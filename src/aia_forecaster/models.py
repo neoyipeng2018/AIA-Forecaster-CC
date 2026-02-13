@@ -91,6 +91,7 @@ class SurfaceCell(BaseModel):
     tenor: Tenor
     question: str
     calibrated: CalibratedForecast | None = None
+    ensemble: EnsembleResult | None = None
 
 
 class ProbabilitySurface(BaseModel):
@@ -98,6 +99,44 @@ class ProbabilitySurface(BaseModel):
     spot_rate: float
     generated_at: datetime = Field(default_factory=datetime.utcnow)
     cells: list[SurfaceCell] = Field(default_factory=list)
+
+
+# --- Explanation Models ---
+
+
+class EvidenceItem(BaseModel):
+    """A single evidence item with citation frequency across agents."""
+
+    title: str
+    snippet: str
+    url: str
+    source: str = ""
+    cited_by_agents: int = 1
+
+
+class CellExplanation(BaseModel):
+    """Per-cell explanation summary for a surface cell."""
+
+    strike: float
+    tenor: Tenor
+    calibrated_probability: float | None = None
+    raw_probability: float | None = None
+    num_agents: int = 0
+    agent_probabilities: list[float] = Field(default_factory=list)
+    top_evidence: list[EvidenceItem] = Field(default_factory=list)
+    consensus_summary: str = ""
+    disagreement_notes: str = ""
+    supervisor_confidence: str | None = None
+    supervisor_reasoning: str = ""
+
+
+class SurfaceExplanation(BaseModel):
+    """Full explanation for an entire probability surface."""
+
+    pair: str
+    spot_rate: float
+    generated_at: datetime
+    cells: list[CellExplanation] = Field(default_factory=list)
 
 
 # --- Full Pipeline Output ---

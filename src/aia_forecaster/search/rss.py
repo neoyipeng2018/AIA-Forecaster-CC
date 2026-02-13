@@ -2,56 +2,165 @@
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
 import feedparser
+import httpx
 
 from aia_forecaster.models import SearchResult
 from aia_forecaster.storage.cache import SearchCache
 
 logger = logging.getLogger(__name__)
 
-# Curated FX-relevant RSS feeds
-FX_RSS_FEEDS = [
-    # Central bank & macro
-    "https://www.federalreserve.gov/feeds/press_all.xml",
-    "https://www.ecb.europa.eu/rss/press.html",
-    # FX news
-    "https://www.fxstreet.com/rss",
-    "https://www.forexlive.com/feed/",
-    # General financial
-    "https://feeds.reuters.com/reuters/businessNews",
-    "https://feeds.bbci.co.uk/news/business/rss.xml",
-    "https://www.cnbc.com/id/100727362/device/rss/rss.html",
-    # Japan-specific (for JPY)
-    "https://www.japantimes.co.jp/feed/",
-    "https://english.kyodonews.net/rss/all.xml",
+
+# ---------------------------------------------------------------------------
+# Feed configuration
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class FeedConfig:
+    """Configuration for a single RSS feed."""
+
+    url: str
+    category: str  # central_bank, fx_specific, macro_data, commodity, geopolitical, general
+    currencies: list[str] = field(default_factory=list)  # empty = all pairs
+
+
+FX_FEEDS: list[FeedConfig] = [
+    # === Central Banks ===
+    FeedConfig("https://www.federalreserve.gov/feeds/press_all.xml", "central_bank", ["USD"]),
+    FeedConfig("https://www.ecb.europa.eu/rss/press.html", "central_bank", ["EUR"]),
+    FeedConfig("https://www.boj.or.jp/en/rss/whatsnew.xml", "central_bank", ["JPY"]),
+    FeedConfig("https://www.bankofengland.co.uk/rss/news", "central_bank", ["GBP"]),
+    FeedConfig("https://www.rba.gov.au/rss/rss-cb-media-releases.xml", "central_bank", ["AUD"]),
+    FeedConfig("https://www.rbnz.govt.nz/rss/news.xml", "central_bank", ["NZD"]),
+    FeedConfig("https://www.snb.ch/en/mmr/reference/rss_en/source/rss_en.en.xml", "central_bank", ["CHF"]),
+    FeedConfig("https://www.bankofcanada.ca/content_type/press-releases/feed/", "central_bank", ["CAD"]),
+    # === FX-Specific News ===
+    FeedConfig("https://www.fxstreet.com/rss", "fx_specific"),
+    FeedConfig("https://www.forexlive.com/feed/", "fx_specific"),
+    FeedConfig("https://www.dailyfx.com/feeds/all", "fx_specific"),
+    FeedConfig("https://www.investing.com/rss/news_14.rss", "fx_specific"),
+    # === Macro Data Sources ===
+    FeedConfig("https://www.bls.gov/feed/bls_latest.rss", "macro_data", ["USD"]),
+    FeedConfig("https://www.bea.gov/news/feed", "macro_data", ["USD"]),
+    FeedConfig("https://ec.europa.eu/eurostat/web/main/news/euro-indicators/feed", "macro_data", ["EUR"]),
+    # === Commodity / Energy (affects AUD, CAD, NOK) ===
+    FeedConfig("https://oilprice.com/rss/main", "commodity", ["CAD", "NOK", "AUD"]),
+    # === Geopolitical / Trade ===
+    FeedConfig("https://www.wto.org/english/news_e/news_e.rss", "geopolitical"),
+    # === General Financial ===
+    FeedConfig("https://feeds.reuters.com/reuters/businessNews", "general"),
+    FeedConfig("https://feeds.bbci.co.uk/news/business/rss.xml", "general"),
+    FeedConfig("https://www.cnbc.com/id/100727362/device/rss/rss.html", "general"),
+    # === Regional ===
+    FeedConfig("https://www.japantimes.co.jp/feed/", "general", ["JPY"]),
+    FeedConfig("https://english.kyodonews.net/rss/all.xml", "general", ["JPY"]),
+    FeedConfig("https://www.theguardian.com/business/rss", "general", ["GBP"]),
+    FeedConfig("https://www.smh.com.au/rss/business.xml", "general", ["AUD"]),
 ]
 
-# Keywords mapped by currency for filtering headlines
+# Backward compatibility: flat URL list
+FX_RSS_FEEDS = [f.url for f in FX_FEEDS]
+
+
+# ---------------------------------------------------------------------------
+# Currency keyword maps
+# ---------------------------------------------------------------------------
+
 CURRENCY_KEYWORDS: dict[str, list[str]] = {
-    "JPY": ["jpy", "yen", "japan", "boj", "bank of japan", "ueda", "japanese"],
-    "USD": ["usd", "dollar", "fed", "federal reserve", "fomc", "powell", "treasury"],
-    "EUR": ["eur", "euro", "ecb", "european central bank", "lagarde", "eurozone"],
-    "GBP": ["gbp", "pound", "sterling", "bank of england", "boe", "bailey"],
-    "CHF": ["chf", "franc", "swiss", "snb", "swiss national bank"],
-    "AUD": ["aud", "aussie", "rba", "reserve bank of australia"],
-    "CAD": ["cad", "loonie", "bank of canada", "boc"],
-    "NZD": ["nzd", "kiwi", "rbnz", "reserve bank of new zealand"],
+    "JPY": [
+        "jpy", "yen", "japan", "boj", "bank of japan", "ueda", "japanese",
+        "nikkei", "tokyo",
+    ],
+    "USD": [
+        "usd", "dollar", "fed", "federal reserve", "fomc", "powell", "treasury",
+        "nonfarm", "payroll", "cpi", "pce",
+    ],
+    "EUR": [
+        "eur", "euro", "ecb", "european central bank", "lagarde", "eurozone",
+        "eurostat", "german",
+    ],
+    "GBP": [
+        "gbp", "pound", "sterling", "bank of england", "boe", "bailey",
+        "uk economy", "british",
+    ],
+    "CHF": [
+        "chf", "franc", "swiss", "snb", "swiss national bank", "switzerland",
+    ],
+    "AUD": [
+        "aud", "aussie", "rba", "reserve bank of australia", "australia",
+        "iron ore", "bullock",
+    ],
+    "CAD": [
+        "cad", "loonie", "bank of canada", "boc", "canada", "canadian",
+        "crude oil", "macklem",
+    ],
+    "NZD": [
+        "nzd", "kiwi", "rbnz", "reserve bank of new zealand", "new zealand",
+        "dairy",
+    ],
+    "NOK": [
+        "nok", "norwegian", "norges bank", "krone", "norway", "brent crude",
+    ],
+    "SEK": [
+        "sek", "swedish", "riksbank", "krona", "sweden",
+    ],
 }
 
-# General FX keywords that match any pair
 GENERAL_FX_KEYWORDS = [
     "forex", "fx", "exchange rate", "currency", "carry trade",
     "risk-on", "risk-off", "safe haven", "interest rate",
     "inflation", "gdp", "employment", "trade balance",
     "central bank", "monetary policy", "rate hike", "rate cut",
     "hawkish", "dovish", "quantitative", "yield",
+    "rate decision", "forward guidance", "tariff", "pmi",
+    "bond yield", "vix", "retail sales", "current account",
 ]
 
+
+# ---------------------------------------------------------------------------
+# Feed health tracking
+# ---------------------------------------------------------------------------
+
+_feed_health: dict[str, dict] = {}
+
+
+def _record_feed_result(url: str, success: bool) -> None:
+    if url not in _feed_health:
+        _feed_health[url] = {"last_success": None, "failures": 0}
+    if success:
+        _feed_health[url]["last_success"] = datetime.now(timezone.utc)
+        _feed_health[url]["failures"] = 0
+    else:
+        _feed_health[url]["failures"] += 1
+
+
+def get_feed_health() -> dict[str, dict]:
+    """Return current feed health status for diagnostics."""
+    return dict(_feed_health)
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
 _cache = SearchCache()
+
+
+def _feeds_for_pair(pair: str) -> list[FeedConfig]:
+    """Return feeds relevant to a specific currency pair."""
+    base = pair[:3].upper()
+    quote = pair[3:].upper()
+    return [
+        f for f in FX_FEEDS
+        if not f.currencies or base in f.currencies or quote in f.currencies
+    ]
 
 
 def _pair_keywords(pair: str) -> list[str]:
@@ -74,12 +183,36 @@ def _entry_hash(title: str, link: str) -> str:
     return hashlib.sha256(f"{title}:{link}".encode()).hexdigest()[:16]
 
 
+# ---------------------------------------------------------------------------
+# Async feed fetching
+# ---------------------------------------------------------------------------
+
+_FEED_TIMEOUT = 10  # seconds per feed
+
+
+async def _fetch_feed_async(url: str) -> feedparser.FeedParserDict | None:
+    """Fetch and parse a single RSS feed asynchronously."""
+    try:
+        async with httpx.AsyncClient(timeout=_FEED_TIMEOUT) as client:
+            resp = await client.get(url)
+            resp.raise_for_status()
+            parsed = feedparser.parse(resp.text)
+            _record_feed_result(url, success=True)
+            return parsed
+    except Exception:
+        logger.warning("Failed to fetch feed: %s", url)
+        _record_feed_result(url, success=False)
+        return None
+
+
 async def fetch_fx_news(
     currency_pair: str = "USDJPY",
     max_age_hours: int = 48,
     max_results: int = 30,
 ) -> list[SearchResult]:
     """Fetch recent FX-relevant news from RSS feeds.
+
+    Fetches feeds in parallel, filtered by currency pair relevance.
 
     Args:
         currency_pair: E.g. 'USDJPY'.
@@ -99,11 +232,13 @@ async def fetch_fx_news(
     seen_hashes: set[str] = set()
     results: list[SearchResult] = []
 
-    for feed_url in FX_RSS_FEEDS:
-        try:
-            feed = feedparser.parse(feed_url)
-        except Exception:
-            logger.warning("Failed to parse feed: %s", feed_url)
+    # Fetch only feeds relevant to this pair, in parallel
+    feeds = _feeds_for_pair(currency_pair)
+    tasks = [_fetch_feed_async(f.url) for f in feeds]
+    parsed_feeds = await asyncio.gather(*tasks)
+
+    for feed_config, feed in zip(feeds, parsed_feeds):
+        if feed is None:
             continue
 
         for entry in feed.entries:
@@ -138,7 +273,7 @@ async def fetch_fx_news(
                     title=title,
                     snippet=summary[:500],
                     url=link,
-                    source=feed_url,
+                    source=feed_config.url,
                     timestamp=datetime.now(),
                 )
             )
@@ -150,5 +285,5 @@ async def fetch_fx_news(
             break
 
     _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
-    logger.info("Fetched %d FX news items for %s", len(results), currency_pair)
+    logger.info("Fetched %d FX news items for %s from %d feeds", len(results), currency_pair, len(feeds))
     return results

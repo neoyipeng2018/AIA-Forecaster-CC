@@ -8,6 +8,7 @@ import logging
 import re
 import sys
 from datetime import date
+from pathlib import Path
 
 from rich.console import Console
 from rich.panel import Panel
@@ -119,12 +120,42 @@ async def run_question(args: argparse.Namespace) -> None:
         title="Forecast Complete",
     ))
 
-    # Print top reasoning traces
+    # Print detailed reasoning traces
     if args.verbose:
         console.print("\n[bold]Agent Reasoning Traces:[/bold]")
         for f in ensemble_result.agent_forecasts:
-            console.print(f"\n[dim]--- Agent {f.agent_id} (p={f.probability:.4f}) ---[/dim]")
-            console.print(f.reasoning[:500])
+            console.print(f"\n[dim]{'=' * 60}[/dim]")
+            console.print(
+                f"[bold]Agent {f.agent_id}[/bold] (p={f.probability:.4f}, "
+                f"{f.iterations} search iterations)"
+            )
+            if f.search_queries:
+                console.print("\n[bold]Search queries:[/bold]")
+                for i, q in enumerate(f.search_queries, 1):
+                    console.print(f"  {i}. {q}")
+            if f.evidence:
+                console.print(f"\n[bold]Evidence ({len(f.evidence)} items):[/bold]")
+                for i, e in enumerate(f.evidence[:5], 1):
+                    console.print(f"  [{i}] {e.title}")
+                    console.print(f"      {e.snippet[:200]}")
+                    console.print(f"      [dim]{e.url}[/dim]")
+            console.print("\n[bold]Reasoning:[/bold]")
+            console.print(f.reasoning)
+
+        if ensemble_result.supervisor:
+            s = ensemble_result.supervisor
+            console.print(f"\n[bold]{'=' * 60}[/bold]")
+            console.print(
+                f"[bold]Supervisor Reconciliation[/bold] "
+                f"(confidence={s.confidence.value})"
+            )
+            console.print(f"\n{s.reasoning}")
+            if s.additional_evidence:
+                console.print(
+                    f"\n[bold]Additional evidence ({len(s.additional_evidence)} items):[/bold]"
+                )
+                for i, e in enumerate(s.additional_evidence[:5], 1):
+                    console.print(f"  [{i}] {e.title}: {e.snippet[:200]}")
 
 
 async def run_surface(args: argparse.Namespace) -> None:
@@ -148,6 +179,13 @@ async def run_surface(args: argparse.Namespace) -> None:
     console.print("\n")
     print_surface(surface)
 
+    # Show per-cell evidence and reasoning
+    if getattr(args, "explain", False) or args.verbose:
+        from aia_forecaster.fx.explanation import explain_surface, print_explanation
+
+        explanation = explain_surface(surface)
+        print_explanation(explanation)
+
     # Save heatmap
     output = args.output
     if not output:
@@ -155,6 +193,11 @@ async def run_surface(args: argparse.Namespace) -> None:
         output = f"data/forecasts/{args.pair}_{cutoff_str}.png"
     path = plot_surface(surface, output)
     console.print(f"\n[bold]Heatmap saved:[/bold] {path}")
+
+    # Save full surface data (including reasoning/evidence) as companion JSON
+    json_path = Path(str(path).replace(".png", ".json"))
+    json_path.write_text(surface.model_dump_json(indent=2))
+    console.print(f"[bold]Surface JSON saved:[/bold] {json_path}")
 
 
 async def run_evaluate(args: argparse.Namespace) -> None:
@@ -253,6 +296,7 @@ def build_parser() -> argparse.ArgumentParser:
     s_parser.add_argument("--strikes", type=int, default=5, help="Number of strikes")
     s_parser.add_argument("--tenors", help="Comma-separated tenors (e.g., 1W,1M)")
     s_parser.add_argument("-o", "--output", help="Output path for heatmap PNG (default: data/forecasts/PAIR_DATE.png)")
+    s_parser.add_argument("-e", "--explain", action="store_true", help="Show per-cell evidence and reasoning")
     s_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
     s_parser.add_argument("--agents", type=int, default=argparse.SUPPRESS, help=argparse.SUPPRESS)
 

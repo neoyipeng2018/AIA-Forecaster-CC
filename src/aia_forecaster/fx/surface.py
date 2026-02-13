@@ -11,6 +11,7 @@ import numpy as np
 from rich.console import Console
 from rich.table import Table
 
+from aia_forecaster.calibration.monotonicity import enforce_surface_monotonicity
 from aia_forecaster.calibration.platt import calibrate
 from aia_forecaster.ensemble.engine import EnsembleEngine
 from aia_forecaster.fx.pairs import DEFAULT_TENORS, generate_strikes
@@ -104,6 +105,7 @@ class ProbabilitySurfaceGenerator:
                         tenor=tenor,
                         question=q_text,
                         calibrated=cal,
+                        ensemble=ensemble_result,
                     )
                     surface.cells.append(cell)
 
@@ -116,6 +118,15 @@ class ProbabilitySurfaceGenerator:
                     surface.cells.append(
                         SurfaceCell(strike=strike, tenor=tenor, question=q_text)
                     )
+
+        # Enforce monotonicity: P(above strike) must be non-increasing as strike rises
+        n_adjusted = enforce_surface_monotonicity(surface)
+        if n_adjusted:
+            console.print(
+                f"\n[yellow]Monotonicity: adjusted {n_adjusted} cell(s)[/yellow]"
+            )
+        else:
+            console.print("\n[green]Monotonicity: no violations[/green]")
 
         return surface
 
