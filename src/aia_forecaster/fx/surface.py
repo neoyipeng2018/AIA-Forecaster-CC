@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import logging
 from datetime import date
+from pathlib import Path
 
+import matplotlib.pyplot as plt
+import numpy as np
 from rich.console import Console
 from rich.table import Table
 
@@ -151,3 +154,86 @@ def print_surface(surface: ProbabilitySurface) -> None:
         table.add_row(*row)
 
     console.print(table)
+
+
+def plot_surface(surface: ProbabilitySurface, output_path: str | Path) -> Path:
+    """Render the probability surface as a heatmap and save to PNG.
+
+    Args:
+        surface: The probability surface data.
+        output_path: File path for the saved image.
+
+    Returns:
+        The resolved output path.
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    strikes = sorted(set(c.strike for c in surface.cells))
+    tenors = sorted(
+        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+    )
+
+    # Build lookup
+    lookup: dict[tuple[float, Tenor], float | None] = {}
+    for c in surface.cells:
+        p = c.calibrated.calibrated_probability if c.calibrated else None
+        lookup[(c.strike, c.tenor)] = p
+
+    # Build 2D array (rows=strikes descending so higher strikes at top, cols=tenors)
+    strikes_desc = list(reversed(strikes))
+    data = np.full((len(strikes_desc), len(tenors)), np.nan)
+    for i, strike in enumerate(strikes_desc):
+        for j, tenor in enumerate(tenors):
+            p = lookup.get((strike, tenor))
+            if p is not None:
+                data[i, j] = p
+
+    fig, ax = plt.subplots(figsize=(max(8, len(tenors) * 1.8), max(5, len(strikes) * 0.7)))
+
+    im = ax.imshow(data, cmap="RdYlGn", vmin=0.0, vmax=1.0, aspect="auto")
+
+    # Annotate cells
+    for i in range(len(strikes_desc)):
+        for j in range(len(tenors)):
+            val = data[i, j]
+            if not np.isnan(val):
+                color = "white" if val < 0.25 or val > 0.75 else "black"
+                ax.text(j, i, f"{val:.2f}", ha="center", va="center", color=color, fontsize=11, fontweight="bold")
+
+    # Axis labels
+    ax.set_xticks(range(len(tenors)))
+    ax.set_xticklabels([t.value for t in tenors], fontsize=11)
+    ax.set_yticks(range(len(strikes_desc)))
+    ax.set_yticklabels([f"{s:.2f}" for s in strikes_desc], fontsize=10)
+    ax.set_xlabel("Tenor", fontsize=12)
+    ax.set_ylabel("Strike", fontsize=12)
+
+    # Spot rate marker
+    if surface.spot_rate is not None:
+        for i, s in enumerate(strikes_desc):
+            if s <= surface.spot_rate:
+                spot_y = max(0, i - 0.5) if i == 0 or strikes_desc[i - 1] > surface.spot_rate else i - (surface.spot_rate - s) / (strikes_desc[i - 1] - s) if i > 0 and strikes_desc[i - 1] != s else i
+                ax.axhline(y=spot_y, color="blue", linewidth=2, linestyle="--", alpha=0.7)
+                ax.text(
+                    len(tenors) - 0.5, spot_y, f"  spot={surface.spot_rate:.2f}",
+                    va="center", ha="left", color="blue", fontsize=9, fontweight="bold",
+                    clip_on=False,
+                )
+                break
+
+    base, quote = surface.pair[:3], surface.pair[3:]
+    date_str = surface.generated_at.strftime("%Y-%m-%d")
+    ax.set_title(
+        f"{base}/{quote} Probability Surface\nspot={surface.spot_rate}  |  as-of {date_str}",
+        fontsize=14, fontweight="bold", pad=12,
+    )
+
+    cbar = fig.colorbar(im, ax=ax, shrink=0.8, pad=0.12)
+    cbar.set_label("P(above strike)", fontsize=11)
+
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+    return output_path

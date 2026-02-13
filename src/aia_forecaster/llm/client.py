@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 # Suppress litellm's verbose logging
 litellm.suppress_debug_info = True
+# Drop unsupported params (e.g., temperature for o-series/gpt-5 models)
+litellm.drop_params = True
 
 
 class LLMClient:

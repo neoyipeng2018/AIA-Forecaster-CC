@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import logging
+import re
 import sys
 from datetime import date
 
@@ -15,12 +16,58 @@ from aia_forecaster.calibration.platt import calibrate
 from aia_forecaster.config import settings
 from aia_forecaster.ensemble.engine import EnsembleEngine
 from aia_forecaster.evaluation.metrics import brier_score
-from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator, print_surface
+from aia_forecaster.fx.pairs import PAIR_CONFIGS
+from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator, plot_surface, print_surface
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import ForecastQuestion, ForecastRun, Tenor
 from aia_forecaster.storage.database import ForecastDatabase
 
 console = Console()
+
+# Shorthand detection: "forecast USDJPY 2025-02-13" → surface command
+_SUBCOMMANDS = {"question", "surface", "evaluate", "list"}
+_PAIR_PATTERN = re.compile(r"^[A-Z]{6}$")
+
+
+def _is_pair_shorthand(argv: list[str]) -> bool:
+    """Check if argv uses the PAIR [DATE] shorthand form."""
+    if len(argv) < 2:
+        return False
+    first = argv[1]
+    if first in _SUBCOMMANDS or first.startswith("-"):
+        return False
+    return bool(_PAIR_PATTERN.match(first.upper()))
+
+
+def _rewrite_shorthand(argv: list[str]) -> list[str]:
+    """Rewrite 'forecast USDJPY 2025-02-13 [flags]' into canonical form.
+
+    Result: 'forecast --pair USDJPY --cutoff 2025-02-13 surface [flags]'
+    """
+    new_argv = [argv[0]]
+    pair = argv[1].upper()
+
+    if pair not in PAIR_CONFIGS:
+        supported = ", ".join(sorted(PAIR_CONFIGS.keys()))
+        print(f"Error: Unknown currency pair '{pair}'. Supported: {supported}", file=sys.stderr)
+        sys.exit(1)
+
+    new_argv.extend(["--pair", pair])
+
+    rest_start = 2
+    if len(argv) > 2 and not argv[2].startswith("-"):
+        cutoff = argv[2]
+        try:
+            date.fromisoformat(cutoff)
+        except ValueError:
+            print(f"Error: Invalid date '{cutoff}'. Expected YYYY-MM-DD.", file=sys.stderr)
+            sys.exit(1)
+        new_argv.extend(["--cutoff", cutoff])
+        rest_start = 3
+
+    new_argv.append("surface")
+    new_argv.extend(argv[rest_start:])
+    return new_argv
 
 
 async def run_question(args: argparse.Namespace) -> None:
@@ -89,15 +136,25 @@ async def run_surface(args: argparse.Namespace) -> None:
     llm = LLMClient(model=args.model) if args.model else LLMClient()
     generator = ProbabilitySurfaceGenerator(llm=llm, num_agents=args.agents)
 
+    cutoff = date.fromisoformat(args.cutoff) if args.cutoff else None
+
     surface = await generator.generate(
         pair=args.pair,
         num_strikes=args.strikes,
         tenors=tenors,
-        cutoff_date=date.fromisoformat(args.cutoff) if args.cutoff else None,
+        cutoff_date=cutoff,
     )
 
     console.print("\n")
     print_surface(surface)
+
+    # Save heatmap
+    output = args.output
+    if not output:
+        cutoff_str = (cutoff or date.today()).isoformat()
+        output = f"data/forecasts/{args.pair}_{cutoff_str}.png"
+    path = plot_surface(surface, output)
+    console.print(f"\n[bold]Heatmap saved:[/bold] {path}")
 
 
 async def run_evaluate(args: argparse.Namespace) -> None:
@@ -164,6 +221,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="forecast",
         description="AIA Forecaster — FX probability forecasting",
+        epilog=(
+            "Quick start:\n"
+            "  forecast USDJPY 2025-02-13          Generate probability surface\n"
+            "  forecast EURUSD 2025-02-13 --strikes 7\n"
+            "  forecast USDJPY                      Surface with today as cutoff\n"
+            "\n"
+            "Subcommands:\n"
+            "  forecast question \"Will USD/JPY be above 155 in 1 week?\"\n"
+            "  forecast evaluate RUN_ID 1\n"
+            "  forecast list\n"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--model", help="LLM model string (litellm format)")
     parser.add_argument("--agents", type=int, default=settings.num_agents, help="Number of forecasting agents")
@@ -176,11 +245,16 @@ def build_parser() -> argparse.ArgumentParser:
     # question command
     q_parser = subparsers.add_parser("question", help="Forecast a single binary question")
     q_parser.add_argument("question", help="Binary question to forecast")
+    q_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
+    q_parser.add_argument("--agents", type=int, default=argparse.SUPPRESS, help=argparse.SUPPRESS)
 
     # surface command
     s_parser = subparsers.add_parser("surface", help="Generate probability surface")
     s_parser.add_argument("--strikes", type=int, default=5, help="Number of strikes")
     s_parser.add_argument("--tenors", help="Comma-separated tenors (e.g., 1W,1M)")
+    s_parser.add_argument("-o", "--output", help="Output path for heatmap PNG (default: data/forecasts/PAIR_DATE.png)")
+    s_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
+    s_parser.add_argument("--agents", type=int, default=argparse.SUPPRESS, help=argparse.SUPPRESS)
 
     # evaluate command
     e_parser = subparsers.add_parser("evaluate", help="Evaluate a past forecast")
@@ -200,6 +274,10 @@ def main() -> None:
         format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
         datefmt="%H:%M:%S",
     )
+
+    # Shorthand: "forecast USDJPY 2025-02-13" → "forecast --pair USDJPY --cutoff 2025-02-13 surface"
+    if _is_pair_shorthand(sys.argv):
+        sys.argv = _rewrite_shorthand(sys.argv)
 
     parser = build_parser()
     args = parser.parse_args()
