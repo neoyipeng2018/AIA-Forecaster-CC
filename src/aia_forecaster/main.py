@@ -18,7 +18,12 @@ from aia_forecaster.config import settings
 from aia_forecaster.ensemble.engine import EnsembleEngine
 from aia_forecaster.evaluation.metrics import brier_score
 from aia_forecaster.fx.pairs import PAIR_CONFIGS
-from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator, plot_surface, print_surface
+from aia_forecaster.fx.surface import (
+    ProbabilitySurfaceGenerator,
+    plot_surface,
+    plot_surface_3d,
+    print_surface,
+)
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import ForecastQuestion, ForecastRun, Tenor
 from aia_forecaster.storage.database import ForecastDatabase
@@ -193,6 +198,11 @@ async def run_surface(args: argparse.Namespace) -> None:
         output = f"data/forecasts/{args.pair}_{cutoff_str}.png"
     path = plot_surface(surface, output)
     console.print(f"\n[bold]Heatmap saved:[/bold] {path}")
+
+    # Save interactive 3D surface
+    html_path = Path(str(path).replace(".png", ".html"))
+    plot_surface_3d(surface, html_path)
+    console.print(f"[bold]Interactive 3D surface saved:[/bold] {html_path}")
 
     # Save full surface data (including reasoning/evidence) as companion JSON
     json_path = Path(str(path).replace(".png", ".json"))

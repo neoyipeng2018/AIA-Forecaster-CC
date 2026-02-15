@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import html as html_mod
 import logging
+import textwrap
 from datetime import date
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.graph_objects as go
 from rich.console import Console
 from rich.table import Table
 
@@ -342,5 +345,220 @@ def plot_surface(surface: ProbabilitySurface, output_path: str | Path) -> Path:
     fig.tight_layout()
     fig.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
+
+    return output_path
+
+
+# ---------------------------------------------------------------------------
+# Tenor numeric mapping for 3D surface
+# ---------------------------------------------------------------------------
+
+_TENOR_DAYS: dict[Tenor, int] = {
+    Tenor.D1: 1,
+    Tenor.W1: 7,
+    Tenor.M1: 30,
+    Tenor.M3: 90,
+    Tenor.M6: 180,
+}
+
+
+def _build_hover_text(
+    surface: ProbabilitySurface,
+    strikes: list[float],
+    tenors: list[Tenor],
+) -> list[list[str]]:
+    """Build per-cell hover HTML from explanation data.
+
+    Returns a 2D list [strike_idx][tenor_idx] of hover text strings.
+    """
+    from aia_forecaster.fx.explanation import explain_cell
+
+    # Build cell lookup
+    cell_lookup: dict[tuple[float, Tenor], SurfaceCell] = {}
+    for c in surface.cells:
+        cell_lookup[(c.strike, c.tenor)] = c
+
+    hover: list[list[str]] = []
+    for strike in strikes:
+        row: list[str] = []
+        for tenor in tenors:
+            cell = cell_lookup.get((strike, tenor))
+            if cell is None:
+                row.append("")
+                continue
+
+            expl = explain_cell(cell)
+            cal_p = expl.calibrated_probability
+            raw_p = expl.raw_probability
+
+            lines = [
+                f"<b>Strike:</b> {strike:.2f}  |  <b>Tenor:</b> {tenor.value}",
+                f"<b>P(above):</b> {cal_p:.3f}" + (f"  (raw: {raw_p:.3f})" if raw_p else ""),
+                f"<b>Agents:</b> {expl.num_agents}",
+            ]
+
+            # Consensus
+            if expl.consensus_summary:
+                wrapped = textwrap.shorten(expl.consensus_summary, width=120, placeholder="...")
+                lines.append(f"<br><b>Consensus:</b> {html_mod.escape(wrapped)}")
+
+            # Disagreements
+            if expl.disagreement_notes:
+                wrapped = textwrap.shorten(expl.disagreement_notes, width=120, placeholder="...")
+                lines.append(f"<b>Disagreements:</b> {html_mod.escape(wrapped)}")
+
+            # Top evidence (up to 3)
+            if expl.top_evidence:
+                lines.append(f"<br><b>Sources ({len(expl.top_evidence)}):</b>")
+                for ev in expl.top_evidence[:3]:
+                    title = textwrap.shorten(html_mod.escape(ev.title), width=80, placeholder="...")
+                    snippet = textwrap.shorten(
+                        html_mod.escape(ev.snippet), width=100, placeholder="..."
+                    )
+                    cited = f" [{ev.cited_by_agents} agents]" if ev.cited_by_agents > 1 else ""
+                    lines.append(f"  • {title}{cited}")
+                    lines.append(f"    <i>{snippet}</i>")
+                    lines.append(f"    {html_mod.escape(ev.url)}")
+
+            # Supervisor
+            if expl.supervisor_reasoning:
+                sup_text = textwrap.shorten(
+                    html_mod.escape(expl.supervisor_reasoning), width=120, placeholder="..."
+                )
+                lines.append(
+                    f"<br><b>Supervisor ({expl.supervisor_confidence}):</b> {sup_text}"
+                )
+
+            row.append("<br>".join(lines))
+        hover.append(row)
+
+    return hover
+
+
+def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Path:
+    """Render an interactive 3D probability surface and save as HTML.
+
+    The surface can be rotated, zoomed, and hovered to inspect per-cell
+    explanations including consensus reasoning, evidence sources, and
+    agent disagreements.
+
+    Args:
+        surface: The probability surface data.
+        output_path: File path for the saved HTML file.
+
+    Returns:
+        The resolved output path.
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    strikes = sorted(set(c.strike for c in surface.cells))
+    tenors = sorted(
+        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+    )
+    tenor_labels = [t.value for t in tenors]
+    tenor_days = [_TENOR_DAYS[t] for t in tenors]
+
+    # Build probability grid [strike_idx][tenor_idx]
+    lookup: dict[tuple[float, Tenor], float | None] = {}
+    for c in surface.cells:
+        p = c.calibrated.calibrated_probability if c.calibrated else None
+        lookup[(c.strike, c.tenor)] = p
+
+    z_data = []
+    for strike in strikes:
+        row = []
+        for tenor in tenors:
+            p = lookup.get((strike, tenor))
+            row.append(p if p is not None else float("nan"))
+        z_data.append(row)
+
+    z_arr = np.array(z_data)
+
+    # Build hover text
+    hover_text = _build_hover_text(surface, strikes, tenors)
+
+    base, quote = surface.pair[:3], surface.pair[3:]
+    date_str = surface.generated_at.strftime("%Y-%m-%d")
+
+    fig = go.Figure()
+
+    # Main probability surface
+    fig.add_trace(go.Surface(
+        x=tenor_days,
+        y=strikes,
+        z=z_arr,
+        customdata=np.array(hover_text, dtype=object),
+        hovertemplate="%{customdata}<extra></extra>",
+        colorscale="RdYlGn",
+        cmin=0.0,
+        cmax=1.0,
+        colorbar=dict(
+            title=dict(text="P(above strike)", side="right"),
+            thickness=20,
+            len=0.75,
+        ),
+        opacity=0.92,
+    ))
+
+    # Spot rate plane (translucent horizontal plane at spot rate)
+    if surface.spot_rate is not None:
+        spot_z = np.full((2, len(tenor_days)), 0.5)  # arbitrary z for reference plane
+        fig.add_trace(go.Surface(
+            x=[tenor_days[0], tenor_days[-1]],
+            y=[surface.spot_rate, surface.spot_rate],
+            z=spot_z,
+            showscale=False,
+            opacity=0.3,
+            colorscale=[[0, "royalblue"], [1, "royalblue"]],
+            hovertemplate=(
+                f"<b>Spot rate:</b> {surface.spot_rate:.4f}<extra></extra>"
+            ),
+        ))
+
+    fig.update_layout(
+        title=dict(
+            text=f"{base}/{quote} Probability Surface — {date_str}",
+            font=dict(size=18),
+        ),
+        scene=dict(
+            xaxis=dict(
+                title="Tenor",
+                tickvals=tenor_days,
+                ticktext=tenor_labels,
+                type="log",
+            ),
+            yaxis=dict(
+                title="Strike",
+                tickformat=".2f",
+            ),
+            zaxis=dict(
+                title="P(above strike)",
+                range=[0, 1],
+            ),
+            camera=dict(
+                eye=dict(x=1.8, y=-1.4, z=0.8),
+            ),
+        ),
+        hoverlabel=dict(
+            bgcolor="rgba(255,255,255,0.95)",
+            font_size=12,
+            font_family="monospace",
+            align="left",
+        ),
+        margin=dict(l=20, r=20, t=60, b=20),
+        template="plotly_white",
+    )
+
+    fig.write_html(
+        str(output_path),
+        include_plotlyjs=True,
+        full_html=True,
+        config={
+            "displayModeBar": True,
+            "scrollZoom": True,
+            "modeBarButtonsToAdd": ["hoverclosest", "hovercompare"],
+        },
+    )
 
     return output_path
