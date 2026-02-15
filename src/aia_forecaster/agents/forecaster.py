@@ -17,6 +17,7 @@ import logging
 import re
 
 from aia_forecaster.config import settings
+from aia_forecaster.fx.base_rates import format_base_rate_context
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import AgentForecast, ForecastQuestion, SearchResult
 from aia_forecaster.search.rss import fetch_fx_news
@@ -31,6 +32,7 @@ QUESTION: {question}
 
 Your information cutoff date is {cutoff_date}. Do NOT use any information after this date.
 
+{base_rate_section}
 {evidence_section}
 
 Based on what you know and any evidence gathered so far, generate the SINGLE BEST search \
@@ -70,6 +72,7 @@ available before this date.
 EVIDENCE GATHERED:
 {evidence_summary}
 
+{base_rate_section}
 Analyze the evidence carefully. Consider:
 1. Base rates and historical precedents for similar FX moves
 2. Current monetary policy stance and expected changes
@@ -115,6 +118,20 @@ class ForecastingAgent:
         self.agent_id = agent_id
         self.llm = llm or LLMClient()
 
+    def _build_base_rate_section(self, question: ForecastQuestion) -> str:
+        """Build the base rate context block if spot/strike/tenor are available."""
+        if question.spot is not None and question.strike is not None and question.tenor is not None:
+            try:
+                return format_base_rate_context(
+                    pair=question.pair,
+                    spot=question.spot,
+                    strike=question.strike,
+                    tenor=question.tenor,
+                )
+            except ValueError:
+                return ""
+        return ""
+
     async def forecast(self, question: ForecastQuestion) -> AgentForecast:
         """Run the full agentic search loop and return a forecast.
 
@@ -128,6 +145,7 @@ class ForecastingAgent:
         """
         all_evidence: list[SearchResult] = []
         all_queries: list[str] = []
+        base_rate_section = self._build_base_rate_section(question)
 
         # Start with RSS news as background context
         try:
@@ -153,6 +171,7 @@ class ForecastingAgent:
             query_prompt = QUERY_GENERATION_PROMPT.format(
                 question=question.text,
                 cutoff_date=question.cutoff_date.isoformat(),
+                base_rate_section=base_rate_section,
                 evidence_section=evidence_section,
             )
             search_query = await self.llm.complete(
@@ -197,6 +216,7 @@ class ForecastingAgent:
             question=question.text,
             cutoff_date=question.cutoff_date.isoformat(),
             evidence_summary=_format_evidence(all_evidence, max_chars=8000),
+            base_rate_section=base_rate_section,
         )
         response = await self.llm.complete(
             [{"role": "user", "content": forecast_prompt}],

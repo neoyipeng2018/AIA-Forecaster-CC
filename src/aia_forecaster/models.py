@@ -47,6 +47,7 @@ class FlaggedResult(BaseModel):
 class ForecastQuestion(BaseModel):
     text: str = Field(description="Binary question, e.g. 'Will USD/JPY be above 155.00 in 1 week?'")
     pair: str = "USDJPY"
+    spot: float | None = None
     strike: float | None = None
     tenor: Tenor | None = None
     cutoff_date: date = Field(default_factory=date.today)

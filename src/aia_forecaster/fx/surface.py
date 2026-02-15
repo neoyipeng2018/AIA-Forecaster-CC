@@ -91,6 +91,7 @@ class ProbabilitySurfaceGenerator:
                 question = ForecastQuestion(
                     text=q_text,
                     pair=pair,
+                    spot=spot,
                     strike=strike,
                     tenor=tenor,
                     cutoff_date=cutoff_date,
