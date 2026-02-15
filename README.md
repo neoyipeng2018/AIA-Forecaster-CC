@@ -11,11 +11,10 @@ poetry install
 poetry shell
 ```
 
-Set your LLM API key in `.env`:
+Set your API key in `.env`:
 
 ```
 OPENAI_API_KEY=sk-...
-# or ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ## Quick Start
@@ -231,7 +230,7 @@ Settings are loaded from environment variables or `.env`:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LLM_MODEL` | `anthropic/claude-sonnet-4-5-20250929` | LLM model (litellm format) |
+| `LLM_MODEL` | `gpt-4o` | LLM model (provider/model-name or just model-name) |
 | `NUM_AGENTS` | `10` | Number of forecasting agents |
 | `MAX_SEARCH_ITERATIONS` | `5` | Max search iterations per agent |
 | `PLATT_ALPHA` | `sqrt(3)` | Calibration coefficient |
@@ -248,6 +247,7 @@ forecast USDJPY --agents 5 --model openai/gpt-4o
 Each surface run produces:
 - **Console table** with color-coded probabilities
 - **Heatmap PNG** saved to `data/forecasts/PAIR_DATE.png`
+- **Interactive 3D surface** (HTML/Plotly) saved to `data/forecasts/PAIR_DATE.html`
 - **JSON file** with full surface data (probabilities, evidence, reasoning)
 
 ## Supported Pairs

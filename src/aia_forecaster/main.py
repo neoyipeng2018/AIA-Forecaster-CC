@@ -287,7 +287,7 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--model", help="LLM model string (litellm format)")
+    parser.add_argument("--model", help="LLM model string (e.g., gpt-4o, openai/o3)")
     parser.add_argument("--agents", type=int, default=settings.num_agents, help="Number of forecasting agents")
     parser.add_argument("--pair", default=settings.default_pair, help="Currency pair (e.g., USDJPY)")
     parser.add_argument("--cutoff", help="Information cutoff date (YYYY-MM-DD)")
