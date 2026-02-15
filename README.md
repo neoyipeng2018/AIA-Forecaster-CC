@@ -137,6 +137,93 @@ M agents in parallel -> agentic search -> probability estimate
 | Platt Calibration | `calibration/platt.py` | LLM hedging bias correction |
 | Monotonicity (PAVA) | `calibration/monotonicity.py` | Strike-monotonicity enforcement |
 | Base Rates | `fx/base_rates.py` | Statistical anchoring from vol data |
+| Data Source Registry | `search/registry.py` | Pluggable data source framework |
+
+## Adding Custom Data Sources
+
+You can plug any dataset into the forecasting pipeline by writing a single decorated async function. Agents will automatically fetch from it alongside the built-in RSS feeds.
+
+### Minimal example
+
+```python
+# my_sources.py  (import this file at startup so the decorator runs)
+from aia_forecaster.search.registry import data_source
+from aia_forecaster.models import SearchResult
+
+@data_source("my_csv")
+async def fetch_csv_data(pair: str, cutoff_date, **kwargs) -> list[SearchResult]:
+    """Load headlines from a local CSV file."""
+    import csv
+    from pathlib import Path
+
+    results = []
+    for row in csv.DictReader(open(Path("data") / f"{pair}.csv")):
+        results.append(SearchResult(
+            query=f"csv:{pair}",
+            title=row["headline"],
+            snippet=row["body"][:500],
+            url=row.get("url", ""),
+            source="my_csv",
+        ))
+    return results[: kwargs.get("max_results", 20)]
+```
+
+### Requirements
+
+- The function **must** be `async` and return `list[SearchResult]`.
+- Required parameters: `pair` (`str`, e.g. `"USDJPY"`) and `cutoff_date` (`datetime.date`).
+- Optional `**kwargs` receives `max_results`, `max_age_hours`, etc. from the agent.
+- All registered sources run **in parallel** with error isolation — one failing source won't break the others.
+
+### More examples
+
+```python
+# API data source
+@data_source("bloomberg_api")
+async def fetch_bloomberg(pair: str, cutoff_date, **kwargs):
+    import httpx
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(f"https://api.example.com/news/{pair}")
+        return [
+            SearchResult(query=f"bloomberg:{pair}", title=item["title"],
+                         snippet=item["summary"], url=item["link"], source="bloomberg")
+            for item in resp.json()["articles"]
+        ]
+
+# Database source
+@data_source("internal_db")
+async def fetch_from_db(pair: str, cutoff_date, **kwargs):
+    import aiosqlite
+    async with aiosqlite.connect("data/research.db") as db:
+        rows = await db.execute_fetchall(
+            "SELECT title, body, url FROM articles WHERE pair = ? AND date <= ?",
+            (pair, cutoff_date.isoformat()),
+        )
+        return [
+            SearchResult(query=f"db:{pair}", title=r[0], snippet=r[1], url=r[2], source="internal_db")
+            for r in rows
+        ]
+```
+
+### Imperative registration
+
+If you prefer not to use the decorator:
+
+```python
+from aia_forecaster.search.registry import register
+
+async def my_source(pair, cutoff_date, **kwargs):
+    ...
+
+register("my_source", my_source)
+```
+
+### Inspecting registered sources
+
+```python
+from aia_forecaster.search.registry import list_sources
+print(list_sources())  # ['rss', 'my_csv', 'bloomberg_api', ...]
+```
 
 ## Configuration
 

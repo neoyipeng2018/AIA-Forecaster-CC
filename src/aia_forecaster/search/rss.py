@@ -6,7 +6,7 @@ import asyncio
 import hashlib
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import feedparser
 import httpx
@@ -287,3 +287,24 @@ async def fetch_fx_news(
     _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
     logger.info("Fetched %d FX news items for %s from %d feeds", len(results), currency_pair, len(feeds))
     return results
+
+
+# ---------------------------------------------------------------------------
+# Register as a data source
+# ---------------------------------------------------------------------------
+
+from aia_forecaster.search.registry import data_source  # noqa: E402
+
+
+@data_source("rss")
+async def _rss_data_source(
+    pair: str, cutoff_date: date | None = None, **kwargs
+) -> list[SearchResult]:
+    """RSS adapter for the data source registry."""
+    max_age_hours = kwargs.get("max_age_hours", 48)
+    max_results = kwargs.get("max_results", 20)
+    return await fetch_fx_news(
+        currency_pair=pair,
+        max_age_hours=max_age_hours,
+        max_results=max_results,
+    )

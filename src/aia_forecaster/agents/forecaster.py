@@ -29,7 +29,7 @@ from aia_forecaster.models import (
     SearchResult,
     Tenor,
 )
-from aia_forecaster.search.rss import fetch_fx_news
+from aia_forecaster.search.registry import fetch_all as fetch_all_sources
 from aia_forecaster.search.web import search_web
 
 logger = logging.getLogger(__name__)
@@ -241,19 +241,21 @@ class ForecastingAgent:
 
         logger.info("Agent %d: search_mode=%s", self.agent_id, self.search_mode.value)
 
-        # RSS evidence gathering (RSS_ONLY and HYBRID modes)
+        # Passive data source gathering (RSS_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.RSS_ONLY, SearchMode.HYBRID):
-            max_rss = 20 if self.search_mode == SearchMode.RSS_ONLY else 10
+            max_results = 20 if self.search_mode == SearchMode.RSS_ONLY else 10
             try:
-                rss_news = await fetch_fx_news(
-                    currency_pair=question.pair,
+                source_results = await fetch_all_sources(
+                    pair=question.pair,
+                    cutoff_date=question.cutoff_date,
                     max_age_hours=72 if self.search_mode == SearchMode.RSS_ONLY else 48,
-                    max_results=max_rss,
+                    max_results=max_results,
                 )
-                all_evidence.extend(rss_news)
-                logger.info("Agent %d: Got %d RSS news items", self.agent_id, len(rss_news))
+                for source_name, results in source_results.items():
+                    all_evidence.extend(results)
+                    logger.info("Agent %d: Got %d items from '%s'", self.agent_id, len(results), source_name)
             except Exception:
-                logger.warning("Agent %d: RSS fetch failed", self.agent_id)
+                logger.warning("Agent %d: Data source fetch failed", self.agent_id)
 
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
@@ -277,6 +279,13 @@ class ForecastingAgent:
                     max_tokens=200,
                 )
                 search_query = search_query.strip().strip('"')
+
+                # Skip empty or trivially short queries
+                if not search_query or len(search_query) < 5:
+                    logger.warning("Agent %d, iter %d: Empty/short query — skipping", self.agent_id, iteration)
+                    all_queries.append(search_query)
+                    continue
+
                 all_queries.append(search_query)
                 logger.info("Agent %d, iter %d: Searching '%s'", self.agent_id, iteration, search_query)
 
@@ -348,19 +357,21 @@ class ForecastingAgent:
         logger.info("Agent %d: research mode, pair=%s, search_mode=%s",
                      self.agent_id, pair, self.search_mode.value)
 
-        # RSS evidence gathering (RSS_ONLY and HYBRID modes)
+        # Passive data source gathering (RSS_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.RSS_ONLY, SearchMode.HYBRID):
-            max_rss = 20 if self.search_mode == SearchMode.RSS_ONLY else 10
+            max_results = 20 if self.search_mode == SearchMode.RSS_ONLY else 10
             try:
-                rss_news = await fetch_fx_news(
-                    currency_pair=pair,
+                source_results = await fetch_all_sources(
+                    pair=pair,
+                    cutoff_date=cutoff_date,
                     max_age_hours=72 if self.search_mode == SearchMode.RSS_ONLY else 48,
-                    max_results=max_rss,
+                    max_results=max_results,
                 )
-                all_evidence.extend(rss_news)
-                logger.info("Agent %d: Got %d RSS news items", self.agent_id, len(rss_news))
+                for source_name, results in source_results.items():
+                    all_evidence.extend(results)
+                    logger.info("Agent %d: Got %d items from '%s'", self.agent_id, len(results), source_name)
             except Exception:
-                logger.warning("Agent %d: RSS fetch failed", self.agent_id)
+                logger.warning("Agent %d: Data source fetch failed", self.agent_id)
 
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
@@ -384,6 +395,14 @@ class ForecastingAgent:
                     max_tokens=200,
                 )
                 search_query = search_query.strip().strip('"')
+
+                # Skip empty or trivially short queries
+                if not search_query or len(search_query) < 5:
+                    logger.warning("Agent %d, iter %d: Empty/short query — skipping",
+                                   self.agent_id, iteration)
+                    all_queries.append(search_query)
+                    continue
+
                 all_queries.append(search_query)
                 logger.info("Agent %d, iter %d: Searching '%s'",
                             self.agent_id, iteration, search_query)
