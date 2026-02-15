@@ -31,16 +31,37 @@ console = Console()
 # ---------------------------------------------------------------------------
 
 
+def _is_irrelevant_evidence(url: str, title: str, snippet: str) -> bool:
+    """Return True if this evidence is clearly not FX-relevant."""
+    combined = (url + " " + title + " " + snippet).lower()
+    # Calculator / date-tool / converter sites
+    irrelevant_domains = [
+        "calculator.net", "calculateconvert.com", "gigacalculator.com",
+        "calculatorsoup.com", "timeanddate.com", "convertunits.com",
+        "rapidtables.com", "epochconverter.com", "daysuntil.net",
+    ]
+    url_lower = url.lower()
+    if any(d in url_lower for d in irrelevant_domains):
+        return True
+    # Generic date-calculator content (title/snippet both about date math)
+    date_calc_keywords = ["date calculator", "days between dates", "date difference calculator"]
+    if any(kw in combined for kw in date_calc_keywords):
+        return True
+    return False
+
+
 def _deduplicate_evidence(agents: list[AgentForecast], top_n: int = 5) -> list[EvidenceItem]:
     """Aggregate evidence across agents, counting citation frequency.
 
     Uses URL-based deduplication. If multiple agents cite the same URL,
     merge into one EvidenceItem with cited_by_agents = count.
-    Sorted by citation frequency descending.
+    Sorted by citation frequency descending. Filters out irrelevant sources.
     """
     url_map: dict[str, EvidenceItem] = {}
     for agent in agents:
         for result in agent.evidence:
+            if _is_irrelevant_evidence(result.url, result.title, result.snippet):
+                continue
             normalized_url = result.url.rstrip("/").lower()
             if normalized_url in url_map:
                 url_map[normalized_url].cited_by_agents += 1

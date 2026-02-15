@@ -22,11 +22,29 @@ BLACKLISTED_DOMAINS = [
     "smarkets.com",
 ]
 
+# Utility/tool domains that are never relevant to FX analysis
+IRRELEVANT_DOMAINS = [
+    "calculator.net",
+    "calculateconvert.com",
+    "gigacalculator.com",
+    "calculatorsoup.com",
+    "timeanddate.com",
+    "convertunits.com",
+    "rapidtables.com",
+    "unitconverters.net",
+    "mathsisfun.com",
+    "daysuntil.net",
+    "epochconverter.com",
+]
+
 _cache = SearchCache()
 
 
 def _is_blacklisted(url: str) -> bool:
-    return any(domain in url.lower() for domain in BLACKLISTED_DOMAINS)
+    url_lower = url.lower()
+    return any(domain in url_lower for domain in BLACKLISTED_DOMAINS) or any(
+        domain in url_lower for domain in IRRELEVANT_DOMAINS
+    )
 
 
 async def search_web(
@@ -44,6 +62,11 @@ async def search_web(
     Returns:
         List of SearchResult objects, with blacklisted domains removed.
     """
+    # Reject empty or whitespace-only queries
+    if not query or not query.strip():
+        logger.warning("Empty search query — skipping web search")
+        return []
+
     # Check cache first
     cache_key = f"web:{query}:{cutoff_date}"
     cached = _cache.get(cache_key)

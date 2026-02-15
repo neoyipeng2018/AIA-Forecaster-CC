@@ -8,7 +8,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # LLM
-    llm_model: str = "anthropic/claude-sonnet-4-5-20250929"
+    llm_model: str = "gpt-4o"
+    openai_api_key: str = ""
 
     # Forecaster
     num_agents: int = 10
