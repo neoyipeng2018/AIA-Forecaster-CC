@@ -25,8 +25,10 @@ from aia_forecaster.models import (
     AgentForecast,
     Confidence,
     ForecastQuestion,
+    ResearchBrief,
     SearchResult,
     SupervisorResult,
+    Tenor,
 )
 from aia_forecaster.search.web import search_web
 
@@ -88,6 +90,46 @@ Respond in this EXACT JSON format:
   "confidence": "high" | "medium" | "low",
   "reconciled_probability": 0.XX,
   "reasoning": "Explanation of your reconciliation"
+}}"""
+
+
+SURFACE_REVIEW_PROMPT = """\
+You are a senior FX supervisor reviewing a FULL probability surface for {pair}.
+
+Spot rate: {spot}
+Information cutoff: {cutoff_date}
+
+PROBABILITY GRID (P(above strike) for each strike × tenor):
+{grid_text}
+
+SHARED RESEARCH THEMES (from {num_agents} agents):
+{research_themes}
+
+Review this probability surface for anomalies:
+1. Non-monotonicity: P(above strike) should decrease as strike increases (for each tenor)
+2. Tenor inconsistency: Longer tenors should generally show more regression toward 0.5 \
+(probabilities for extreme strikes should move toward 0.5 at longer horizons)
+3. Implausible values: Any cell that seems inconsistent with the evidence
+4. Missing risk factors: Evidence themes that should shift specific cells but don't seem to
+
+For each anomalous cell, decide if you have HIGH confidence in a correction.
+Only override cells where specific evidence clearly demands it.
+
+Respond in this EXACT JSON format:
+{{
+  "anomalies_found": true/false,
+  "search_queries": ["targeted query 1", "targeted query 2"],
+  "adjustments": [
+    {{
+      "strike": 155.00,
+      "tenor": "1W",
+      "current_probability": 0.XX,
+      "adjusted_probability": 0.XX,
+      "confidence": "high" | "medium" | "low",
+      "reasoning": "Why this cell needs adjustment"
+    }}
+  ],
+  "surface_reasoning": "Overall assessment of the surface quality"
 }}"""
 
 
@@ -182,6 +224,117 @@ class SupervisorAgent:
         )
 
         return self._parse_reconciliation(reconciliation_response, additional_evidence)
+
+    async def review_surface(
+        self,
+        pair: str,
+        spot: float,
+        cutoff_date,
+        strikes: list[float],
+        tenors: list[Tenor],
+        cell_probabilities: dict[tuple[float, Tenor], float],
+        briefs: list[ResearchBrief],
+    ) -> dict[tuple[float, Tenor], float]:
+        """Review the full probability surface and return adjustments.
+
+        Unlike per-cell reconciliation, this reviews the entire grid for
+        cross-cell consistency and does targeted searches only for
+        genuine anomalies.
+
+        Returns:
+            Dict mapping (strike, tenor) → adjusted probability.
+            Only contains cells that were adjusted with HIGH confidence.
+        """
+        # Build grid text
+        grid_lines = ["Strike    " + "  ".join(f"{t.value:>6}" for t in tenors)]
+        for strike in strikes:
+            row = f"{strike:<10.2f}"
+            for tenor in tenors:
+                p = cell_probabilities.get((strike, tenor), float("nan"))
+                row += f"  {p:>6.3f}"
+            grid_lines.append(row)
+        grid_text = "\n".join(grid_lines)
+
+        # Collect research themes across all agents
+        all_themes: list[str] = []
+        for brief in briefs:
+            all_themes.extend(brief.key_themes)
+        # Deduplicate
+        seen: set[str] = set()
+        unique_themes: list[str] = []
+        for theme in all_themes:
+            normalized = theme.lower().strip()
+            if normalized not in seen:
+                seen.add(normalized)
+                unique_themes.append(theme)
+        research_themes = "\n".join(f"- {t}" for t in unique_themes[:15])
+
+        prompt = SURFACE_REVIEW_PROMPT.format(
+            pair=pair,
+            spot=spot,
+            cutoff_date=cutoff_date,
+            grid_text=grid_text,
+            num_agents=len(briefs),
+            research_themes=research_themes or "No themes available.",
+        )
+
+        response = await self.llm.complete(
+            [{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=2000,
+        )
+
+        # Parse response
+        adjustments: dict[tuple[float, Tenor], float] = {}
+        try:
+            text = response.strip()
+            if text.startswith("```"):
+                lines = text.split("\n")
+                lines = [l for l in lines if not l.strip().startswith("```")]
+                text = "\n".join(lines)
+            data = json.loads(text)
+
+            surface_reasoning = data.get("surface_reasoning", "")
+            logger.info("Supervisor surface review: %s", surface_reasoning[:200])
+
+            # Execute targeted searches if any
+            search_queries = data.get("search_queries", [])
+            additional_evidence: list[SearchResult] = []
+            for query in search_queries[:3]:
+                try:
+                    results = await search_web(
+                        query=query,
+                        max_results=5,
+                        cutoff_date=cutoff_date,
+                    )
+                    additional_evidence.extend(results)
+                except Exception:
+                    logger.warning("Supervisor: Surface search failed for '%s'", query)
+
+            # Apply HIGH confidence adjustments only
+            for adj in data.get("adjustments", []):
+                conf = adj.get("confidence", "low").lower()
+                if conf != "high":
+                    continue
+                try:
+                    strike = float(adj["strike"])
+                    tenor = Tenor(adj["tenor"])
+                    adjusted_p = max(0.0, min(1.0, float(adj["adjusted_probability"])))
+                    adjustments[(strike, tenor)] = adjusted_p
+                    logger.info(
+                        "Supervisor adjusted [%s, %.2f]: %.4f → %.4f (%s)",
+                        tenor.value, strike,
+                        adj.get("current_probability", 0),
+                        adjusted_p,
+                        adj.get("reasoning", "")[:100],
+                    )
+                except (KeyError, ValueError) as e:
+                    logger.warning("Supervisor: Invalid adjustment entry: %s", e)
+
+        except (json.JSONDecodeError, KeyError) as e:
+            logger.warning("Supervisor: Failed to parse surface review: %s", e)
+
+        return adjustments
 
     def _parse_disagreements(self, response: str) -> list[str]:
         """Extract search queries from the disagreement analysis."""

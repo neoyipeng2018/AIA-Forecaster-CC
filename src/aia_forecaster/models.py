@@ -22,6 +22,14 @@ class Confidence(str, Enum):
     LOW = "low"
 
 
+class SearchMode(str, Enum):
+    """Controls which information sources an agent uses."""
+
+    RSS_ONLY = "rss_only"  # RSS feeds only, no web search
+    WEB_ONLY = "web_only"  # Web search only, no RSS
+    HYBRID = "hybrid"  # Both RSS and web search (original behavior)
+
+
 # --- Search ---
 
 
@@ -60,6 +68,7 @@ class AgentForecast(BaseModel):
     search_queries: list[str] = Field(default_factory=list)
     evidence: list[SearchResult] = Field(default_factory=list)
     iterations: int = 0
+    search_mode: SearchMode = SearchMode.HYBRID
 
 
 class SupervisorResult(BaseModel):
@@ -82,6 +91,41 @@ class CalibratedForecast(BaseModel):
     raw_probability: float
     calibrated_probability: float
     alpha: float
+
+
+# --- Two-Phase Surface Research ---
+
+
+class ResearchBrief(BaseModel):
+    """Per-agent research output from Phase 1 (shared research)."""
+
+    agent_id: int
+    key_themes: list[str] = Field(default_factory=list)
+    evidence: list[SearchResult] = Field(default_factory=list)
+    search_queries: list[str] = Field(default_factory=list)
+    search_mode: SearchMode = SearchMode.HYBRID
+    macro_summary: str = ""
+    iterations: int = 0
+
+
+class SharedResearch(BaseModel):
+    """Collection of all agent research briefs for a currency pair."""
+
+    pair: str
+    cutoff_date: date
+    briefs: list[ResearchBrief] = Field(default_factory=list)
+
+
+class BatchPricingResult(BaseModel):
+    """Per-agent pricing of all strikes for one tenor."""
+
+    agent_id: int
+    tenor: Tenor
+    probabilities: dict[str, float] = Field(
+        default_factory=dict,
+        description="Map of strike (as string) to probability",
+    )
+    reasoning: str = ""
 
 
 # --- FX Surface ---

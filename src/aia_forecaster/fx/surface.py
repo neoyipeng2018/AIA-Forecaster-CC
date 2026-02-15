@@ -18,7 +18,8 @@ from aia_forecaster.fx.pairs import DEFAULT_TENORS, generate_strikes
 from aia_forecaster.fx.rates import get_spot_rate
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import (
-    ForecastQuestion,
+    AgentForecast,
+    EnsembleResult,
     ProbabilitySurface,
     SurfaceCell,
     Tenor,
@@ -43,10 +44,17 @@ def _question_text(pair: str, strike: float, tenor: Tenor) -> str:
 
 
 class ProbabilitySurfaceGenerator:
-    """Generates the full probability surface for a currency pair."""
+    """Generates the full probability surface for a currency pair.
+
+    Uses a two-phase approach to avoid redundant search:
+      Phase 1: Shared research — agents gather evidence for the pair (not per-cell)
+      Phase 2: Batch pricing — each agent prices all cells using its own evidence
+    This reduces LLM calls from ~3,000 to ~170 (a ~94% reduction).
+    """
 
     def __init__(self, llm: LLMClient | None = None, num_agents: int | None = None):
-        self.engine = EnsembleEngine(llm=llm, num_agents=num_agents)
+        self.llm = llm or LLMClient()
+        self.engine = EnsembleEngine(llm=self.llm, num_agents=num_agents)
 
     async def generate(
         self,
@@ -55,7 +63,11 @@ class ProbabilitySurfaceGenerator:
         tenors: list[Tenor] | None = None,
         cutoff_date: date | None = None,
     ) -> ProbabilitySurface:
-        """Generate the probability surface.
+        """Generate the probability surface using two-phase shared research.
+
+        Phase 1: Shared research — M agents independently research the pair outlook
+        Phase 2: Batch pricing — each agent prices all (strike, tenor) cells
+        Phase 3: Surface-level supervisor review + Platt calibration + PAVA
 
         Args:
             pair: Currency pair.
@@ -79,55 +91,138 @@ class ProbabilitySurfaceGenerator:
         console.print(f"[bold]Tenors:[/bold] {[t.value for t in tenors]}")
 
         total_cells = len(strikes) * len(tenors)
-        console.print(f"\n[bold]Generating {total_cells} forecasts...[/bold]\n")
+        num_agents = self.engine.num_agents
+        estimated_calls = (
+            num_agents * 7  # ~7 LLM calls per agent in research (queries + assess + summary)
+            + num_agents * len(tenors)  # pricing calls
+            + 1  # supervisor surface review
+        )
+        console.print(
+            f"\n[bold]Generating {total_cells} cell surface "
+            f"(~{estimated_calls} LLM calls via shared research)...[/bold]\n"
+        )
 
+        # --- Phase 1: Shared Research ---
+        console.print("[bold]Phase 1: Shared Research[/bold]")
+        shared_research = await self.engine.research(pair, cutoff_date)
+        console.print(
+            f"  [green]{len(shared_research.briefs)} agents produced research briefs[/green]"
+        )
+        for brief in shared_research.briefs:
+            themes = ", ".join(brief.key_themes[:3]) if brief.key_themes else "—"
+            console.print(
+                f"  [dim]Agent {brief.agent_id} ({brief.search_mode.value}): "
+                f"{brief.iterations} searches, {len(brief.evidence)} evidence items, "
+                f"themes: {themes}[/dim]"
+            )
+
+        # --- Phase 2: Batch Pricing ---
+        console.print("\n[bold]Phase 2: Batch Pricing[/bold]")
+        cell_data = await self.engine.price_surface(
+            shared_research, strikes, tenors, spot
+        )
+
+        # Build surface cells with synthetic EnsembleResult per cell
         surface = ProbabilitySurface(pair=pair, spot_rate=spot)
+        cell_probabilities: dict[tuple[float, Tenor], float] = {}
 
         for tenor in tenors:
             for strike in strikes:
                 q_text = _question_text(pair, strike, tenor)
-                console.print(f"  [dim]{q_text}[/dim]")
+                data = cell_data.get((strike, tenor), {})
+                agent_probs = data.get("agent_probabilities", [])
+                mean_prob = data.get("mean_probability", 0.5)
 
-                question = ForecastQuestion(
-                    text=q_text,
-                    pair=pair,
-                    spot=spot,
-                    strike=strike,
-                    tenor=tenor,
-                    cutoff_date=cutoff_date,
+                # Build synthetic AgentForecast objects for explanation compatibility
+                agent_forecasts = []
+                briefs = data.get("agent_briefs", shared_research.briefs)
+                for idx, p in enumerate(agent_probs):
+                    brief = briefs[idx] if idx < len(briefs) else None
+                    agent_forecasts.append(AgentForecast(
+                        agent_id=brief.agent_id if brief else idx,
+                        probability=p,
+                        reasoning=brief.macro_summary if brief else "",
+                        search_queries=brief.search_queries if brief else [],
+                        evidence=brief.evidence if brief else [],
+                        iterations=brief.iterations if brief else 0,
+                        search_mode=brief.search_mode if brief else "hybrid",
+                    ))
+
+                ensemble_result = EnsembleResult(
+                    agent_forecasts=agent_forecasts,
+                    mean_probability=mean_prob,
+                    supervisor=None,
+                    final_probability=mean_prob,
                 )
 
-                try:
-                    ensemble_result = await self.engine.run(question)
-                    cal = calibrate(ensemble_result.final_probability)
+                cell_probabilities[(strike, tenor)] = mean_prob
 
-                    cell = SurfaceCell(
-                        strike=strike,
-                        tenor=tenor,
-                        question=q_text,
-                        calibrated=cal,
-                        ensemble=ensemble_result,
-                    )
-                    surface.cells.append(cell)
+                console.print(
+                    f"  [dim]{q_text}[/dim] → mean={mean_prob:.4f} "
+                    f"(n={len(agent_probs)})"
+                )
 
-                    console.print(
-                        f"    → raw={cal.raw_probability:.4f}, "
-                        f"calibrated={cal.calibrated_probability:.4f}"
-                    )
-                except Exception:
-                    logger.exception("Failed to forecast: %s", q_text)
-                    surface.cells.append(
-                        SurfaceCell(strike=strike, tenor=tenor, question=q_text)
-                    )
+                surface.cells.append(SurfaceCell(
+                    strike=strike,
+                    tenor=tenor,
+                    question=q_text,
+                    ensemble=ensemble_result,
+                ))
 
-        # Enforce monotonicity: P(above strike) must be non-increasing as strike rises
+        # --- Phase 3: Surface-level Supervisor ---
+        console.print("\n[bold]Phase 3: Surface Supervisor Review[/bold]")
+        from aia_forecaster.agents.supervisor import SupervisorAgent
+
+        supervisor = SupervisorAgent(llm=self.llm)
+        try:
+            adjustments = await supervisor.review_surface(
+                pair=pair,
+                spot=spot,
+                cutoff_date=cutoff_date,
+                strikes=strikes,
+                tenors=tenors,
+                cell_probabilities=cell_probabilities,
+                briefs=shared_research.briefs,
+            )
+            if adjustments:
+                console.print(
+                    f"  [yellow]Supervisor adjusted {len(adjustments)} cell(s)[/yellow]"
+                )
+                # Apply high-confidence adjustments
+                for cell in surface.cells:
+                    key = (cell.strike, cell.tenor)
+                    if key in adjustments:
+                        adjusted_p = adjustments[key]
+                        cell_probabilities[key] = adjusted_p
+                        if cell.ensemble:
+                            cell.ensemble.final_probability = adjusted_p
+                        console.print(
+                            f"    [{cell.tenor.value}, {cell.strike:.2f}]: "
+                            f"adjusted to {adjusted_p:.4f}"
+                        )
+            else:
+                console.print("  [green]No adjustments needed[/green]")
+        except Exception as e:
+            logger.error("Supervisor surface review failed: %s", e)
+            console.print(f"  [red]Supervisor failed: {e}[/red]")
+
+        # --- Calibration ---
+        console.print("\n[bold]Calibrating (Platt scaling)...[/bold]")
+        for cell in surface.cells:
+            final_p = cell_probabilities.get(
+                (cell.strike, cell.tenor),
+                cell.ensemble.final_probability if cell.ensemble else 0.5,
+            )
+            cell.calibrated = calibrate(final_p)
+
+        # --- Monotonicity (PAVA) ---
         n_adjusted = enforce_surface_monotonicity(surface)
         if n_adjusted:
             console.print(
-                f"\n[yellow]Monotonicity: adjusted {n_adjusted} cell(s)[/yellow]"
+                f"[yellow]Monotonicity: adjusted {n_adjusted} cell(s)[/yellow]"
             )
         else:
-            console.print("\n[green]Monotonicity: no violations[/green]")
+            console.print("[green]Monotonicity: no violations[/green]")
 
         return surface
 
