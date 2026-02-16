@@ -23,6 +23,7 @@ from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import (
     AgentForecast,
     BatchPricingResult,
+    CausalFactor,
     ForecastQuestion,
     ResearchBrief,
     SearchMode,
@@ -160,9 +161,30 @@ Produce a summary covering:
 3. Near-term risks and catalysts
 4. Overall directional bias (bullish/bearish/neutral on {base} vs {quote})
 
+CAUSAL ANALYSIS (REQUIRED):
+For each material factor you identified, state the causal chain explicitly:
+- Event/Condition: What is happening or expected to happen
+- Channel: How it transmits to {pair} (e.g., rate differential, risk appetite, trade flows, safe-haven demand, carry trade, portfolio rebalancing)
+- Direction: Does this make {base} stronger (bullish on pair) or weaker (bearish on pair)?
+- Magnitude: strong / moderate / weak
+- Confidence: high / medium / low (how sure are you this factor is active?)
+
+Be specific about the transmission channel — two analysts can agree on the event but disagree \
+on which channel dominates, producing opposite forecasts. Making the channel explicit is the \
+whole point.
+
 Respond in this EXACT JSON format:
 {{
   "key_themes": ["theme1", "theme2", "theme3"],
+  "causal_factors": [
+    {{
+      "event": "BOJ signals rate hike in March",
+      "channel": "rate differential narrowing",
+      "direction": "bearish",
+      "magnitude": "strong",
+      "confidence": "high"
+    }}
+  ],
   "macro_summary": "2-3 paragraph summary of your analysis"
 }}"""
 
@@ -181,18 +203,33 @@ YOUR EVIDENCE:
 YOUR MACRO ANALYSIS:
 {macro_summary}
 
+YOUR CAUSAL FACTORS:
+{causal_factors_block}
+
 BASE RATES (statistical anchors):
 {base_rates_block}
 
-For EACH strike, provide a probability that reflects your evidence.
-Rules:
-- Probabilities MUST be non-increasing as strike increases (higher price = less likely to be above)
-- Do NOT hedge toward 0.5 — if evidence points in one direction, commit to it
-- Use the base rates as starting anchors and adjust based on your evidence
+INSTRUCTIONS:
+1. Start from the base rates as statistical anchors.
+2. For EACH causal factor above, assess whether it is relevant at THIS tenor ({tenor_label}). \
+Some factors act fast (positioning, sentiment → days/weeks) while others act slowly \
+(trade flows, policy divergence → months). Weight accordingly.
+3. State how each active factor shifts your probability distribution (up/down, by roughly how much).
+4. Probabilities MUST be non-increasing as strike increases (higher price = less likely to be above).
+5. Do NOT hedge toward 0.5 — if evidence points in one direction, commit to it.
 
 Respond in this EXACT JSON format:
 {{
   "reasoning": "Brief explanation of your probability distribution",
+  "causal_factors": [
+    {{
+      "event": "description of the factor",
+      "channel": "transmission mechanism",
+      "direction": "bullish or bearish",
+      "magnitude": "strong, moderate, or weak",
+      "confidence": "high, medium, or low"
+    }}
+  ],
   "probabilities": {{{strike_keys}}}
 }}"""
 
@@ -212,6 +249,37 @@ def _format_evidence(evidence: list[SearchResult], max_chars: int = 6000) -> str
         parts.append(entry)
         total_chars += len(entry)
     return "\n\n".join(parts)
+
+
+def _format_causal_factors(factors: list[CausalFactor]) -> str:
+    """Format causal factors into a readable block for inclusion in prompts."""
+    if not factors:
+        return "No causal factors identified yet."
+    lines = []
+    for i, f in enumerate(factors, 1):
+        lines.append(
+            f"[{i}] {f.event}\n"
+            f"    Channel: {f.channel}\n"
+            f"    Direction: {f.direction} | Magnitude: {f.magnitude} | Confidence: {f.confidence}"
+        )
+    return "\n".join(lines)
+
+
+def _parse_causal_factors(raw: list[dict]) -> list[CausalFactor]:
+    """Parse raw dicts from LLM JSON into validated CausalFactor objects."""
+    factors: list[CausalFactor] = []
+    for item in raw:
+        try:
+            factors.append(CausalFactor(
+                event=str(item.get("event", "")),
+                channel=str(item.get("channel", "")),
+                direction=str(item.get("direction", "")).lower(),
+                magnitude=str(item.get("magnitude", "moderate")).lower(),
+                confidence=str(item.get("confidence", "medium")).lower(),
+            ))
+        except Exception:
+            logger.warning("Skipping unparseable causal factor: %s", item)
+    return factors
 
 
 class ForecastingAgent:
@@ -459,6 +527,7 @@ class ForecastingAgent:
 
         # Generate macro summary
         key_themes: list[str] = []
+        causal_factors: list[CausalFactor] = []
         macro_summary = ""
         if all_evidence:
             try:
@@ -471,11 +540,12 @@ class ForecastingAgent:
                 summary_response = await self.llm.complete(
                     [{"role": "user", "content": summary_prompt}],
                     temperature=0.3,
-                    max_tokens=1500,
+                    max_tokens=2500,
                 )
                 summary_data = self._parse_json_response(summary_response)
                 key_themes = summary_data.get("key_themes", [])
                 macro_summary = summary_data.get("macro_summary", "")
+                causal_factors = _parse_causal_factors(summary_data.get("causal_factors", []))
             except Exception:
                 logger.warning("Agent %d: Failed to generate macro summary", self.agent_id)
                 macro_summary = _format_evidence(all_evidence, max_chars=3000)
@@ -483,6 +553,7 @@ class ForecastingAgent:
         return ResearchBrief(
             agent_id=self.agent_id,
             key_themes=key_themes,
+            causal_factors=causal_factors,
             evidence=all_evidence,
             search_queries=all_queries,
             search_mode=self.search_mode,
@@ -530,6 +601,9 @@ class ForecastingAgent:
         # Build strike keys for JSON template
         strike_keys = ", ".join(f'"{s:.2f}": 0.XX' for s in strikes)
 
+        # Format causal factors from research phase
+        causal_factors_block = _format_causal_factors(brief.causal_factors)
+
         prompt = BATCH_PRICING_PROMPT.format(
             pair=pair,
             base=base,
@@ -538,6 +612,7 @@ class ForecastingAgent:
             tenor_label=tenor_label,
             evidence_summary=_format_evidence(brief.evidence, max_chars=6000),
             macro_summary=brief.macro_summary or "No macro summary available.",
+            causal_factors_block=causal_factors_block,
             base_rates_block=base_rates_block,
             strike_keys=strike_keys,
         )
@@ -552,6 +627,7 @@ class ForecastingAgent:
         data = self._parse_json_response(response)
         raw_probs = data.get("probabilities", {})
         reasoning = data.get("reasoning", "")
+        causal_factors = _parse_causal_factors(data.get("causal_factors", []))
 
         # Normalize keys and clamp values
         probabilities: dict[str, float] = {}
@@ -568,6 +644,7 @@ class ForecastingAgent:
             tenor=tenor,
             probabilities=probabilities,
             reasoning=reasoning,
+            causal_factors=causal_factors,
         )
 
     def _parse_json_response(self, response: str) -> dict:

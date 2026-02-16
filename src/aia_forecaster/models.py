@@ -33,6 +33,21 @@ class SearchMode(str, Enum):
 # --- Search ---
 
 
+class CausalFactor(BaseModel):
+    """A single causal channel linking an event/condition to an FX impact.
+
+    Agents produce these during research to make their causal reasoning
+    explicit.  The supervisor compares them across agents to pinpoint
+    exactly *where* forecasts diverge (event vs. channel vs. magnitude).
+    """
+
+    event: str = Field(description="Triggering event or condition")
+    channel: str = Field(description="Transmission mechanism (e.g. 'rate differential', 'risk appetite')")
+    direction: str = Field(description="'bullish' or 'bearish' on the pair")
+    magnitude: str = Field(description="'strong', 'moderate', or 'weak'")
+    confidence: str = Field(description="'high', 'medium', or 'low'")
+
+
 class SearchResult(BaseModel):
     query: str
     title: str
@@ -101,6 +116,7 @@ class ResearchBrief(BaseModel):
 
     agent_id: int
     key_themes: list[str] = Field(default_factory=list)
+    causal_factors: list[CausalFactor] = Field(default_factory=list)
     evidence: list[SearchResult] = Field(default_factory=list)
     search_queries: list[str] = Field(default_factory=list)
     search_mode: SearchMode = SearchMode.HYBRID
@@ -126,6 +142,7 @@ class BatchPricingResult(BaseModel):
         description="Map of strike (as string) to probability",
     )
     reasoning: str = ""
+    causal_factors: list[CausalFactor] = Field(default_factory=list)
 
 
 # --- FX Surface ---

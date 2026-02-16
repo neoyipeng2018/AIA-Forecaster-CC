@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     max_search_iterations: int = 5
     platt_alpha: float = math.sqrt(3)
 
+    # Causal reasoning
+    regime_weighting_enabled: bool = True
+
     # Default currency pair
     default_pair: str = "USDJPY"
 
