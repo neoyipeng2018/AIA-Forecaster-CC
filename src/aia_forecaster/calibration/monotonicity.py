@@ -64,6 +64,43 @@ def enforce_decreasing(probabilities: list[float]) -> list[float]:
     return result
 
 
+def enforce_raw_surface_monotonicity(
+    cell_probabilities: dict[tuple[float, "Tenor"], float],
+    strikes: list[float],
+    tenors: list["Tenor"],
+) -> int:
+    """Apply PAVA to raw (pre-calibration) probabilities per tenor.
+
+    Modifies *cell_probabilities* in-place so that for each tenor the
+    probabilities are non-increasing as strike increases.
+
+    Returns:
+        Number of cells whose probabilities were adjusted.
+    """
+    sorted_strikes = sorted(strikes)
+    total_adjusted = 0
+
+    for tenor in tenors:
+        probs = [cell_probabilities.get((s, tenor), 0.5) for s in sorted_strikes]
+        adjusted = enforce_decreasing(probs)
+
+        for strike, orig, adj in zip(sorted_strikes, probs, adjusted):
+            if abs(orig - adj) > 1e-10:
+                total_adjusted += 1
+                logger.info(
+                    "Raw monotonicity fix [%s, strike=%.2f]: %.4f -> %.4f",
+                    tenor.value, strike, orig, adj,
+                )
+                cell_probabilities[(strike, tenor)] = adj
+
+    if total_adjusted:
+        logger.info("Raw monotonicity: adjusted %d cells", total_adjusted)
+    else:
+        logger.info("Raw monotonicity: no violations detected")
+
+    return total_adjusted
+
+
 def enforce_surface_monotonicity(surface: ProbabilitySurface) -> int:
     """Enforce monotonicity across strikes for each tenor in a probability surface.
 

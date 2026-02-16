@@ -14,7 +14,10 @@ import plotly.graph_objects as go
 from rich.console import Console
 from rich.table import Table
 
-from aia_forecaster.calibration.monotonicity import enforce_surface_monotonicity
+from aia_forecaster.calibration.monotonicity import (
+    enforce_raw_surface_monotonicity,
+    enforce_surface_monotonicity,
+)
 from aia_forecaster.calibration.platt import calibrate
 from aia_forecaster.ensemble.engine import EnsembleEngine
 from aia_forecaster.fx.pairs import DEFAULT_TENORS, generate_strikes
@@ -70,7 +73,7 @@ class ProbabilitySurfaceGenerator:
 
         Phase 1: Shared research — M agents independently research the pair outlook
         Phase 2: Batch pricing — each agent prices all (strike, tenor) cells
-        Phase 3: Surface-level supervisor review + Platt calibration + PAVA
+        Phase 3: Surface-level supervisor review + PAVA monotonicity + Platt calibration
 
         Args:
             pair: Currency pair.
@@ -209,23 +212,25 @@ class ProbabilitySurfaceGenerator:
             logger.error("Supervisor surface review failed: %s", e)
             console.print(f"  [red]Supervisor failed: {e}[/red]")
 
-        # --- Calibration ---
-        console.print("\n[bold]Calibrating (Platt scaling)...[/bold]")
+        # --- Monotonicity (PAVA on raw means) ---
+        n_adjusted = enforce_raw_surface_monotonicity(
+            cell_probabilities, strikes, tenors,
+        )
+        if n_adjusted:
+            console.print(
+                f"[yellow]Monotonicity (raw): adjusted {n_adjusted} cell(s)[/yellow]"
+            )
+        else:
+            console.print("[green]Monotonicity: no violations[/green]")
+
+        # --- Calibration (Platt scaling on monotone sequence) ---
+        console.print("[bold]Calibrating (Platt scaling)...[/bold]")
         for cell in surface.cells:
             final_p = cell_probabilities.get(
                 (cell.strike, cell.tenor),
                 cell.ensemble.final_probability if cell.ensemble else 0.5,
             )
             cell.calibrated = calibrate(final_p)
-
-        # --- Monotonicity (PAVA) ---
-        n_adjusted = enforce_surface_monotonicity(surface)
-        if n_adjusted:
-            console.print(
-                f"[yellow]Monotonicity: adjusted {n_adjusted} cell(s)[/yellow]"
-            )
-        else:
-            console.print("[green]Monotonicity: no violations[/green]")
 
         return surface
 

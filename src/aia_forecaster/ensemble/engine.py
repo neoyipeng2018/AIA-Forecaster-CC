@@ -44,17 +44,31 @@ class EnsembleEngine:
         self.num_agents = num_agents or settings.num_agents
 
     def _create_agents(self) -> list[ForecastingAgent]:
-        """Create agents with diverse search modes."""
+        """Create agents with diverse search modes, temperatures, and search depths.
+
+        Diversity strategy:
+        - Search modes cycle: RSS_ONLY → WEB_ONLY → HYBRID
+        - Temperatures spread across 0.4–1.0
+        - Search iterations vary from 3–7
+        """
         agents = []
+        modes = [SearchMode.RSS_ONLY, SearchMode.WEB_ONLY, SearchMode.HYBRID]
         for i in range(self.num_agents):
-            mode_index = i % 3
-            if mode_index == 0:
-                mode = SearchMode.RSS_ONLY
-            elif mode_index == 1:
-                mode = SearchMode.WEB_ONLY
+            mode = modes[i % len(modes)]
+            # Spread temperatures evenly across [0.4, 1.0]
+            if self.num_agents > 1:
+                temperature = 0.4 + (i / (self.num_agents - 1)) * 0.6
             else:
-                mode = SearchMode.HYBRID
-            agents.append(ForecastingAgent(agent_id=i, llm=self.llm, search_mode=mode))
+                temperature = 0.7
+            # Vary search iterations: 3, 4, 5, 6, 7, 3, 4, ...
+            max_iters = 3 + (i % 5)
+            agents.append(ForecastingAgent(
+                agent_id=i,
+                llm=self.llm,
+                search_mode=mode,
+                temperature=round(temperature, 2),
+                max_search_iterations=max_iters,
+            ))
         return agents
 
     async def research(self, pair: str, cutoff_date: date) -> SharedResearch:
@@ -124,14 +138,20 @@ class EnsembleEngine:
         pair = shared_research.pair
         cutoff_date = shared_research.cutoff_date
 
-        # Create agents matching the briefs (same agent_id, search_mode)
+        # Create agents matching the briefs (same agent_id, search_mode, diversity)
         agents = []
-        for brief in briefs:
+        for idx, brief in enumerate(briefs):
+            if self.num_agents > 1:
+                temperature = 0.4 + (brief.agent_id / (self.num_agents - 1)) * 0.6
+            else:
+                temperature = 0.7
             agents.append(
                 ForecastingAgent(
                     agent_id=brief.agent_id,
                     llm=self.llm,
                     search_mode=brief.search_mode,
+                    temperature=round(temperature, 2),
+                    max_search_iterations=3 + (brief.agent_id % 5),
                 )
             )
 

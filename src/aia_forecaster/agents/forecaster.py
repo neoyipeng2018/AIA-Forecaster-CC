@@ -45,9 +45,16 @@ Your information cutoff date is {cutoff_date}. Do NOT use any information after 
 {evidence_section}
 
 Based on what you know and any evidence gathered so far, generate the SINGLE BEST search \
-query to find information that would help you estimate the probability of this event. \
-Focus on finding factual, quantitative data — central bank policy signals, economic \
-indicators, market positioning, or geopolitical developments.
+query to find information that would help you estimate the probability of this event.
+
+Prioritize FX-specific data sources:
+- Central bank forward guidance, rate decisions, and dot plots (Fed, ECB, BOJ, BOE, etc.)
+- Economic calendar events: NFP, CPI, GDP, PMI, employment, retail sales
+- CFTC Commitments of Traders (COT) positioning data and risk reversals
+- Key technical levels: support/resistance, round-number barriers, 200-day MA
+- Trade balance and capital flow data (current account, portfolio flows)
+- Cross-pair correlations and risk sentiment indicators (VIX, DXY, yield spreads)
+- Geopolitical risk events affecting safe-haven flows (JPY, CHF, USD)
 
 Respond with ONLY the search query string, nothing else."""
 
@@ -112,9 +119,16 @@ Your information cutoff date is {cutoff_date}. Do NOT use any information after 
 {evidence_section}
 
 Generate the SINGLE BEST search query to find information about the current and near-term \
-outlook for {base}/{quote}. Focus on finding factual, quantitative data — central bank \
-policy signals, economic indicators, market positioning, or geopolitical developments \
-that could affect this currency pair over the next 1 day to 6 months.
+outlook for {base}/{quote} over the next 1 day to 6 months.
+
+Prioritize FX-specific data sources:
+- Central bank forward guidance, rate decisions, and dot plots for both currencies
+- Economic calendar events: NFP, CPI, GDP, PMI, employment, retail sales
+- CFTC Commitments of Traders (COT) positioning data and risk reversals
+- Key technical levels: support/resistance, round-number barriers, 200-day MA
+- Trade balance and capital flow data (current account, portfolio flows)
+- Cross-pair correlations and risk sentiment indicators (VIX, DXY, yield spreads)
+- Geopolitical risk events affecting safe-haven flows (JPY, CHF, USD)
 
 Respond with ONLY the search query string, nothing else."""
 
@@ -208,10 +222,18 @@ class ForecastingAgent:
         agent_id: int,
         llm: LLMClient | None = None,
         search_mode: SearchMode = SearchMode.HYBRID,
+        temperature: float | None = None,
+        max_search_iterations: int | None = None,
     ):
         self.agent_id = agent_id
         self.llm = llm or LLMClient()
         self.search_mode = search_mode
+        self.temperature = temperature if temperature is not None else 0.7
+        self.max_search_iterations = (
+            max_search_iterations
+            if max_search_iterations is not None
+            else settings.max_search_iterations
+        )
 
     def _build_base_rate_section(self, question: ForecastQuestion) -> str:
         """Build the base rate context block if spot/strike/tenor are available."""
@@ -259,7 +281,7 @@ class ForecastingAgent:
 
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
-            for iteration in range(1, settings.max_search_iterations + 1):
+            for iteration in range(1, self.max_search_iterations + 1):
                 # Step 1: Generate search query
                 evidence_section = ""
                 if all_evidence:
@@ -275,7 +297,7 @@ class ForecastingAgent:
                 )
                 search_query = await self.llm.complete(
                     [{"role": "user", "content": query_prompt}],
-                    temperature=0.7 + (self.agent_id % 5) * 0.05,  # Slight diversity
+                    temperature=self.temperature,
                     max_tokens=200,
                 )
                 search_query = search_query.strip().strip('"')
@@ -301,7 +323,7 @@ class ForecastingAgent:
                     logger.warning("Agent %d: Search failed for query '%s'", self.agent_id, search_query)
 
                 # Step 3: Assess if we have enough evidence (skip on last iteration)
-                if iteration < settings.max_search_iterations:
+                if iteration < self.max_search_iterations:
                     assess_prompt = ASSESS_PROMPT.format(
                         question=question.text,
                         iteration=iteration,
@@ -375,7 +397,7 @@ class ForecastingAgent:
 
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
-            for iteration in range(1, settings.max_search_iterations + 1):
+            for iteration in range(1, self.max_search_iterations + 1):
                 evidence_section = ""
                 if all_evidence:
                     evidence_section = (
@@ -391,7 +413,7 @@ class ForecastingAgent:
                 )
                 search_query = await self.llm.complete(
                     [{"role": "user", "content": query_prompt}],
-                    temperature=0.7 + (self.agent_id % 5) * 0.05,
+                    temperature=self.temperature,
                     max_tokens=200,
                 )
                 search_query = search_query.strip().strip('"')
@@ -418,7 +440,7 @@ class ForecastingAgent:
                     logger.warning("Agent %d: Search failed for query '%s'",
                                    self.agent_id, search_query)
 
-                if iteration < settings.max_search_iterations:
+                if iteration < self.max_search_iterations:
                     assess_prompt = RESEARCH_ASSESS_PROMPT.format(
                         pair=pair,
                         iteration=iteration,
