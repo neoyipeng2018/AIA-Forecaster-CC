@@ -222,7 +222,7 @@ _cache = SearchCache()
 
 async def fetch_bis_speeches(
     pair: str,
-    max_age_hours: int = 168,
+    max_age_hours: int = 336,
     max_results: int = 15,
 ) -> list[SearchResult]:
     """Fetch recent BIS central bank speeches relevant to a currency pair.
@@ -308,7 +308,7 @@ async def _bis_data_source(
     pair: str, cutoff_date: date | None = None, **kwargs
 ) -> list[SearchResult]:
     """BIS speeches adapter for the data source registry."""
-    max_age_hours = kwargs.get("max_age_hours", 168)
+    max_age_hours = kwargs.get("max_age_hours", 336)
     max_results = kwargs.get("max_results", 15)
     return await fetch_bis_speeches(
         pair=pair,
