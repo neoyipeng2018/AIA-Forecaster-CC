@@ -130,6 +130,10 @@ def _load_builtins() -> None:
         import aia_forecaster.search.rss  # noqa: F401 — triggers @data_source("rss")
     except Exception:
         logger.debug("Could not load built-in RSS data source")
+    try:
+        import aia_forecaster.search.bis  # noqa: F401 — triggers @data_source("bis_speeches")
+    except Exception:
+        logger.debug("Could not load built-in BIS speeches data source")
 
 
 async def fetch_all(
