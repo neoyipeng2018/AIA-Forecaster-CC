@@ -14,6 +14,7 @@ from rich.panel import Panel
 
 from aia_forecaster.models import (
     AgentForecast,
+    CausalFactor,
     CellExplanation,
     Confidence,
     EvidenceItem,
@@ -222,6 +223,9 @@ def explain_surface(surface: ProbabilitySurface) -> SurfaceExplanation:
         spot_rate=surface.spot_rate,
         generated_at=surface.generated_at,
         cells=[explain_cell(cell) for cell in surface.cells],
+        causal_factors=surface.causal_factors,
+        regime=surface.regime,
+        regime_dominant_channels=surface.regime_dominant_channels,
     )
 
 
@@ -230,9 +234,39 @@ def explain_surface(surface: ProbabilitySurface) -> SurfaceExplanation:
 # ---------------------------------------------------------------------------
 
 
+def _format_causal_factors_rich(factors: list[CausalFactor]) -> str:
+    """Format causal factors for Rich CLI display."""
+    if not factors:
+        return "[dim]No causal factors identified.[/dim]"
+    lines = []
+    for f in factors:
+        icon = "[green]+[/green]" if f.direction == "bullish" else "[red]-[/red]"
+        lines.append(
+            f"  {icon} {f.event}\n"
+            f"    [dim]{f.channel} → {f.direction} | "
+            f"magnitude: {f.magnitude} | confidence: {f.confidence}[/dim]"
+        )
+    return "\n".join(lines)
+
+
 def print_explanation(explanation: SurfaceExplanation) -> None:
     """Print per-cell explanations using Rich formatting."""
     console.print(f"\n[bold]Evidence & Reasoning — {explanation.pair}[/bold]\n")
+
+    # Causal factors and regime header
+    if explanation.causal_factors:
+        regime_label = ""
+        if explanation.regime:
+            channels = ", ".join(explanation.regime_dominant_channels) if explanation.regime_dominant_channels else "—"
+            regime_label = f"\n[bold]Regime:[/bold] {explanation.regime} [dim](dominant: {channels})[/dim]"
+
+        console.print(Panel(
+            f"[bold]Causal Factors ({len(explanation.causal_factors)}):[/bold]\n"
+            + _format_causal_factors_rich(explanation.causal_factors)
+            + regime_label,
+            title="Causal Map",
+            border_style="cyan",
+        ))
 
     for cell in explanation.cells:
         if cell.calibrated_probability is None:

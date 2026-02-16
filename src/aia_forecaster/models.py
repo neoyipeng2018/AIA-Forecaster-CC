@@ -161,6 +161,15 @@ class ProbabilitySurface(BaseModel):
     spot_rate: float
     generated_at: datetime = Field(default_factory=datetime.utcnow)
     cells: list[SurfaceCell] = Field(default_factory=list)
+    causal_factors: list[CausalFactor] = Field(
+        default_factory=list,
+        description="Consensus causal factors aggregated from all agent research briefs",
+    )
+    regime: str = Field(
+        default="",
+        description="Detected macro regime (risk_on, risk_off, policy_divergence, carry_unwind, mixed)",
+    )
+    regime_dominant_channels: list[str] = Field(default_factory=list)
 
 
 # --- Explanation Models ---
@@ -199,6 +208,9 @@ class SurfaceExplanation(BaseModel):
     spot_rate: float
     generated_at: datetime
     cells: list[CellExplanation] = Field(default_factory=list)
+    causal_factors: list[CausalFactor] = Field(default_factory=list)
+    regime: str = ""
+    regime_dominant_channels: list[str] = Field(default_factory=list)
 
 
 # --- Full Pipeline Output ---

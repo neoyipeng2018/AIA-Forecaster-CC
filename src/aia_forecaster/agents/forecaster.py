@@ -173,9 +173,10 @@ Be specific about the transmission channel — two analysts can agree on the eve
 on which channel dominates, producing opposite forecasts. Making the channel explicit is the \
 whole point.
 
+You MUST include ALL three fields in your JSON response. Do NOT omit causal_factors.
+
 Respond in this EXACT JSON format:
 {{
-  "key_themes": ["theme1", "theme2", "theme3"],
   "causal_factors": [
     {{
       "event": "BOJ signals rate hike in March",
@@ -183,8 +184,16 @@ Respond in this EXACT JSON format:
       "direction": "bearish",
       "magnitude": "strong",
       "confidence": "high"
+    }},
+    {{
+      "event": "Fed holds rates, pushes back on cuts",
+      "channel": "rate differential widening",
+      "direction": "bullish",
+      "magnitude": "moderate",
+      "confidence": "high"
     }}
   ],
+  "key_themes": ["theme1", "theme2", "theme3"],
   "macro_summary": "2-3 paragraph summary of your analysis"
 }}"""
 
@@ -543,9 +552,21 @@ class ForecastingAgent:
                     max_tokens=2500,
                 )
                 summary_data = self._parse_json_response(summary_response)
+                if not summary_data:
+                    logger.warning(
+                        "Agent %d: summary JSON parse returned empty — "
+                        "response length=%d",
+                        self.agent_id, len(summary_response),
+                    )
                 key_themes = summary_data.get("key_themes", [])
                 macro_summary = summary_data.get("macro_summary", "")
-                causal_factors = _parse_causal_factors(summary_data.get("causal_factors", []))
+                raw_causal = summary_data.get("causal_factors", [])
+                causal_factors = _parse_causal_factors(raw_causal)
+                if causal_factors:
+                    logger.info(
+                        "Agent %d: extracted %d causal factors",
+                        self.agent_id, len(causal_factors),
+                    )
             except Exception:
                 logger.warning("Agent %d: Failed to generate macro summary", self.agent_id)
                 macro_summary = _format_evidence(all_evidence, max_chars=3000)

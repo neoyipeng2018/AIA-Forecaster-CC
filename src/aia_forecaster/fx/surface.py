@@ -25,14 +25,63 @@ from aia_forecaster.fx.rates import get_spot_rate
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import (
     AgentForecast,
+    CausalFactor,
     EnsembleResult,
     ProbabilitySurface,
+    ResearchBrief,
     SurfaceCell,
     Tenor,
 )
 
 logger = logging.getLogger(__name__)
 console = Console()
+
+
+def _build_consensus_factors(briefs: list[ResearchBrief]) -> list[CausalFactor]:
+    """Aggregate causal factors across all agent briefs into consensus factors.
+
+    Groups by (channel, direction), keeps the most common magnitude,
+    and only returns factors cited by 2+ agents (or all if fewer than 2 agents).
+    """
+    if not briefs:
+        return []
+
+    # Collect all factors with agent ids
+    all_factors: list[tuple[int, CausalFactor]] = []
+    for brief in briefs:
+        for f in brief.causal_factors:
+            all_factors.append((brief.agent_id, f))
+
+    if not all_factors:
+        return []
+
+    # Group by (channel_normalized, direction_normalized)
+    groups: dict[tuple[str, str], list[tuple[int, CausalFactor]]] = {}
+    for agent_id, f in all_factors:
+        key = (f.channel.lower().strip(), f.direction.lower().strip())
+        groups.setdefault(key, []).append((agent_id, f))
+
+    # Build consensus factors, sorted by citation count.
+    # Require 2+ agents when enough agents produced factors; otherwise show all.
+    agents_with_factors = len({aid for aid, _ in all_factors})
+    min_count = 2 if agents_with_factors >= 3 else 1
+    consensus: list[CausalFactor] = []
+    for (_channel, _direction), entries in sorted(groups.items(), key=lambda x: -len(x[1])):
+        if len(entries) < min_count:
+            continue
+        magnitudes = [e.magnitude for _, e in entries]
+        confidences = [e.confidence for _, e in entries]
+        representative = entries[0][1]
+        agent_count = len({aid for aid, _ in entries})
+        consensus.append(CausalFactor(
+            event=f"[{agent_count}/{len(briefs)} agents] {representative.event}",
+            channel=representative.channel,
+            direction=representative.direction,
+            magnitude=max(set(magnitudes), key=magnitudes.count),
+            confidence=max(set(confidences), key=confidences.count),
+        ))
+
+    return consensus
 
 
 def _question_text(pair: str, strike: float, tenor: Tenor) -> str:
@@ -122,6 +171,18 @@ class ProbabilitySurfaceGenerator:
                 f"themes: {themes}[/dim]"
             )
 
+        # Aggregate consensus causal factors from all briefs
+        consensus_factors = _build_consensus_factors(shared_research.briefs)
+        if consensus_factors:
+            console.print(f"\n  [bold]Consensus causal factors ({len(consensus_factors)}):[/bold]")
+            for cf in consensus_factors:
+                icon = "[green]+[/green]" if cf.direction == "bullish" else "[red]-[/red]"
+                console.print(
+                    f"    {icon} {cf.event}\n"
+                    f"      [dim]{cf.channel} | {cf.direction} | "
+                    f"magnitude: {cf.magnitude} | confidence: {cf.confidence}[/dim]"
+                )
+
         # --- Phase 2: Batch Pricing ---
         console.print("\n[bold]Phase 2: Batch Pricing[/bold]")
         cell_data = await self.engine.price_surface(
@@ -129,7 +190,11 @@ class ProbabilitySurfaceGenerator:
         )
 
         # Build surface cells with synthetic EnsembleResult per cell
-        surface = ProbabilitySurface(pair=pair, spot_rate=spot)
+        surface = ProbabilitySurface(
+            pair=pair,
+            spot_rate=spot,
+            causal_factors=consensus_factors,
+        )
         cell_probabilities: dict[tuple[float, Tenor], float] = {}
 
         for tenor in tenors:
@@ -180,6 +245,24 @@ class ProbabilitySurfaceGenerator:
         from aia_forecaster.agents.supervisor import SupervisorAgent
 
         supervisor = SupervisorAgent(llm=self.llm)
+
+        # Capture regime for surface metadata
+        from aia_forecaster.config import settings as app_settings
+
+        if app_settings.regime_weighting_enabled and shared_research.briefs:
+            try:
+                regime, dominant_channels, regime_reasoning = await supervisor.detect_regime(
+                    pair, shared_research.briefs
+                )
+                surface.regime = regime
+                surface.regime_dominant_channels = dominant_channels
+                console.print(
+                    f"  [bold]Regime:[/bold] {regime} "
+                    f"[dim](channels: {', '.join(dominant_channels)})[/dim]"
+                )
+            except Exception as e:
+                logger.warning("Regime detection failed: %s", e)
+
         try:
             adjustments = await supervisor.review_surface(
                 pair=pair,
@@ -401,6 +484,23 @@ def _build_hover_text(
                 f"<b>P(above):</b> {cal_p:.3f}" + (f"  (raw: {raw_p:.3f})" if raw_p else ""),
                 f"<b>Agents:</b> {expl.num_agents}",
             ]
+
+            # Causal factors (surface-level, shown per cell in hover)
+            if surface.causal_factors:
+                regime_tag = ""
+                if surface.regime:
+                    regime_tag = f"  [regime: {html_mod.escape(surface.regime)}]"
+                lines.append(f"<br><b>Causal Factors{regime_tag}:</b>")
+                for cf in surface.causal_factors[:5]:
+                    icon = "+" if cf.direction == "bullish" else "-"
+                    event_text = textwrap.shorten(
+                        html_mod.escape(cf.event), width=80, placeholder="..."
+                    )
+                    lines.append(
+                        f"  {icon} {event_text}"
+                        f"<br>    <i>{html_mod.escape(cf.channel)} → {cf.direction} "
+                        f"| {cf.magnitude} | {cf.confidence}</i>"
+                    )
 
             # Consensus
             if expl.consensus_summary:
