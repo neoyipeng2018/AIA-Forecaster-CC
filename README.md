@@ -97,33 +97,114 @@ asyncio.run(main())
 
 ## Architecture
 
-### Two-Phase Surface Generation
+### Pipeline Overview
 
-The surface generator uses a shared-research approach to avoid redundant search across cells (~94% fewer LLM calls vs naive per-cell ensembles):
+```mermaid
+flowchart TB
+    subgraph Input
+        pair["Currency Pair\n(e.g. USDJPY)"]
+        cutoff["Cutoff Date"]
+        spot["Spot Rate\n(Yahoo Finance)"]
+    end
 
+    pair & cutoff & spot --> Phase1
+
+    subgraph Phase1["Phase 1: Shared Research"]
+        direction TB
+        agents["M Forecasting Agents\n(parallel, diversified)"]
+        agents --> a1["Agent 1\n(RSS only, T=0.4)"]
+        agents --> a2["Agent 2\n(Web only, T=0.7)"]
+        agents --> dots["···"]
+        agents --> aM["Agent M\n(Hybrid, T=1.0)"]
+
+        subgraph search["Agentic Search Loop (per agent)"]
+            direction LR
+            q1["Generate\nQuery"] --> s1["Search\n(RSS + Web)"]
+            s1 --> ev["Evaluate\nEvidence"]
+            ev -->|"Need more"| q1
+            ev -->|"Sufficient"| brief["Research\nBrief"]
+        end
+
+        a1 & a2 & aM --> search
+    end
+
+    subgraph Phase2["Phase 2: Batch Pricing"]
+        direction TB
+        pricing["Each Agent × Each Tenor\n= 1 LLM call"]
+        pricing --> grid["Raw Probability Grid\n(M agents × S strikes × T tenors)"]
+    end
+
+    Phase1 -->|"M ResearchBriefs\n+ causal factors"| Phase2
+
+    subgraph Phase3["Phase 3: Aggregation & Calibration"]
+        direction TB
+        mean["Per-Cell Mean\nof M agent estimates"]
+        mean --> sup["Supervisor Review\n(anomaly detection,\ntargeted search)"]
+        sup --> regime["Regime Detection\n(risk-on / risk-off /\npolicy divergence)"]
+        regime --> pava["PAVA Monotonicity\nEnforcement"]
+        pava --> platt["Platt Scaling\n(α = √3, corrects\nLLM hedging bias)"]
+    end
+
+    Phase2 --> Phase3
+
+    subgraph Output
+        direction LR
+        table["Console\nTable"]
+        png["Heatmap\nPNG"]
+        html["Interactive\n3D Surface"]
+        json["JSON\n(full data)"]
+    end
+
+    Phase3 --> Output
+
+    style Phase1 fill:#1a1a2e,stroke:#e94560,color:#eee
+    style Phase2 fill:#1a1a2e,stroke:#0f3460,color:#eee
+    style Phase3 fill:#1a1a2e,stroke:#16213e,color:#eee
+    style Input fill:#0f3460,stroke:#533483,color:#eee
+    style Output fill:#0f3460,stroke:#533483,color:#eee
+    style search fill:#16213e,stroke:#e94560,color:#eee
 ```
-Phase 1: Shared Research (M agents, full agentic search)
-  Each agent researches the broad pair outlook (not a specific cell)
-  Same agentic search loop (up to 5 iterations per agent)
-  Output: M ResearchBriefs with unique evidence + macro reasoning
 
-Phase 2: Batch Pricing (M agents x T tenors, one LLM call each)
-  Each agent prices ALL strikes for a tenor using its own evidence
-  10 agents x 5 tenors = 50 LLM calls (vs ~3,000 with per-cell ensembles)
+### Data Sources
 
-Phase 3: Aggregation & Calibration
-  Per-cell mean of M agent probabilities
-  Surface-level supervisor review (anomaly detection, targeted search)
-  Platt scaling (alpha = sqrt(3), corrects LLM hedging bias)
-  PAVA monotonicity enforcement
+```mermaid
+flowchart LR
+    subgraph sources["Pluggable Data Sources (parallel, error-isolated)"]
+        rss["RSS Feeds\n(27 curated:\nFed, ECB, BOJ,\nFXStreet, ...)"]
+        bis["BIS Speeches\n(central bank\ncommunications)"]
+        web["Web Search\n(DuckDuckGo,\nblacklist-filtered)"]
+        custom["Custom Sources\n(@data_source\ndecorator)"]
+    end
+
+    sources --> filter["Temporal Filter\n+ Foreknowledge\nBias Check"]
+    filter --> agent["Forecasting\nAgent"]
+
+    style sources fill:#1a1a2e,stroke:#e94560,color:#eee
 ```
 
 ### Single-Question Pipeline
 
+```mermaid
+flowchart LR
+    Q["Binary\nQuestion"] --> agents["M Agents\n(parallel)"]
+    agents --> search["Agentic\nSearch"]
+    search --> probs["M Probability\nEstimates"]
+    probs --> sup["Supervisor\nReconciliation"]
+    sup --> cal["Platt\nCalibration"]
+    cal --> P["Final\nProbability"]
+
+    style Q fill:#0f3460,stroke:#533483,color:#eee
+    style P fill:#0f3460,stroke:#533483,color:#eee
 ```
-M agents in parallel -> agentic search -> probability estimate
-  -> supervisor reconciliation -> Platt calibration
-```
+
+### Efficiency: Shared Research vs Naive
+
+The surface generator uses a shared-research approach to avoid redundant search across cells (~94% fewer LLM calls vs naive per-cell ensembles):
+
+| Approach | Formula | LLM Calls |
+|----------|---------|-----------|
+| **Naive per-cell** | 10 agents × 5 strikes × 5 tenors × ~12 calls/cell | **~3,000** |
+| **Shared research** | 10 agents × ~7 research + 10 × 5 pricing + 1 supervisor | **~120** |
 
 ### Key Components
 
