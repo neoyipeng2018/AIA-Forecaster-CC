@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from datetime import date, datetime
 
 from duckduckgo_search import DDGS
@@ -47,6 +48,47 @@ def _is_blacklisted(url: str) -> bool:
     )
 
 
+def _sanitize_query(query: str) -> str:
+    """Sanitize a search query for DuckDuckGo compatibility.
+
+    Strips site: operators, boolean AND/OR, parentheses, and
+    truncates to 300 characters at a word boundary.
+    """
+    q = query
+    # Strip site: operators (e.g. site:reuters.com)
+    q = re.sub(r'site:\S+', '', q)
+    # Strip before:/after: date operators (Google syntax, not DDG)
+    q = re.sub(r'(?:before|after):\S+', '', q)
+    # Strip boolean operators — convert to spaces
+    q = re.sub(r'\b(AND|OR|NOT)\b', ' ', q)
+    # Strip parentheses and quotation marks
+    q = re.sub(r'[()"\']', ' ', q)
+    # Collapse whitespace
+    q = re.sub(r'\s+', ' ', q).strip()
+    # Truncate to 300 chars at word boundary
+    if len(q) > 300:
+        q = q[:300].rsplit(' ', 1)[0]
+    return q
+
+
+def _compute_timelimit(cutoff_date: date) -> str | None:
+    """Compute DDG timelimit parameter from cutoff date.
+
+    Returns 'd' (day), 'w' (week), 'm' (month), 'y' (year), or None.
+    """
+    days = (date.today() - cutoff_date).days
+    if days < 0:
+        # Cutoff is in the future — no restriction needed
+        return None
+    if days <= 1:
+        return "d"
+    if days <= 7:
+        return "w"
+    if days <= 31:
+        return "m"
+    return "y"
+
+
 async def search_web(
     query: str,
     max_results: int = 10,
@@ -74,15 +116,23 @@ async def search_web(
         logger.debug("Cache hit for query: %s", query)
         return [SearchResult(**r) for r in cached]
 
-    # Build query with temporal filter
-    search_query = query
-    if cutoff_date:
-        search_query = f"{query} before:{cutoff_date.isoformat()}"
+    # Sanitize query for DDG compatibility
+    search_query = _sanitize_query(query)
+    if not search_query:
+        logger.warning("Query empty after sanitization — skipping web search")
+        return []
+
+    # Compute DDG-native time limit from cutoff date
+    timelimit = _compute_timelimit(cutoff_date) if cutoff_date else None
 
     results: list[SearchResult] = []
     try:
         with DDGS() as ddgs:
-            raw_results = list(ddgs.text(search_query, max_results=max_results + 5))
+            raw_results = list(ddgs.text(
+                search_query,
+                max_results=max_results + 5,
+                timelimit=timelimit,
+            ))
 
         for r in raw_results:
             url = r.get("href", r.get("link", ""))
@@ -107,6 +157,7 @@ async def search_web(
     except Exception:
         logger.exception("DuckDuckGo search failed for query: %s", query)
 
-    # Cache results
-    _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
+    # Only cache non-empty results to avoid poisoning cache with failures
+    if results:
+        _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
     return results

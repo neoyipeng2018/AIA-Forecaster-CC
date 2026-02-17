@@ -57,6 +57,12 @@ Prioritize FX-specific data sources:
 - Cross-pair correlations and risk sentiment indicators (VIX, DXY, yield spreads)
 - Geopolitical risk events affecting safe-haven flows (JPY, CHF, USD)
 
+IMPORTANT query formatting rules:
+- Keep the query SHORT (under 150 characters, ideally 5-10 words)
+- Use plain keywords only — NO boolean operators (AND/OR), NO parentheses, NO quotation marks
+- Do NOT use site: filters or before:/after: date filters
+- Focus on ONE specific topic per query
+
 Respond with ONLY the search query string, nothing else."""
 
 ASSESS_PROMPT = """\
@@ -130,6 +136,12 @@ Prioritize FX-specific data sources:
 - Trade balance and capital flow data (current account, portfolio flows)
 - Cross-pair correlations and risk sentiment indicators (VIX, DXY, yield spreads)
 - Geopolitical risk events affecting safe-haven flows (JPY, CHF, USD)
+
+IMPORTANT query formatting rules:
+- Keep the query SHORT (under 150 characters, ideally 5-10 words)
+- Use plain keywords only — NO boolean operators (AND/OR), NO parentheses, NO quotation marks
+- Do NOT use site: filters or before:/after: date filters
+- Focus on ONE specific topic per query
 
 Respond with ONLY the search query string, nothing else."""
 
@@ -227,18 +239,9 @@ Some factors act fast (positioning, sentiment → days/weeks) while others act s
 4. Probabilities MUST be non-increasing as strike increases (higher price = less likely to be above).
 5. Do NOT hedge toward 0.5 — if evidence points in one direction, commit to it.
 
-Respond in this EXACT JSON format:
+Respond in this EXACT JSON format (no extra fields):
 {{
   "reasoning": "Brief explanation of your probability distribution",
-  "causal_factors": [
-    {{
-      "event": "description of the factor",
-      "channel": "transmission mechanism",
-      "direction": "bullish or bearish",
-      "magnitude": "strong, moderate, or weak",
-      "confidence": "high, medium, or low"
-    }}
-  ],
   "probabilities": {{{strike_keys}}}
 }}"""
 
@@ -641,14 +644,15 @@ class ForecastingAgent:
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],
             temperature=0.5,
-            max_tokens=1500,
+            max_tokens=4096,
         )
 
         # Parse response
         data = self._parse_json_response(response)
         raw_probs = data.get("probabilities", {})
         reasoning = data.get("reasoning", "")
-        causal_factors = _parse_causal_factors(data.get("causal_factors", []))
+        # Causal factors come from the research phase (brief), not the pricing response
+        causal_factors = brief.causal_factors
 
         # Normalize keys and clamp values
         probabilities: dict[str, float] = {}
@@ -685,6 +689,10 @@ class ForecastingAgent:
                     return json.loads(match.group())
                 except json.JSONDecodeError:
                     pass
+            logger.warning(
+                "JSON parse failed — raw response (first 500 chars): %s",
+                response[:500],
+            )
             return {}
 
     def _parse_forecast_response(self, response: str) -> tuple[float, str]:
