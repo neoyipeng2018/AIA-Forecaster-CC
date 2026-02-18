@@ -474,6 +474,14 @@ _TENOR_DAYS: dict[Tenor, int] = {
 }
 
 
+_HOVER_LINE_WIDTH = 60  # max chars per line in hover tooltips
+
+
+def _wrap_html(text: str, width: int = _HOVER_LINE_WIDTH) -> str:
+    """Wrap *text* to *width* using ``<br>`` tags instead of newlines."""
+    return "<br>".join(textwrap.wrap(text, width=width))
+
+
 def _build_hover_text(
     surface: ProbabilitySurface,
     strikes: list[float],
@@ -521,45 +529,53 @@ def _build_hover_text(
                 lines.append(f"<br><b>Causal Factors{regime_tag}:</b>")
                 for cf in surface.causal_factors[:5]:
                     icon = "+" if cf.direction == "bullish" else "-"
-                    event_text = textwrap.shorten(
-                        html_mod.escape(cf.event), width=80, placeholder="..."
+                    event_text = _wrap_html(
+                        html_mod.escape(cf.event), width=_HOVER_LINE_WIDTH - 4
                     )
+                    detail = (
+                        f"{html_mod.escape(cf.channel)} → {cf.direction} "
+                        f"| {cf.magnitude} | {cf.confidence}"
+                    )
+                    detail_wrapped = _wrap_html(detail, width=_HOVER_LINE_WIDTH - 6)
                     lines.append(
                         f"  {icon} {event_text}"
-                        f"<br>    <i>{html_mod.escape(cf.channel)} → {cf.direction} "
-                        f"| {cf.magnitude} | {cf.confidence}</i>"
+                        f"<br>    <i>{detail_wrapped}</i>"
                     )
 
             # Consensus
             if expl.consensus_summary:
-                wrapped = textwrap.shorten(expl.consensus_summary, width=120, placeholder="...")
-                lines.append(f"<br><b>Consensus:</b> {html_mod.escape(wrapped)}")
+                body = _wrap_html(html_mod.escape(expl.consensus_summary))
+                lines.append(f"<br><b>Consensus:</b><br>{body}")
 
             # Disagreements
             if expl.disagreement_notes:
-                wrapped = textwrap.shorten(expl.disagreement_notes, width=120, placeholder="...")
-                lines.append(f"<b>Disagreements:</b> {html_mod.escape(wrapped)}")
+                body = _wrap_html(html_mod.escape(expl.disagreement_notes))
+                lines.append(f"<b>Disagreements:</b><br>{body}")
 
             # Top evidence (up to 3)
             if expl.top_evidence:
                 lines.append(f"<br><b>Sources ({len(expl.top_evidence)}):</b>")
                 for ev in expl.top_evidence[:3]:
-                    title = textwrap.shorten(html_mod.escape(ev.title), width=80, placeholder="...")
-                    snippet = textwrap.shorten(
-                        html_mod.escape(ev.snippet), width=100, placeholder="..."
+                    title = _wrap_html(
+                        html_mod.escape(ev.title), width=_HOVER_LINE_WIDTH - 4
+                    )
+                    snippet = _wrap_html(
+                        html_mod.escape(ev.snippet), width=_HOVER_LINE_WIDTH - 6
                     )
                     cited = f" [{ev.cited_by_agents} agents]" if ev.cited_by_agents > 1 else ""
                     lines.append(f"  • {title}{cited}")
                     lines.append(f"    <i>{snippet}</i>")
-                    lines.append(f"    {html_mod.escape(ev.url)}")
+                    url_wrapped = _wrap_html(
+                        html_mod.escape(ev.url), width=_HOVER_LINE_WIDTH - 4
+                    )
+                    lines.append(f"    {url_wrapped}")
 
             # Supervisor
             if expl.supervisor_reasoning:
-                sup_text = textwrap.shorten(
-                    html_mod.escape(expl.supervisor_reasoning), width=120, placeholder="..."
-                )
+                sup_text = _wrap_html(html_mod.escape(expl.supervisor_reasoning))
                 lines.append(
-                    f"<br><b>Supervisor ({expl.supervisor_confidence}):</b> {sup_text}"
+                    f"<br><b>Supervisor ({expl.supervisor_confidence}):</b>"
+                    f"<br>{sup_text}"
                 )
 
             row.append("<br>".join(lines))

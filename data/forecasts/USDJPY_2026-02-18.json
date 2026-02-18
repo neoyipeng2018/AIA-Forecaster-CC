@@ -1,0 +1,2332 @@
+{
+  "pair": "USDJPY",
+  "spot_rate": 153.284116,
+  "generated_at": "2026-02-18T08:27:25.472010",
+  "cells": [
+    {
+      "strike": 152.28,
+      "tenor": "1D",
+      "question": "Will USD/JPY touch/reach 152.28 within 1 day?",
+      "calibrated": {
+        "raw_probability": 0.245,
+        "calibrated_probability": 0.12462391286386369,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.19,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.3,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.245,
+        "supervisor": null,
+        "final_probability": 0.245
+      }
+    },
+    {
+      "strike": 153.28,
+      "tenor": "1D",
+      "question": "Will USD/JPY touch/reach 153.28 within 1 day?",
+      "calibrated": {
+        "raw_probability": 0.9984999999999999,
+        "calibrated_probability": 0.9999871183893738,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.998,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.999,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.9984999999999999,
+        "supervisor": null,
+        "final_probability": 0.9984999999999999
+      }
+    },
+    {
+      "strike": 154.28,
+      "tenor": "1D",
+      "question": "Will USD/JPY touch/reach 154.28 within 1 day?",
+      "calibrated": {
+        "raw_probability": 0.28200000000000003,
+        "calibrated_probability": 0.16538289112678078,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.297,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.267,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.28200000000000003,
+        "supervisor": null,
+        "final_probability": 0.28200000000000003
+      }
+    },
+    {
+      "strike": 152.28,
+      "tenor": "1W",
+      "question": "Will USD/JPY touch/reach 152.28 within 1 week?",
+      "calibrated": {
+        "raw_probability": 0.5605,
+        "calibrated_probability": 0.6037751669069576,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.451,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.67,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.5605,
+        "supervisor": null,
+        "final_probability": 0.5605
+      }
+    },
+    {
+      "strike": 153.28,
+      "tenor": "1W",
+      "question": "Will USD/JPY touch/reach 153.28 within 1 week?",
+      "calibrated": {
+        "raw_probability": 0.999,
+        "calibrated_probability": 0.9999936232791672,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.999,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.999,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.999,
+        "supervisor": null,
+        "final_probability": 0.999
+      }
+    },
+    {
+      "strike": 154.28,
+      "tenor": "1W",
+      "question": "Will USD/JPY touch/reach 154.28 within 1 week?",
+      "calibrated": {
+        "raw_probability": 0.6585,
+        "calibrated_probability": 0.7571824184618999,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.707,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611591"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Opening Remarks by Executive Director KAMIYAMA at the 10th Meeting of the Liaison and Coordination Committee on Central Bank Digital Currency on February 2, 2026 (Points Forming Lines, Evolving to Surfaces)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/about/release_2026/rel260217a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611603"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-18T14:30:44.611609"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News & Forecast: GBP/USD trades slightly lower",
+                "snippet": "GBP/USD trades slightly lower at around 1.3556 as of writing. The 20-period Exponential Moving Average (EMA) trends lower at 1.3593 and continues to cap rebounds. Price holds beneath this gauge, maintaining a short-term bearish bias.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-forecast-gbp-usd-trades-slightly-lower-202602180532",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611697"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "When is the UK CPI data and how could it affect GBP/USD?",
+                "snippet": "The United Kingdom (UK) Consumer Price Index (CPI) data for January is scheduled to be published today at 07:00 GMT.",
+                "url": "https://www.fxstreet.com/news/when-is-the-uk-cpi-data-and-how-could-it-affect-gbp-usd-202602180523",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611704"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Saudi Arabia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Saudi Arabia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/saudi-arabia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180505",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611708"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Philippines Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Philippines on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/philippines-gold-price-today-gold-rises-according-to-fxstreet-data-202602180500",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611712"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD loses ground below 1.1850 ahead of FOMC Minutes",
+                "snippet": "The EUR/USD pair loses traction near 1.1840 during the early European session on Wednesday, pressured by renewed US Dollar (USD) demand. Traders brace for the Federal Open Market Committee (FOMC) Minutes for signals on future rate cuts, which will be released later on Wednesday.",
+                "url": "https://www.fxstreet.com/news/eur-usd-loses-ground-below-11850-ahead-of-fomc-minutes-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611719"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "United Arab Emirates Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in United Arab Emirates on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/united-arab-emirates-gold-price-today-gold-rises-according-to-fxstreet-data-202602180455",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611723"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pakistan Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Pakistan on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/pakistan-gold-price-today-gold-rises-according-to-fxstreet-data-202602180445",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611726"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "India Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in India on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/india-gold-price-today-gold-rises-according-to-fxstreet-data-202602180435",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611730"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611736"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Malaysia Gold price today: Gold rises, according to FXStreet data",
+                "snippet": "Gold prices rose in Malaysia on Wednesday, according to data compiled by FXStreet.",
+                "url": "https://www.fxstreet.com/news/malaysia-gold-price-today-gold-rises-according-to-fxstreet-data-202602180430",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611740"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/INR opens flat ahead of FOMC Minutes",
+                "snippet": "The Indian Rupee (INR) opens almost flat against the US Dollar (USD) on Wednesday. The USD/INR pair is expected to wobble near its current levels at around 90.80 as investors await the release of Federal Open Market Committee (FOMC) Minutes at 19:00 GMT.",
+                "url": "https://www.fxstreet.com/news/usd-inr-opens-flat-ahead-of-fomc-minutes-202602180428",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611749"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver Price Forecast: XAG/USD recovers above $74.50 on safe-haven demand, FOMC Minutes loom",
+                "snippet": "Silver price (XAG/USD) rises to near $74.75 on Wednesday at the time of writing, up 1.90% on the day. The white metal rebounds amid persistent tensions between the United States (US) and Iran, which boost safe-haven demand.",
+                "url": "https://www.fxstreet.com/news/silver-price-forecast-xag-usd-drops-to-near-7600-while-investors-await-fomc-minutes-202602170315",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611760"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold regains positive traction after Tuesday's over 2% slump as traders await FOMC Minutes",
+                "snippet": "Gold (XAU/USD) gains some positive traction during the Asian session on Wednesday and recovers a part of the previous day's heavy losses more than 2%, to the $4,843-4,842 region or a nearly two-week low.",
+                "url": "https://www.fxstreet.com/news/gold-plunges-over-3-as-us-iran-talks-boost-usd-demand-202602171902",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611769"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD dives to near 0.6000 as RBNZ’s Breman downplays hawkish prospects",
+                "snippet": "The NZD/USD pair is down 0.7% to near 0.6000 during the Asian trading session on Wednesday, following the monetary policy announcement by the Reserve Bank of New Zealand (RBNZ).",
+                "url": "https://www.fxstreet.com/news/nzd-usd-dives-to-near-06000-as-rbnzs-breman-downplays-hawkish-prospects-202602180305",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611794"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD Price Forecast: Seems vulnerable near mid-1.3500s; UK CPI/FOMC Minutes awaited",
+                "snippet": "The GBP/USD pair struggles to capitalize on the previous day's late rebound from an over one-week low – levels below the 1.3500 psychological mark – and trades with a negative bias for the third consecutive day on Wednesday.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-price-forecast-seems-vulnerable-near-mid-13500s-uk-cpi-fomc-minutes-awaited-202602180257",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611805"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Breman Speech: RBNZ Governor discusses interest rate outlook after the expected hold",
+                "snippet": "Reserve Bank of New Zealand’s (RBNZ) new Governor Anna Breman presents the prepared remarks on the policy statement and responds to media questions at the press conference after the February monetary policy announcement.",
+                "url": "https://www.fxstreet.com/news/rbnz-set-to-hold-interest-rate-as-new-governor-breman-takes-center-stage-202602172015",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611824"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "AUD/NZD gains ground above 1.1750 as RBNZ holds rates, Australian employment report awaited",
+                "snippet": "The AUD/NZD cross rises to near 1.1760 during the Asian trading hours on Wednesday. The New Zealand Dollar (NZD) edges lower against the Australian Dollar (AUD) after the Reserve Bank of New Zealand (RBNZ) interest rate decision.",
+                "url": "https://www.fxstreet.com/news/aud-nzd-gains-ground-above-11750-as-rbnz-holds-rates-australian-employment-report-awaited-202602180223",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-18T14:30:44.611830"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics",
+                "snippet": "Philip N Jefferson: Economic outlook and supply-side (dis)inflation dynamics — Speech by Mr Philip N Jefferson, Vice Chair of the Board of Governors of the Federal Reserve System, at the Brookings Institution, Washington DC, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217c.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203441"
+              },
+              {
+                "query": "bis_speeches:USDJPY",
+                "title": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan",
+                "snippet": "Kazuyuki Masu: Economic activity, prices, and monetary policy in Japan — Speech by Mr Kazuyuki Masu, Member of the Policy Board of the Bank of Japan, at a meeting with local leaders, Ehime, 6 February 2026.",
+                "url": "https://www.bis.org/review/r260217b.htm",
+                "source": "bis.org",
+                "timestamp": "2026-02-18T14:30:38.203505"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.61,
+            "reasoning": "USD/JPY is trading under competing macro forces. Near-term yen strength is the dominant technical narrative: firm Japanese export data and rising market pricing for a BoJ tightening (and sympathetic BOJ comments) are narrowing the historical rate advantage of USD assets and are supporting JPY through trade-flow and yield-channel transmission. Risk-off episodes would further amplify JPY appreciation via safe-haven flows. Offsetting that, hawkish Fed commentary and higher US Treasury yields keep the US rate advantage plausible, supporting USD via portfolio and carry channels. Japanese fiscal worries — or talk of renewed fiscal support — are a meaningful counterweight that can cap JPY gains by increasing JGB supply and domestic risk premia.\n\nOverall bias: mildly bearish USD/JPY (i.e., modest JPY appreciation) in the near term, but the setup is balanced and data/catalyst dependent. Key near-term catalysts to watch are BoJ communications and meeting odds, incoming Japanese trade/GDP prints, Fed speakers and FOMC minutes/US CPI/Treasury moves, and any fiscal-policy announcements from Tokyo — each can rapidly flip positioning given the concentrated liquidity around the mid-153 area.",
+            "search_queries": [
+              "USDJPY outlook next 6 months Fed BoJ COT",
+              "USD JPY near term Fed BoJ rate outlook",
+              "USD JPY outlook 1 6 months BoJ Fed",
+              "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969739"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969822"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969832"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "User | bigspringherald.com - Dollar Supported by Hawkish Fed Comments",
+                "snippet": "Dollar Supported by Hawkish Fed Comments USD/JPY (^USDJPY) on Tuesday fell by -0.12%. The yen recovered from early losses on Tuesday and moved higher. Hawkish comments on Tuesday from BOJ Board member Seiji Adachi were supportive of the yen when he said he favored a BOJ interest rate increase in April. Divergent central bank policies are also bullish for the yen, with the BOJ seen raising ...",
+                "url": "https://business.bigspringherald.com/bigspringherald/article/barchart-2026-2-17-dollar-supported-by-hawkish-fed-comments",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969839"
+              },
+              {
+                "query": "USDJPY outlook next 6 months Fed BoJ COT",
+                "title": "IC Markets - Asia Fundamental Forecast | 17 February 2026",
+                "snippet": "The Japanese Yen has fluctuated around the 153 USD/JPY level after a strong weekly performance driven by political momentum from Takaichi's election victory and prospects of BoJ tightening, though soft GDP figures and fiscal concerns introduced caution, limiting further upside.",
+                "url": "https://www.icmarkets.com.au/blog/ic-markets-asia-fundamental-forecast-17-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:24.969844"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862346"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "Japanese Yen weakens vs. USD as fiscal woes offset BoJ rate hike bets ahead of FOMC Minutes USD/JPY regains positive traction as expectations for more stimulus from Japan revive fiscal concerns.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862408"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862414"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "IC Markets Global - Asia Fundamental Forecast | 18 February 2026",
+                "snippet": "What can we expect from JPY today? The Yen firmed slightly to 153.37 per USD, driven by BoJ rate hike speculation and fiscal policy optimism under PM Takaichi, despite lingering fiscal and growth concerns; it posted a sharp weekly gain but remains below yearly highs, with analysts eyeing further support from potential April tightening.",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-18-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862418"
+              },
+              {
+                "query": "USD JPY near term Fed BoJ rate outlook",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:35.862422"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529668"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Japanese yen weakens vs. USD as fiscal woes offset BoJ ... - FXStreet",
+                "snippet": "The USD/JPY pair attracts fresh buyers following the previous day's volatile price swings and climbs above mid-153.00s during the Asian session on Wednesday.",
+                "url": "https://www.fxstreet.com/news/japanese-yen-weakens-vs-usd-as-fiscal-woes-offset-boj-rate-hike-bets-ahead-of-fomc-minutes-202602180430",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529742"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529749"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529755"
+              },
+              {
+                "query": "USD JPY outlook 1 6 months BoJ Fed",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:25:48.529760"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Japanese Yen Forecast: USD/JPY Drops as Japanese Exports Surge",
+                "snippet": "Japanese trade data lifts yen as exports jump and April BoJ hike bets rise. USD/JPY faces downside risks amid shifting Fed rate cut expectations.",
+                "url": "https://www.fxempire.com/forecasts/article/japanese-yen-forecast-usd-jpy-drops-as-japanese-exports-surge-1580183",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091736"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD/JPY Forecast: 2026, 2027 & Long-Term AI Predictions",
+                "snippet": "Expert United States Dollar to Japanese Yen (USD/JPY) exchange rate forecast and predictions. Daily & monthly AI-powered forex analysis, trends, conversion tools & long-term price predictions on MidForex.",
+                "url": "https://midforex.com/forex/usd-to-jpy-forecast",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091904"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "USD valuation drivers: AUD/USD, USD/JPY and USD/CNH outlook",
+                "snippet": "What's driving the US dollar lower in 2026? Explore Fed policy, trade dynamics and technical analysis for AUD/USD, USD/JPY and USD/CNH. Read analysis now.",
+                "url": "https://www.ig.com/en/news-and-trade-ideas/usd-major-currencies-outlook-260218",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091912"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "US Treasury Yield Curve",
+                "snippet": "The checkboxes below the date slider toggle the display of additional information — the Fed Funds target range, or the most recent CPI reading. Use the pin button to stick a copy to the chart for comparison against other dates.",
+                "url": "https://www.ustreasuryyieldcurve.com/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091917"
+              },
+              {
+                "query": "USD JPY outlook 1 day 6 months BoJ Fed COT technical levels",
+                "title": "Financial News, Market Analysis & Trading Insight - FOREX.com AU",
+                "snippet": "Offering Insight to Financial Markets, Market Forecasting, Trading Webinars As Well As Access To Our Financial Analysts.",
+                "url": "https://www.forex.com/en-au/news-and-analysis/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-18T16:26:03.091921"
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          }
+        ],
+        "mean_probability": 0.6585,
+        "supervisor": null,
+        "final_probability": 0.6585
+      }
+    }
+  ],
+  "forecast_mode": "hitting",
+  "causal_factors": [
+    {
+      "event": "[1/2 agents] BoJ signals/market prices a near-term rate hike (April hike bets rise; BOJ board comments supportive)",
+      "channel": "rate differential narrowing as JGB yields and expected BOJ policy rate rise reduce carry advantage of USD; portfolio rebalancing into JPY assets",
+      "direction": "bearish",
+      "magnitude": "strong",
+      "confidence": "high"
+    },
+    {
+      "event": "[1/2 agents] Japanese exports surge / trade data outperformance",
+      "channel": "current account/trade flow channel — stronger exports increase demand for JPY and improve Japan's FX fundamentals, supporting JPY appreciation",
+      "direction": "bearish",
+      "magnitude": "moderate",
+      "confidence": "medium"
+    },
+    {
+      "event": "[1/2 agents] Hawkish Fed rhetoric and delayed expectations for rate cuts",
+      "channel": "rate differential and yield channel — higher/longer US policy expectations and Treasury yields keep USD assets attractive, widening USD-JPY yield gap",
+      "direction": "bullish",
+      "magnitude": "strong",
+      "confidence": "high"
+    },
+    {
+      "event": "[1/2 agents] Elevated US Treasury yields / steeper relative US yields",
+      "channel": "portfolio flows and carry — higher US yields draw capital into USD assets and sustain USD funding demand, pressuring JPY",
+      "direction": "bullish",
+      "magnitude": "moderate",
+      "confidence": "high"
+    },
+    {
+      "event": "[1/2 agents] Japanese fiscal concerns / possibility of more stimulus or large debt issuance",
+      "channel": "fiscal credibility and supply channel — concerns over fiscal deficits increase expected JPY supply and risk premia on JGBs, undermining JPY",
+      "direction": "bullish",
+      "magnitude": "moderate",
+      "confidence": "medium"
+    },
+    {
+      "event": "[1/2 agents] Risk-off episodes or USD safe-haven bid",
+      "channel": "safe-haven flows — JPY typically appreciates in risk-off as investors seek low-risk FX, while risk-on reduces JPY demand",
+      "direction": "bearish",
+      "magnitude": "moderate",
+      "confidence": "medium"
+    },
+    {
+      "event": "[1/2 agents] Positioning/technical around mid-153 (stop/liquidity clusters)",
+      "channel": "flow/stop-squeeze mechanics and technical-driven order flow — can amplify moves in either direction depending on which side of stops are hit",
+      "direction": "neutral",
+      "magnitude": "weak",
+      "confidence": "low"
+    }
+  ],
+  "regime": "policy_divergence",
+  "regime_dominant_channels": [
+    "rate differential and yield spread",
+    "portfolio flows / carry"
+  ]
+}

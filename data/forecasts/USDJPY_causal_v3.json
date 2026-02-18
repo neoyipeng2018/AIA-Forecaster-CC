@@ -1,0 +1,1414 @@
+{
+  "pair": "USDJPY",
+  "spot_rate": 152.832936,
+  "generated_at": "2026-02-16T18:22:06.977568",
+  "cells": [
+    {
+      "strike": 151.83,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 151.83 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.5,
+        "calibrated_probability": 0.5,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "USD/JPY outlook \"next 1 day\" OR \"next day\" OR \"near term\" OR \"next 6 months\" AND (Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy guidance\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR \"yield curve control\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (CFTC OR \"Commitments of Traders\" OR COT OR \"COT report\" OR \"risk reversals\" OR \"FX options\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day MA\" OR \"200 DMA\" OR \"round number\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"net foreign investment\") AND (VIX OR DXY OR \"USD index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year yield\" OR \"JGB yield\") AND (geopolitical OR \"safe haven\" OR Taiwan OR \"Middle East\" OR Russia) (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:federalreserve.gov OR site:boj.or.jp OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:fxstreet.com OR site:forexfactory.com)",
+              "USD/JPY\" OR USDJPY OR \"US dollar/Japanese yen\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"medium term\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy rate\" OR \"interest rate\" OR \"Fed funds\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR YCC OR \"yield curve control\" OR \"policy statement\" OR \"policy rate\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"IMM positioning\") AND (\"risk reversals\" OR \"options skew\" OR \"FX options\" OR \"25-delta\" OR \"10-delta\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"unemployment rate\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key level\") AND (\"current account\" OR \"trade balance\" OR \"portfolio flows\" OR \"capital flows\" OR \"FX swaps\") AND (VIX OR \"risk sentiment\" OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year\" OR \"10y\") AND (geopolitic* OR \"safe haven\" OR Ukraine OR China OR Taiwan OR \"Middle East\") AND (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:nikkei.com OR site:fxstreet.com OR site:forexlive.com OR site:dailyfx.com OR site:investing.com OR site:tradingeconomics.com OR site:cftc.gov OR site:boj.or.jp OR site:federalreserve.gov OR site:cmegroup.com)",
+              "(USDJPY OR \"USD/JPY\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR overnight OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\") AND (BoJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"forward guidance\") AND (\"nonfarm payrolls\" OR NFP OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"CFTC COT\" OR \"COT positioning\" OR \"risk reversals\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"200 MA\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key levels\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"US-Japan yield\" OR \"10y\" OR \"10-year\" OR \"2y\") AND (geopolitical OR \"safe-haven\" OR Ukraine OR Taiwan OR \"Middle East\") (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:cmegroup.com OR site:fxstreet.com OR site:oanda.com OR site:tradingeconomics.com OR site:refinitiv.com OR site:morganstanley.com OR site:nomura.com OR site:ubs.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near-term\" OR \"near term\" OR \"1d\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\" OR \"6m\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\" OR \"CME FedWatch\") AND (\"Bank of Japan\" OR BOJ OR \"yield curve control\" OR \"forward guidance\" OR \"rate decision\") AND (\"NFP\" OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"speculative positioning\" OR \"positions\" OR \"risk reversals\") AND (\"technical\" OR support OR resistance OR \"200-day\" OR \"200 day MA\" OR \"moving average\" OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"UST JGB\" OR \"JGB yield\" OR \"risk sentiment\" OR \"safe-haven\" OR geopolitical OR \"geopolitical risk\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:wsj.com OR site:cftc.gov OR site:federalreserve.gov OR site:boj.or.jp OR site:tradingeconomics.com OR site:fxstreet.com OR site:dailyfx.com OR site:investing.com OR site:tradingview.com OR site:oanda.com OR site:cmegroup.com OR site:refinitiv.com)"
+            ],
+            "evidence": [],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "(\"USD/JPY\" OR USDJPY OR \"Dollar Yen\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR \"overnight\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\") AND (BOJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"policy guidance\") AND (CPI OR \"consumer price\" OR inflation OR NFP OR \"nonfarm payrolls\" OR GDP OR PMI OR unemployment OR \"retail sales\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"risk reversal\" OR \"risk reversals\" OR \"FX options\") AND (technical OR \"200-day\" OR \"200 day\" OR \"200-day MA\" OR \"moving average\" OR support OR resistance OR \"round number\" OR \"psychological level\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\") AND (DXY OR \"US dollar index\" OR VIX OR \"yield spread\" OR \"US-Japan 10y\" OR \"10 year spread\") AND (geopolitic* OR \"safe-haven\" OR \"safe haven\" OR \"risk sentiment\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:bis.org OR site:cftc.gov OR site:fxstreet.com OR site:tradingeconomics.com OR site:investing.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near term\" OR \"next 6 months\" OR \"3 months\" OR \"1 month\" OR weekly OR daily) AND (\"Bank of Japan\" OR BOJ OR Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"forward guidance\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"speculative positioning\" OR \"risk reversals\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day\" OR \"200 day\" OR \"moving average\" OR trendline OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR GDP OR PMI OR employment OR \"retail sales\" OR \"economic calendar\") AND (\"yield spread\" OR JGB OR UST OR \"10-year\" OR 10y OR \"yield differential\") AND (DXY OR \"US Dollar Index\" OR VIX OR \"risk sentiment\" OR geopolitic* OR \"safe haven\") AND (site:reuters.com OR site:bloomberg.com OR site:fxstreet.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:forexlive.com)",
+              "(\"USD/JPY\" OR \"USD JPY\" OR \"dollar yen\") AND (outlook OR forecast OR \"near-term\" OR \"short term\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (BOJ OR \"Bank of Japan\" OR Fed OR \"Federal Reserve\" OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR CPI OR GDP OR PMI OR employment OR \"retail sales\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR positioning OR \"risk reversals\" OR \"FX options\" OR \"implied volatility\") AND (technical OR \"200-day\" OR \"200 day\" OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (DXY OR VIX OR \"yield spread\" OR \"US-Japan yield\" OR \"Japanese yields\" OR \"10-year\") AND (geopolitic* OR \"safe-haven\" OR Ukraine OR \"Middle East\" OR China) (site:fxstreet.com OR site:forexlive.com OR site:reuters.com OR site:bloomberg.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:tradingview.com)",
+              "(USD JPY OR USD/JPY OR \"US dollar yen\" OR \"dollar/yen\") AND (outlook OR forecast OR \"near term\" OR \"1 day\" OR \"7 day\" OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\" OR \"quarterly\") AND (\"Bank of Japan\" OR BOJ OR \"BoJ\" OR \"Federal Reserve\" OR Fed OR \"rate decision\" OR \"forward guidance\" OR dotplot OR \"dot plot\" OR \"policy guidance\" OR \"interest rate\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"economic calendar\" OR \"data release\") AND (\"COT\" OR \"Commitments of Traders\" OR \"CFTC\" OR \"positioning\" OR \"speculative positioning\") AND (\"risk reversal\" OR \"FX options\" OR \"implied volatility\" OR \"options skew\" OR \"volatility surface\") AND (technical OR \"200-day MA\" OR \"200 day moving average\" OR \"50-day MA\" OR \"support\" OR \"resistance\" OR \"round number\" OR \"trendline\" OR \"key levels\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\" OR \"Japan current account\" OR \"FX reserves\" OR \"foreign investment\") AND (DXY OR \"US dollar index\" OR VIX OR \"risk sentiment\" OR \"risk-on\" OR \"risk-off\" OR \"yield spread\" OR \"yield differential\" OR \"US 10-year\" OR \"JGB\" OR \"Japan 10-year\") AND (geopolitic* OR \"safe-haven\" OR \"flight to safety\" OR \"Taiwan\" OR \"Ukraine\" OR \"Middle East\" OR \"geopolitical risk\") AND (site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:wsj.com OR site:fxstreet.com OR site:forexlive.com OR site:investing.com OR site:cmegroup.com OR site:tradingview.com OR site:researchgate.net OR site:bankofamerica.com OR site:ubs.com OR site:gs.com)",
+              "USD/JPY\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"next 6 months\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (\"Bank of Japan\" OR BOJ OR YCC OR \"yield curve control\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR unemployment OR \"retail sales\" OR \"economic calendar\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"positioning\") AND (\"risk reversals\" OR \"FX options\" OR \"options flow\" OR \"volatility skew\") AND (\"technical levels\" OR \"200-day\" OR \"200 day\" OR SMA OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ Current Account Balances\") AND (VIX OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"UST-JGB\" OR \"yield differential\") AND (geopolitical OR \"safe-haven\" OR \"risk-off\" OR Taiwan OR Korea OR Ukraine OR Russia)"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:25.584516"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584753"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584789"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584803"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584821"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584843"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584856"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584919"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584940"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584960"
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          },
+          {
+            "agent_id": 3,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          }
+        ],
+        "mean_probability": 0.5,
+        "supervisor": null,
+        "final_probability": 0.5
+      }
+    },
+    {
+      "strike": 152.83,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 152.83 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.5,
+        "calibrated_probability": 0.5,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "USD/JPY outlook \"next 1 day\" OR \"next day\" OR \"near term\" OR \"next 6 months\" AND (Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy guidance\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR \"yield curve control\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (CFTC OR \"Commitments of Traders\" OR COT OR \"COT report\" OR \"risk reversals\" OR \"FX options\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day MA\" OR \"200 DMA\" OR \"round number\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"net foreign investment\") AND (VIX OR DXY OR \"USD index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year yield\" OR \"JGB yield\") AND (geopolitical OR \"safe haven\" OR Taiwan OR \"Middle East\" OR Russia) (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:federalreserve.gov OR site:boj.or.jp OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:fxstreet.com OR site:forexfactory.com)",
+              "USD/JPY\" OR USDJPY OR \"US dollar/Japanese yen\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"medium term\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy rate\" OR \"interest rate\" OR \"Fed funds\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR YCC OR \"yield curve control\" OR \"policy statement\" OR \"policy rate\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"IMM positioning\") AND (\"risk reversals\" OR \"options skew\" OR \"FX options\" OR \"25-delta\" OR \"10-delta\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"unemployment rate\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key level\") AND (\"current account\" OR \"trade balance\" OR \"portfolio flows\" OR \"capital flows\" OR \"FX swaps\") AND (VIX OR \"risk sentiment\" OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year\" OR \"10y\") AND (geopolitic* OR \"safe haven\" OR Ukraine OR China OR Taiwan OR \"Middle East\") AND (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:nikkei.com OR site:fxstreet.com OR site:forexlive.com OR site:dailyfx.com OR site:investing.com OR site:tradingeconomics.com OR site:cftc.gov OR site:boj.or.jp OR site:federalreserve.gov OR site:cmegroup.com)",
+              "(USDJPY OR \"USD/JPY\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR overnight OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\") AND (BoJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"forward guidance\") AND (\"nonfarm payrolls\" OR NFP OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"CFTC COT\" OR \"COT positioning\" OR \"risk reversals\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"200 MA\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key levels\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"US-Japan yield\" OR \"10y\" OR \"10-year\" OR \"2y\") AND (geopolitical OR \"safe-haven\" OR Ukraine OR Taiwan OR \"Middle East\") (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:cmegroup.com OR site:fxstreet.com OR site:oanda.com OR site:tradingeconomics.com OR site:refinitiv.com OR site:morganstanley.com OR site:nomura.com OR site:ubs.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near-term\" OR \"near term\" OR \"1d\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\" OR \"6m\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\" OR \"CME FedWatch\") AND (\"Bank of Japan\" OR BOJ OR \"yield curve control\" OR \"forward guidance\" OR \"rate decision\") AND (\"NFP\" OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"speculative positioning\" OR \"positions\" OR \"risk reversals\") AND (\"technical\" OR support OR resistance OR \"200-day\" OR \"200 day MA\" OR \"moving average\" OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"UST JGB\" OR \"JGB yield\" OR \"risk sentiment\" OR \"safe-haven\" OR geopolitical OR \"geopolitical risk\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:wsj.com OR site:cftc.gov OR site:federalreserve.gov OR site:boj.or.jp OR site:tradingeconomics.com OR site:fxstreet.com OR site:dailyfx.com OR site:investing.com OR site:tradingview.com OR site:oanda.com OR site:cmegroup.com OR site:refinitiv.com)"
+            ],
+            "evidence": [],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "(\"USD/JPY\" OR USDJPY OR \"Dollar Yen\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR \"overnight\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\") AND (BOJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"policy guidance\") AND (CPI OR \"consumer price\" OR inflation OR NFP OR \"nonfarm payrolls\" OR GDP OR PMI OR unemployment OR \"retail sales\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"risk reversal\" OR \"risk reversals\" OR \"FX options\") AND (technical OR \"200-day\" OR \"200 day\" OR \"200-day MA\" OR \"moving average\" OR support OR resistance OR \"round number\" OR \"psychological level\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\") AND (DXY OR \"US dollar index\" OR VIX OR \"yield spread\" OR \"US-Japan 10y\" OR \"10 year spread\") AND (geopolitic* OR \"safe-haven\" OR \"safe haven\" OR \"risk sentiment\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:bis.org OR site:cftc.gov OR site:fxstreet.com OR site:tradingeconomics.com OR site:investing.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near term\" OR \"next 6 months\" OR \"3 months\" OR \"1 month\" OR weekly OR daily) AND (\"Bank of Japan\" OR BOJ OR Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"forward guidance\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"speculative positioning\" OR \"risk reversals\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day\" OR \"200 day\" OR \"moving average\" OR trendline OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR GDP OR PMI OR employment OR \"retail sales\" OR \"economic calendar\") AND (\"yield spread\" OR JGB OR UST OR \"10-year\" OR 10y OR \"yield differential\") AND (DXY OR \"US Dollar Index\" OR VIX OR \"risk sentiment\" OR geopolitic* OR \"safe haven\") AND (site:reuters.com OR site:bloomberg.com OR site:fxstreet.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:forexlive.com)",
+              "(\"USD/JPY\" OR \"USD JPY\" OR \"dollar yen\") AND (outlook OR forecast OR \"near-term\" OR \"short term\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (BOJ OR \"Bank of Japan\" OR Fed OR \"Federal Reserve\" OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR CPI OR GDP OR PMI OR employment OR \"retail sales\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR positioning OR \"risk reversals\" OR \"FX options\" OR \"implied volatility\") AND (technical OR \"200-day\" OR \"200 day\" OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (DXY OR VIX OR \"yield spread\" OR \"US-Japan yield\" OR \"Japanese yields\" OR \"10-year\") AND (geopolitic* OR \"safe-haven\" OR Ukraine OR \"Middle East\" OR China) (site:fxstreet.com OR site:forexlive.com OR site:reuters.com OR site:bloomberg.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:tradingview.com)",
+              "(USD JPY OR USD/JPY OR \"US dollar yen\" OR \"dollar/yen\") AND (outlook OR forecast OR \"near term\" OR \"1 day\" OR \"7 day\" OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\" OR \"quarterly\") AND (\"Bank of Japan\" OR BOJ OR \"BoJ\" OR \"Federal Reserve\" OR Fed OR \"rate decision\" OR \"forward guidance\" OR dotplot OR \"dot plot\" OR \"policy guidance\" OR \"interest rate\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"economic calendar\" OR \"data release\") AND (\"COT\" OR \"Commitments of Traders\" OR \"CFTC\" OR \"positioning\" OR \"speculative positioning\") AND (\"risk reversal\" OR \"FX options\" OR \"implied volatility\" OR \"options skew\" OR \"volatility surface\") AND (technical OR \"200-day MA\" OR \"200 day moving average\" OR \"50-day MA\" OR \"support\" OR \"resistance\" OR \"round number\" OR \"trendline\" OR \"key levels\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\" OR \"Japan current account\" OR \"FX reserves\" OR \"foreign investment\") AND (DXY OR \"US dollar index\" OR VIX OR \"risk sentiment\" OR \"risk-on\" OR \"risk-off\" OR \"yield spread\" OR \"yield differential\" OR \"US 10-year\" OR \"JGB\" OR \"Japan 10-year\") AND (geopolitic* OR \"safe-haven\" OR \"flight to safety\" OR \"Taiwan\" OR \"Ukraine\" OR \"Middle East\" OR \"geopolitical risk\") AND (site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:wsj.com OR site:fxstreet.com OR site:forexlive.com OR site:investing.com OR site:cmegroup.com OR site:tradingview.com OR site:researchgate.net OR site:bankofamerica.com OR site:ubs.com OR site:gs.com)",
+              "USD/JPY\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"next 6 months\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (\"Bank of Japan\" OR BOJ OR YCC OR \"yield curve control\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR unemployment OR \"retail sales\" OR \"economic calendar\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"positioning\") AND (\"risk reversals\" OR \"FX options\" OR \"options flow\" OR \"volatility skew\") AND (\"technical levels\" OR \"200-day\" OR \"200 day\" OR SMA OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ Current Account Balances\") AND (VIX OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"UST-JGB\" OR \"yield differential\") AND (geopolitical OR \"safe-haven\" OR \"risk-off\" OR Taiwan OR Korea OR Ukraine OR Russia)"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:25.584516"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584753"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584789"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584803"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584821"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584843"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584856"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584919"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584940"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584960"
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          },
+          {
+            "agent_id": 3,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          }
+        ],
+        "mean_probability": 0.5,
+        "supervisor": null,
+        "final_probability": 0.5
+      }
+    },
+    {
+      "strike": 153.83,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 153.83 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.5,
+        "calibrated_probability": 0.5,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "USD/JPY outlook \"next 1 day\" OR \"next day\" OR \"near term\" OR \"next 6 months\" AND (Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy guidance\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR \"yield curve control\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (CFTC OR \"Commitments of Traders\" OR COT OR \"COT report\" OR \"risk reversals\" OR \"FX options\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day MA\" OR \"200 DMA\" OR \"round number\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"net foreign investment\") AND (VIX OR DXY OR \"USD index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year yield\" OR \"JGB yield\") AND (geopolitical OR \"safe haven\" OR Taiwan OR \"Middle East\" OR Russia) (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:federalreserve.gov OR site:boj.or.jp OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:fxstreet.com OR site:forexfactory.com)",
+              "USD/JPY\" OR USDJPY OR \"US dollar/Japanese yen\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"medium term\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"policy rate\" OR \"interest rate\" OR \"Fed funds\") AND (BOJ OR \"Bank of Japan\" OR \"forward guidance\" OR YCC OR \"yield curve control\" OR \"policy statement\" OR \"policy rate\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"IMM positioning\") AND (\"risk reversals\" OR \"options skew\" OR \"FX options\" OR \"25-delta\" OR \"10-delta\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"unemployment rate\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key level\") AND (\"current account\" OR \"trade balance\" OR \"portfolio flows\" OR \"capital flows\" OR \"FX swaps\") AND (VIX OR \"risk sentiment\" OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"US-Japan yield spread\" OR \"10-year\" OR \"10y\") AND (geopolitic* OR \"safe haven\" OR Ukraine OR China OR Taiwan OR \"Middle East\") AND (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:nikkei.com OR site:fxstreet.com OR site:forexlive.com OR site:dailyfx.com OR site:investing.com OR site:tradingeconomics.com OR site:cftc.gov OR site:boj.or.jp OR site:federalreserve.gov OR site:cmegroup.com)",
+              "(USDJPY OR \"USD/JPY\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR overnight OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\") AND (BoJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"forward guidance\") AND (\"nonfarm payrolls\" OR NFP OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"CFTC COT\" OR \"COT positioning\" OR \"risk reversals\") AND (\"200-day\" OR \"200 day\" OR \"200dma\" OR \"200 MA\" OR \"moving average\") AND (support OR resistance OR \"round number\" OR \"psychological level\" OR \"key levels\") AND (\"trade balance\" OR \"current account\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"US-Japan yield\" OR \"10y\" OR \"10-year\" OR \"2y\") AND (geopolitical OR \"safe-haven\" OR Ukraine OR Taiwan OR \"Middle East\") (site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:cmegroup.com OR site:fxstreet.com OR site:oanda.com OR site:tradingeconomics.com OR site:refinitiv.com OR site:morganstanley.com OR site:nomura.com OR site:ubs.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near-term\" OR \"near term\" OR \"1d\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\" OR \"6m\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\" OR \"CME FedWatch\") AND (\"Bank of Japan\" OR BOJ OR \"yield curve control\" OR \"forward guidance\" OR \"rate decision\") AND (\"NFP\" OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment) AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"speculative positioning\" OR \"positions\" OR \"risk reversals\") AND (\"technical\" OR support OR resistance OR \"200-day\" OR \"200 day MA\" OR \"moving average\" OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\") AND (VIX OR DXY OR \"yield spread\" OR \"UST JGB\" OR \"JGB yield\" OR \"risk sentiment\" OR \"safe-haven\" OR geopolitical OR \"geopolitical risk\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:wsj.com OR site:cftc.gov OR site:federalreserve.gov OR site:boj.or.jp OR site:tradingeconomics.com OR site:fxstreet.com OR site:dailyfx.com OR site:investing.com OR site:tradingview.com OR site:oanda.com OR site:cmegroup.com OR site:refinitiv.com)"
+            ],
+            "evidence": [],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [
+              "(\"USD/JPY\" OR USDJPY OR \"Dollar Yen\") AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"1 day\" OR \"overnight\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"rate decision\") AND (BOJ OR \"Bank of Japan\" OR \"yield curve control\" OR YCC OR \"policy guidance\") AND (CPI OR \"consumer price\" OR inflation OR NFP OR \"nonfarm payrolls\" OR GDP OR PMI OR unemployment OR \"retail sales\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"risk reversal\" OR \"risk reversals\" OR \"FX options\") AND (technical OR \"200-day\" OR \"200 day\" OR \"200-day MA\" OR \"moving average\" OR support OR resistance OR \"round number\" OR \"psychological level\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\") AND (DXY OR \"US dollar index\" OR VIX OR \"yield spread\" OR \"US-Japan 10y\" OR \"10 year spread\") AND (geopolitic* OR \"safe-haven\" OR \"safe haven\" OR \"risk sentiment\") AND (site:reuters.com OR site:bloomberg.com OR site:ft.com OR site:boj.or.jp OR site:federalreserve.gov OR site:bis.org OR site:cftc.gov OR site:fxstreet.com OR site:tradingeconomics.com OR site:investing.com)",
+              "(\"USD/JPY\" OR USDJPY) AND (outlook OR forecast OR \"near term\" OR \"next 6 months\" OR \"3 months\" OR \"1 month\" OR weekly OR daily) AND (\"Bank of Japan\" OR BOJ OR Fed OR \"Federal Reserve\" OR FOMC OR \"dot plot\" OR \"forward guidance\") AND (\"Commitments of Traders\" OR COT OR CFTC OR positioning OR \"speculative positioning\" OR \"risk reversals\" OR \"options skew\") AND (\"technical levels\" OR support OR resistance OR \"200-day\" OR \"200 day\" OR \"moving average\" OR trendline OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR GDP OR PMI OR employment OR \"retail sales\" OR \"economic calendar\") AND (\"yield spread\" OR JGB OR UST OR \"10-year\" OR 10y OR \"yield differential\") AND (DXY OR \"US Dollar Index\" OR VIX OR \"risk sentiment\" OR geopolitic* OR \"safe haven\") AND (site:reuters.com OR site:bloomberg.com OR site:fxstreet.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:forexlive.com)",
+              "(\"USD/JPY\" OR \"USD JPY\" OR \"dollar yen\") AND (outlook OR forecast OR \"near-term\" OR \"short term\" OR \"1 day\" OR \"1 week\" OR \"1 month\" OR \"3 month\" OR \"6 month\") AND (BOJ OR \"Bank of Japan\" OR Fed OR \"Federal Reserve\" OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR CPI OR GDP OR PMI OR employment OR \"retail sales\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR positioning OR \"risk reversals\" OR \"FX options\" OR \"implied volatility\") AND (technical OR \"200-day\" OR \"200 day\" OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ current account balances\") AND (DXY OR VIX OR \"yield spread\" OR \"US-Japan yield\" OR \"Japanese yields\" OR \"10-year\") AND (geopolitic* OR \"safe-haven\" OR Ukraine OR \"Middle East\" OR China) (site:fxstreet.com OR site:forexlive.com OR site:reuters.com OR site:bloomberg.com OR site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:tradingeconomics.com OR site:investing.com OR site:tradingview.com)",
+              "(USD JPY OR USD/JPY OR \"US dollar yen\" OR \"dollar/yen\") AND (outlook OR forecast OR \"near term\" OR \"1 day\" OR \"7 day\" OR \"1 week\" OR \"1 month\" OR \"3 months\" OR \"6 months\" OR \"quarterly\") AND (\"Bank of Japan\" OR BOJ OR \"BoJ\" OR \"Federal Reserve\" OR Fed OR \"rate decision\" OR \"forward guidance\" OR dotplot OR \"dot plot\" OR \"policy guidance\" OR \"interest rate\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR \"retail sales\" OR employment OR \"economic calendar\" OR \"data release\") AND (\"COT\" OR \"Commitments of Traders\" OR \"CFTC\" OR \"positioning\" OR \"speculative positioning\") AND (\"risk reversal\" OR \"FX options\" OR \"implied volatility\" OR \"options skew\" OR \"volatility surface\") AND (technical OR \"200-day MA\" OR \"200 day moving average\" OR \"50-day MA\" OR \"support\" OR \"resistance\" OR \"round number\" OR \"trendline\" OR \"key levels\") AND (\"current account\" OR \"capital flows\" OR \"portfolio flows\" OR \"BoJ current account\" OR \"Japan current account\" OR \"FX reserves\" OR \"foreign investment\") AND (DXY OR \"US dollar index\" OR VIX OR \"risk sentiment\" OR \"risk-on\" OR \"risk-off\" OR \"yield spread\" OR \"yield differential\" OR \"US 10-year\" OR \"JGB\" OR \"Japan 10-year\") AND (geopolitic* OR \"safe-haven\" OR \"flight to safety\" OR \"Taiwan\" OR \"Ukraine\" OR \"Middle East\" OR \"geopolitical risk\") AND (site:boj.or.jp OR site:federalreserve.gov OR site:cftc.gov OR site:bloomberg.com OR site:reuters.com OR site:ft.com OR site:wsj.com OR site:fxstreet.com OR site:forexlive.com OR site:investing.com OR site:cmegroup.com OR site:tradingview.com OR site:researchgate.net OR site:bankofamerica.com OR site:ubs.com OR site:gs.com)",
+              "USD/JPY\" AND (outlook OR forecast OR \"near term\" OR \"short term\" OR \"next 6 months\") AND (\"Federal Reserve\" OR Fed OR FOMC OR \"dot plot\" OR \"rate decision\" OR \"forward guidance\") AND (\"Bank of Japan\" OR BOJ OR YCC OR \"yield curve control\" OR \"rate decision\" OR \"forward guidance\") AND (NFP OR \"nonfarm payrolls\" OR CPI OR inflation OR GDP OR PMI OR unemployment OR \"retail sales\" OR \"economic calendar\") AND (\"CFTC\" OR \"Commitments of Traders\" OR COT OR \"positioning\") AND (\"risk reversals\" OR \"FX options\" OR \"options flow\" OR \"volatility skew\") AND (\"technical levels\" OR \"200-day\" OR \"200 day\" OR SMA OR \"moving average\" OR support OR resistance OR \"round number\") AND (\"current account\" OR \"trade balance\" OR \"capital flows\" OR \"portfolio flows\" OR \"BOJ Current Account Balances\") AND (VIX OR DXY OR \"US dollar index\" OR \"yield spread\" OR \"UST-JGB\" OR \"yield differential\") AND (geopolitical OR \"safe-haven\" OR \"risk-off\" OR Taiwan OR Korea OR Ukraine OR Russia)"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:25.584516"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584753"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584789"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584803"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584821"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584843"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584856"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584919"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584940"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:25.584960"
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          },
+          {
+            "agent_id": 3,
+            "probability": 0.5,
+            "reasoning": "",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "BOJ Current Account Balances by Sector (Jan.)",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/boj/other/cabs/cabs.xlsx",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-17T01:57:24.773298"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Silver edges lower as Fed rate cut hopes fade, geopolitical tensions persist",
+                "snippet": "Silver (XAG/USD) trades around $76.50 at the time of writing, down 0.70% on the day, with Silver starting the week on a weaker footing after failing to extend its recent rebound.",
+                "url": "https://www.fxstreet.com/news/silver-edges-lower-as-fed-rate-cut-hopes-fade-geopolitical-tensions-persist-202602161652",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773453"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling retreats during the North American session amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, the GBP/USD trades at 1.3635, down 0.12%. Read More...",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161632",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773472"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE: Market brings forward rate cut bets – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that UK rate markets now price another Bank of England cut as early as next month after a dovish MPC update. Governor Bailey and MPC member Mann have signalled openness to easing, contingent on data.",
+                "url": "https://www.fxstreet.com/news/boe-market-brings-forward-rate-cut-bets-mufg-202602161628",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773480"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "BoE expected to cut rates to 3.50% in March – Reuters poll",
+                "snippet": "A Reuters poll conducted on February 10-16 revealed that economists are eyeing a 25-basis-point rate cut by the Bank of England (BoE) at its next meeting in March.",
+                "url": "https://www.fxstreet.com/news/poll-boe-expected-to-cut-rates-to-350-in-march-reuters-202602161618",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773494"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP/USD slips in thin trade as markets eye UK CPI",
+                "snippet": "The Pound Sterling (GBP) retreats during the North American session on Monday amid thin liquidity conditions as US markets remain closed in observance of the President’s Day. At the time of writing, GBP/USD trades at 1.3635, down 0.12%.",
+                "url": "https://www.fxstreet.com/news/gbp-usd-slips-in-thin-trade-as-markets-eye-uk-cpi-202602161541",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773506"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/JPY Price Forecast: Bears test 100-day SMA after range breakdown",
+                "snippet": "The Euro (EUR) strengthens against the Japanese Yen (JPY) on Monday, as the Yen comes under pressure following softer-than-expected Gross Domestic Product (GDP) data from Japan. At the time of writing, EUR/JPY is trading around 181.76, up nearly 0.20% on the day.",
+                "url": "https://www.fxstreet.com/news/eur-jpy-price-forecast-bears-test-100-day-sma-after-range-breakdown-202602161536",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773513"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Fed: Consumption slowdown shapes outlook – DBS",
+                "snippet": "DBS Group Research Chief Economist Taimur Baig, highlights signs of slowing US consumption after strong 2025 growth. He notes softer retail sales momentum in 4Q25 and a downgrade in real-time GDP estimates.",
+                "url": "https://www.fxstreet.com/news/fed-consumption-slowdown-shapes-outlook-dbs-202602161507",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773554"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Gold trades lower as mixed fundamentals, stronger US Dollar weigh",
+                "snippet": "Gold (XAU/USD) kicks off the week on a subdued note, extending its consolidation phase as traders remain reluctant to chase prices higher amid mixed macro signals. At the time of writing, XAU/USD is trading near $4,987, after marking an intraday high around $5,054, down roughly 0.90% on the day.",
+                "url": "https://www.fxstreet.com/news/gold-range-bound-as-traders-weigh-fed-outlook-geopolitical-risks-202602161218",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773565"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CAD trades higher in thin holiday liquidity, Canada CPI eyed",
+                "snippet": "The Canadian Dollar (CAD) remains on the back foot against the US Dollar (USD) on Monday, with USD/CAD extending its advance for a fourth consecutive day as the Greenback steadies following its recent weakness. At the time of writing, the pair is trading around 1.3628.",
+                "url": "https://www.fxstreet.com/news/usd-cad-trades-higher-in-thin-holiday-liquidity-canada-cpi-eyed-202602161448",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773576"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "NZD/USD consolidates ahead of RBNZ policy decision with hawkish bias expected",
+                "snippet": "NZD/USD trades around 0.6040 on Monday at the time of writing, virtually unchanged on the day, as investors adopt a wait-and-see approach ahead of the Reserve Bank of New Zealand (RBNZ) policy decision due on Wednesday.",
+                "url": "https://www.fxstreet.com/news/nzd-usd-consolidates-ahead-of-rbnz-policy-decision-with-hawkish-bias-expected-202602161437",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773583"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD: Data-driven softness persists – OCBC",
+                "snippet": "OCBC strategists Sim Moh Siong and Christopher Wong note that despite renewed de-dollarisation headlines and AI-related equity volatility, the Dollar remains primarily driven by US macro data and Federal Reserve expectations.",
+                "url": "https://www.fxstreet.com/news/usd-data-driven-softness-persists-ocbc-202602161434",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773598"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Aluminium: Tariff tweaks offer little relief – ING",
+                "snippet": "ING’s commodities team notes that talk of a partial rollback of US aluminium tariffs is unlikely to materially change market conditions. They stress that the core 50% levy on primary Aluminium remains, leaving domestic capacity constraints and elevated Midwest premiums intact.",
+                "url": "https://www.fxstreet.com/news/aluminium-tariff-tweaks-offer-little-relief-ing-202602161415",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773622"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "RBNZ: Markets eye hawkish shift risk – MUFG",
+                "snippet": "MUFG’s Senior Currency Analyst Lee Hardman notes that the Reserve Bank of New Zealand is widely expected to keep the Official Cash Rate unchanged at its first 2026 meeting (Feb 18), after signalling November’s cut was the last of the cycle.",
+                "url": "https://www.fxstreet.com/news/rbnz-markets-eye-hawkish-shift-risk-mufg-202602161356",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773634"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "CAD: Canada data seen mixed with softer CPI – NBC",
+                "snippet": "National Bank Of Canada analysts Daren King and Jocelyn Paquet expect Canada’s January CPI to be unchanged on the month, pulling headline inflation down to 2.3% and trimming CPI-trim slightly, while CPI-median stays at 2.5%.",
+                "url": "https://www.fxstreet.com/news/cad-canada-data-seen-mixed-with-softer-cpi-nbc-202602161342",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773641"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "GBP: Inflation easing and labour market stabilizing – TD Securities",
+                "snippet": "TD Securities analysts expect UK headline inflation to slow to 3.1% year-on-year in January, largely on base effects in food and energy, leaving core inflation at 3.2%. They see the unemployment rate steady at 5.1% with stabilising employment.",
+                "url": "https://www.fxstreet.com/news/gbp-inflation-easing-and-labour-market-stabilizing-td-securities-202602161329",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773684"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "EUR/USD edges lower in a calm start to the week",
+                "snippet": "The Euro (EUR) has resumed the last few days' bearish trend against the US Dollar (USD) on Monday and is retreating towards the 1.1850 level ahead of the US session opening.",
+                "url": "https://www.fxstreet.com/news/eur-usd-consolidates-in-a-calm-start-to-a-data-packed-week-202602160728",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773727"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "TRY: Market skepticism and weak flows pressure Lira – Commerzbank",
+                "snippet": "Commerzbank’s Tatha Ghose notes that the Turkish Lira is rapidly approaching the bank’s 44.0 USD/TRY quarter‑end target as inflation expectations rise and external balances deteriorate.",
+                "url": "https://www.fxstreet.com/news/try-market-skepticism-and-weak-flows-pressure-lira-commerzbank-202602161241",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773734"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "USD/CHF keeps trading around 0.7700 with markets at half throttle",
+                "snippet": "The US Dollar (USD) posts moderate gains against the Swiss Franc (CHF) on Monday, reaching the 0.7700 area at the time of writing.",
+                "url": "https://www.fxstreet.com/news/usd-chf-keeps-trading-around-07700-with-markets-at-half-throttle-202602161239",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773742"
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Pound Sterling Price News and Forecast: GBP/USD flattens around 20-day EMA",
+                "snippet": "The GBP/USD pair trades flat around 1.3640 during the early European trading session on Monday. Cable trades calmly as investors await the release of the United Kingdom (UK) labor market data for the three months ending December, which is scheduled for Tuesday.",
+                "url": "https://www.fxstreet.com/news/pound-sterling-price-news-and-forecast-gbp-usd-flattens-around-20-day-ema-202602161231",
+                "source": "https://www.fxstreet.com/rss",
+                "timestamp": "2026-02-17T01:57:24.773752"
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          }
+        ],
+        "mean_probability": 0.5,
+        "supervisor": null,
+        "final_probability": 0.5
+      }
+    }
+  ],
+  "causal_factors": [],
+  "regime": "mixed",
+  "regime_dominant_channels": [
+    "rate differential",
+    "positioning"
+  ]
+}
