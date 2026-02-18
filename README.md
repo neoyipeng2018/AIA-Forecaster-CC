@@ -305,6 +305,79 @@ from aia_forecaster.search.registry import list_sources
 print(list_sources())  # ['rss', 'my_csv', 'bloomberg_api', ...]
 ```
 
+## Data Source Toggling & Comparison
+
+You can run the pipeline with specific data sources enabled or disabled to understand which sources drive forecast differences.
+
+### Available sources
+
+| Token | Registry name | Description |
+|-------|--------------|-------------|
+| `rss` | `rss` | 27 curated RSS feeds (Fed, ECB, BOJ, FXStreet, etc.) |
+| `bis` | `bis_speeches` | BIS central bank speech transcripts |
+| `web` | — | DuckDuckGo agentic web search |
+
+### Running with specific sources
+
+```bash
+# Only RSS feeds (no web search, no BIS)
+forecast USDJPY --sources rss
+
+# Only web search
+forecast USDJPY --sources web
+
+# RSS + web search (no BIS)
+forecast USDJPY --sources rss,web
+
+# All sources (default behavior, no flag needed)
+forecast USDJPY
+```
+
+When `--sources` is specified, the source label is encoded in the output filename:
+
+```
+data/forecasts/USDJPY_2026-02-18_rss.json
+data/forecasts/USDJPY_2026-02-18_web.json
+data/forecasts/USDJPY_2026-02-18_rss+web.json
+data/forecasts/USDJPY_2026-02-18.json          # default (all sources)
+```
+
+### Comparing surfaces
+
+After generating surfaces with different source configs, compare them side-by-side:
+
+```bash
+forecast compare data/forecasts/USDJPY_2026-02-18_rss.json \
+                 data/forecasts/USDJPY_2026-02-18_web.json \
+                 data/forecasts/USDJPY_2026-02-18.json
+```
+
+This produces three outputs:
+- **Heatmaps PNG** — individual surfaces (RdYlGn) + pairwise difference heatmaps (RdBu diverging, centered at 0)
+- **Scatter PNG** — probability-vs-strike and probability-vs-tenor curves overlaid with different line styles per source config
+- **Interactive HTML** — Plotly heatmap with a dropdown to toggle between surfaces and diff views
+
+You can specify an output directory:
+
+```bash
+forecast compare file1.json file2.json --output-dir results/comparisons
+```
+
+### Python API
+
+```python
+from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator
+from aia_forecaster.models import SourceConfig
+
+# Run with only RSS sources
+config = SourceConfig(registry_sources=["rss"], web_search_enabled=False)
+gen = ProbabilitySurfaceGenerator(num_agents=5, source_config=config)
+surface = await gen.generate(pair="USDJPY")
+
+# The output JSON includes the source_config for provenance
+print(surface.source_config.label)  # "rss"
+```
+
 ## Configuration
 
 Settings are loaded from environment variables or `.env`:
