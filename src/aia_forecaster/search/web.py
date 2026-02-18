@@ -41,6 +41,19 @@ IRRELEVANT_DOMAINS = [
 _cache = SearchCache()
 
 
+def add_blacklisted_domains(domains: list[str]) -> None:
+    """Add domains to the blacklist so they are filtered from search results.
+
+    Use this to block company-specific domains (e.g., internal wikis that
+    leak information, or additional prediction market sites).
+
+    Example::
+
+        add_blacklisted_domains(["internal-wiki.example.com", "insight.example.com"])
+    """
+    BLACKLISTED_DOMAINS.extend(domains)
+
+
 def _is_blacklisted(url: str) -> bool:
     url_lower = url.lower()
     return any(domain in url_lower for domain in BLACKLISTED_DOMAINS) or any(

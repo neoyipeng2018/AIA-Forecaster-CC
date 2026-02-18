@@ -135,6 +135,15 @@ def _load_builtins() -> None:
     except Exception:
         logger.debug("Could not load built-in BIS speeches data source")
 
+    # Auto-discover company data sources (if the company package exists)
+    try:
+        import company.search  # noqa: F401 — triggers any @data_source() decorators
+        logger.info("Loaded company search extensions")
+    except ImportError:
+        pass  # No company package — running upstream
+    except Exception:
+        logger.warning("Failed to load company search extensions", exc_info=True)
+
 
 async def fetch_all(
     pair: str,

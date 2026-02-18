@@ -69,6 +69,28 @@ FX_FEEDS: list[FeedConfig] = [
 FX_RSS_FEEDS = [f.url for f in FX_FEEDS]
 
 
+def register_feed(feed: FeedConfig) -> None:
+    """Register a single custom RSS feed.
+
+    Use this to add company-specific feeds without modifying upstream code.
+
+    Example::
+
+        register_feed(FeedConfig(
+            "https://internal.example.com/fx-news/rss",
+            "fx_specific", ["USD", "EUR"],
+        ))
+    """
+    FX_FEEDS.append(feed)
+    FX_RSS_FEEDS.append(feed.url)
+
+
+def register_feeds(feeds: list[FeedConfig]) -> None:
+    """Register multiple custom RSS feeds at once."""
+    for feed in feeds:
+        register_feed(feed)
+
+
 # ---------------------------------------------------------------------------
 # Currency keyword maps
 # ---------------------------------------------------------------------------
@@ -122,6 +144,22 @@ GENERAL_FX_KEYWORDS = [
     "rate decision", "forward guidance", "tariff", "pmi",
     "bond yield", "vix", "retail sales", "current account",
 ]
+
+
+def register_currency_keywords(currency: str, keywords: list[str]) -> None:
+    """Extend the keyword map for a currency with additional keywords.
+
+    Adds to existing keywords rather than replacing them.
+
+    Example::
+
+        register_currency_keywords("CNH", ["renminbi", "pboc", "yuan", "china"])
+    """
+    currency = currency.upper()
+    if currency in CURRENCY_KEYWORDS:
+        CURRENCY_KEYWORDS[currency].extend(keywords)
+    else:
+        CURRENCY_KEYWORDS[currency] = list(keywords)
 
 
 # ---------------------------------------------------------------------------

@@ -36,6 +36,22 @@ PAIR_CONFIGS: dict[str, PairConfig] = {
 DEFAULT_TENORS = [Tenor.D1, Tenor.W1, Tenor.M1, Tenor.M3, Tenor.M6]
 
 
+def register_pair(config: PairConfig) -> None:
+    """Register a custom currency pair configuration.
+
+    Use this to add exotic pairs, NDF pairs, or company-specific pairs
+    without modifying upstream code.
+
+    Example::
+
+        register_pair(PairConfig(
+            pair="USDCNH", base="USD", quote="CNH",
+            pip_size=0.0001, typical_daily_range=0.005,
+        ))
+    """
+    PAIR_CONFIGS[config.pair.upper()] = config
+
+
 def get_pair_config(pair: str) -> PairConfig:
     """Get configuration for a currency pair."""
     pair = pair.upper()
