@@ -24,6 +24,7 @@ from aia_forecaster.models import (
     AgentForecast,
     BatchPricingResult,
     CausalFactor,
+    ForecastMode,
     ForecastQuestion,
     ResearchBrief,
     SearchMode,
@@ -238,6 +239,51 @@ Some factors act fast (positioning, sentiment → days/weeks) while others act s
 3. State how each active factor shifts your probability distribution (up/down, by roughly how much).
 4. Probabilities MUST be non-increasing as strike increases (higher price = less likely to be above).
 5. Do NOT hedge toward 0.5 — if evidence points in one direction, commit to it.
+
+Respond in this EXACT JSON format (no extra fields):
+{{
+  "reasoning": "Brief explanation of your probability distribution",
+  "probabilities": {{{strike_keys}}}
+}}"""
+
+BATCH_PRICING_PROMPT_HITTING = """\
+You are an expert FX forecasting analyst. Given your research on {pair}, estimate the \
+probability that {base}/{quote} will TOUCH or REACH each barrier price at any point within \
+the {tenor_label} horizon.
+
+This is a BARRIER/HITTING probability — "Will the price touch this level at any point \
+during the period?", NOT "Will it be above this level at the end?"
+
+Key properties of barrier probabilities:
+- P(touch) is highest (~1.0) for barriers near the current spot price
+- P(touch) DECREASES with distance from spot, in BOTH directions (above and below)
+- P(touch) >= P(above) always — touching a level is easier than finishing above it
+- Longer tenors always give higher P(touch) — more time means more chance to reach a level
+
+Current spot: {spot}
+Tenor: {tenor_label}
+
+YOUR EVIDENCE:
+{evidence_summary}
+
+YOUR MACRO ANALYSIS:
+{macro_summary}
+
+YOUR CAUSAL FACTORS:
+{causal_factors_block}
+
+BASE RATES (statistical anchors):
+{base_rates_block}
+
+INSTRUCTIONS:
+1. Start from the base rates as statistical anchors.
+2. For EACH causal factor above, assess whether it is relevant at THIS tenor ({tenor_label}). \
+Some factors act fast (positioning, sentiment → days/weeks) while others act slowly \
+(trade flows, policy divergence → months). Weight accordingly.
+3. State how each active factor shifts your probability distribution (up/down, by roughly how much).
+4. Probabilities MUST decrease with distance from current spot (both above and below).
+5. Do NOT hedge toward 0.5 — if evidence points in one direction, commit to it. \
+Barriers near spot should have probabilities near 1.0.
 
 Respond in this EXACT JSON format (no extra fields):
 {{
@@ -593,6 +639,7 @@ class ForecastingAgent:
         spot: float,
         brief: ResearchBrief,
         cutoff_date: date,
+        forecast_mode: ForecastMode = ForecastMode.ABOVE,
     ) -> BatchPricingResult:
         """Phase 2: Price all strikes for a single tenor using pre-gathered evidence.
 
@@ -610,7 +657,10 @@ class ForecastingAgent:
         base_rates_lines = []
         for strike in strikes:
             try:
-                ctx = format_base_rate_context(pair=pair, spot=spot, strike=strike, tenor=tenor)
+                ctx = format_base_rate_context(
+                    pair=pair, spot=spot, strike=strike, tenor=tenor,
+                    forecast_mode=forecast_mode,
+                )
                 # Extract just the base rate line
                 for line in ctx.split("\n"):
                     if "Statistical base rate" in line:
@@ -628,7 +678,14 @@ class ForecastingAgent:
         # Format causal factors from research phase
         causal_factors_block = _format_causal_factors(brief.causal_factors)
 
-        prompt = BATCH_PRICING_PROMPT.format(
+        # Select prompt based on forecast mode
+        prompt_template = (
+            BATCH_PRICING_PROMPT_HITTING
+            if forecast_mode == ForecastMode.HITTING
+            else BATCH_PRICING_PROMPT
+        )
+
+        prompt = prompt_template.format(
             pair=pair,
             base=base,
             quote=quote,

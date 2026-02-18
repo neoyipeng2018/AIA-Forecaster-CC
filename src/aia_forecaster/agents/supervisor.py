@@ -26,6 +26,7 @@ from aia_forecaster.models import (
     AgentForecast,
     CausalFactor,
     Confidence,
+    ForecastMode,
     ForecastQuestion,
     ResearchBrief,
     SearchResult,
@@ -181,7 +182,7 @@ Respond in this EXACT JSON format:
 }}"""
 
 
-SURFACE_REVIEW_PROMPT = """\
+_SURFACE_REVIEW_ABOVE = """\
 You are a senior FX supervisor reviewing a FULL probability surface for {pair}.
 
 Spot rate: {spot}
@@ -204,6 +205,57 @@ Review this probability surface for anomalies:
 4. Causal factor mismatch: Check that strong, high-confidence causal factors are actually \
 reflected in the surface. A "strong bullish" factor at short tenors should visibly shift \
 near-spot probabilities upward. If a consensus factor isn't reflected, that cell needs review.
+5. Temporal mismatch: Fast-acting factors (positioning, sentiment) should mainly affect \
+short tenors (1D, 1W). Slow-acting factors (policy divergence, trade flows) should mainly \
+affect long tenors (3M, 6M). Flag cells where the wrong factor type dominates.
+
+For each anomalous cell, decide if you have HIGH confidence in a correction.
+Only override cells where specific evidence clearly demands it.
+
+Respond in this EXACT JSON format:
+{{
+  "anomalies_found": true/false,
+  "search_queries": ["targeted query 1", "targeted query 2"],
+  "adjustments": [
+    {{
+      "strike": 155.00,
+      "tenor": "1W",
+      "current_probability": 0.XX,
+      "adjusted_probability": 0.XX,
+      "confidence": "high" | "medium" | "low",
+      "reasoning": "Why this cell needs adjustment"
+    }}
+  ],
+  "surface_reasoning": "Overall assessment of the surface quality"
+}}"""
+
+_SURFACE_REVIEW_HITTING = """\
+You are a senior FX supervisor reviewing a FULL barrier/touch probability surface for {pair}.
+
+Spot rate: {spot}
+Information cutoff: {cutoff_date}
+
+PROBABILITY GRID (P(touch barrier) for each barrier × tenor):
+{grid_text}
+
+SHARED RESEARCH THEMES (from {num_agents} agents):
+{research_themes}
+
+CONSENSUS CAUSAL FACTORS (factors identified by multiple agents):
+{causal_factors_summary}
+
+This is a HITTING/BARRIER probability surface — each cell answers "Will the price \
+touch this barrier at any point within the tenor?"
+
+Review this probability surface for anomalies:
+1. Distance monotonicity: P(touch) should decrease with distance from spot, in BOTH \
+directions (above and below). Barriers near spot should have P ~ 1.0.
+2. Tenor monotonicity: Longer tenors should always give HIGHER P(touch) — more time means \
+more chance to hit any barrier. If a longer tenor shows lower P(touch), that is an anomaly.
+3. Implausible values: Any cell that seems inconsistent with the evidence
+4. Causal factor mismatch: Check that strong, high-confidence causal factors are actually \
+reflected in the surface. A "strong bullish" factor should make above-spot barriers \
+more likely to be touched (and below-spot barriers less likely).
 5. Temporal mismatch: Fast-acting factors (positioning, sentiment) should mainly affect \
 short tenors (1D, 1W). Slow-acting factors (policy divergence, trade flows) should mainly \
 affect long tenors (3M, 6M). Flag cells where the wrong factor type dominates.
@@ -464,6 +516,7 @@ class SupervisorAgent:
         tenors: list[Tenor],
         cell_probabilities: dict[tuple[float, Tenor], float],
         briefs: list[ResearchBrief],
+        forecast_mode: ForecastMode = ForecastMode.ABOVE,
     ) -> dict[tuple[float, Tenor], float]:
         """Review the full probability surface and return adjustments.
 
@@ -518,7 +571,13 @@ class SupervisorAgent:
             except Exception as e:
                 logger.warning("Regime detection for surface review failed: %s", e)
 
-        prompt = SURFACE_REVIEW_PROMPT.format(
+        review_template = (
+            _SURFACE_REVIEW_HITTING
+            if forecast_mode == ForecastMode.HITTING
+            else _SURFACE_REVIEW_ABOVE
+        )
+
+        prompt = review_template.format(
             pair=pair,
             spot=spot,
             cutoff_date=cutoff_date,

@@ -15,6 +15,7 @@ from rich.console import Console
 from rich.table import Table
 
 from aia_forecaster.calibration.monotonicity import (
+    enforce_hitting_monotonicity,
     enforce_raw_surface_monotonicity,
     enforce_surface_monotonicity,
 )
@@ -27,6 +28,7 @@ from aia_forecaster.models import (
     AgentForecast,
     CausalFactor,
     EnsembleResult,
+    ForecastMode,
     ProbabilitySurface,
     ResearchBrief,
     SurfaceCell,
@@ -84,7 +86,12 @@ def _build_consensus_factors(briefs: list[ResearchBrief]) -> list[CausalFactor]:
     return consensus
 
 
-def _question_text(pair: str, strike: float, tenor: Tenor) -> str:
+def _question_text(
+    pair: str,
+    strike: float,
+    tenor: Tenor,
+    forecast_mode: ForecastMode = ForecastMode.ABOVE,
+) -> str:
     """Formulate the binary question for a (strike, tenor) cell."""
     base, quote = pair[:3], pair[3:]
     tenor_map = {
@@ -95,6 +102,8 @@ def _question_text(pair: str, strike: float, tenor: Tenor) -> str:
         Tenor.M6: "6 months",
     }
     horizon = tenor_map.get(tenor, tenor.value)
+    if forecast_mode == ForecastMode.HITTING:
+        return f"Will {base}/{quote} touch/reach {strike} within {horizon}?"
     return f"Will {base}/{quote} be above {strike} in {horizon}?"
 
 
@@ -117,6 +126,7 @@ class ProbabilitySurfaceGenerator:
         num_strikes: int = 5,
         tenors: list[Tenor] | None = None,
         cutoff_date: date | None = None,
+        forecast_mode: ForecastMode = ForecastMode.HITTING,
     ) -> ProbabilitySurface:
         """Generate the probability surface using two-phase shared research.
 
@@ -129,6 +139,7 @@ class ProbabilitySurfaceGenerator:
             num_strikes: Number of strikes around spot.
             tenors: List of tenors to evaluate. Default: all.
             cutoff_date: Information cutoff date.
+            forecast_mode: 'hitting' (barrier touch) or 'above' (terminal distribution).
 
         Returns:
             ProbabilitySurface with calibrated probabilities for each cell.
@@ -140,7 +151,7 @@ class ProbabilitySurfaceGenerator:
 
         # Get spot rate and generate strikes
         spot = await get_spot_rate(pair)
-        strikes = generate_strikes(spot, pair, num_strikes)
+        strikes = generate_strikes(spot, pair, num_strikes, forecast_mode=forecast_mode)
         console.print(f"[bold]Spot rate:[/bold] {pair} = {spot}")
         console.print(f"[bold]Strikes:[/bold] {strikes}")
         console.print(f"[bold]Tenors:[/bold] {[t.value for t in tenors]}")
@@ -186,20 +197,22 @@ class ProbabilitySurfaceGenerator:
         # --- Phase 2: Batch Pricing ---
         console.print("\n[bold]Phase 2: Batch Pricing[/bold]")
         cell_data = await self.engine.price_surface(
-            shared_research, strikes, tenors, spot
+            shared_research, strikes, tenors, spot,
+            forecast_mode=forecast_mode,
         )
 
         # Build surface cells with synthetic EnsembleResult per cell
         surface = ProbabilitySurface(
             pair=pair,
             spot_rate=spot,
+            forecast_mode=forecast_mode,
             causal_factors=consensus_factors,
         )
         cell_probabilities: dict[tuple[float, Tenor], float] = {}
 
         for tenor in tenors:
             for strike in strikes:
-                q_text = _question_text(pair, strike, tenor)
+                q_text = _question_text(pair, strike, tenor, forecast_mode)
                 data = cell_data.get((strike, tenor), {})
                 agent_probs = data.get("agent_probabilities", [])
                 mean_prob = data.get("mean_probability", 0.5)
@@ -272,6 +285,7 @@ class ProbabilitySurfaceGenerator:
                 tenors=tenors,
                 cell_probabilities=cell_probabilities,
                 briefs=shared_research.briefs,
+                forecast_mode=forecast_mode,
             )
             if adjustments:
                 console.print(
@@ -296,9 +310,14 @@ class ProbabilitySurfaceGenerator:
             console.print(f"  [red]Supervisor failed: {e}[/red]")
 
         # --- Monotonicity (PAVA on raw means) ---
-        n_adjusted = enforce_raw_surface_monotonicity(
-            cell_probabilities, strikes, tenors,
-        )
+        if forecast_mode == ForecastMode.HITTING:
+            n_adjusted = enforce_hitting_monotonicity(
+                cell_probabilities, strikes, tenors, spot,
+            )
+        else:
+            n_adjusted = enforce_raw_surface_monotonicity(
+                cell_probabilities, strikes, tenors,
+            )
         if n_adjusted:
             console.print(
                 f"[yellow]Monotonicity (raw): adjusted {n_adjusted} cell(s)[/yellow]"
@@ -330,7 +349,10 @@ def print_surface(surface: ProbabilitySurface) -> None:
         p = c.calibrated.calibrated_probability if c.calibrated else None
         lookup[(c.strike, c.tenor)] = p
 
-    table = Table(title=f"{surface.pair} Probability Surface (spot={surface.spot_rate})")
+    mode_label = (
+        "Barrier/Touch" if surface.forecast_mode == ForecastMode.HITTING else "Above Strike"
+    )
+    table = Table(title=f"{surface.pair} {mode_label} Probability Surface (spot={surface.spot_rate})")
     table.add_column("Strike", style="bold")
     for tenor in tenors:
         table.add_column(tenor.value, justify="center")
@@ -422,13 +444,15 @@ def plot_surface(surface: ProbabilitySurface, output_path: str | Path) -> Path:
 
     base, quote = surface.pair[:3], surface.pair[3:]
     date_str = surface.generated_at.strftime("%Y-%m-%d")
+    is_hitting = surface.forecast_mode == ForecastMode.HITTING
+    mode_subtitle = "Barrier/Touch" if is_hitting else "Above Strike"
     ax.set_title(
-        f"{base}/{quote} Probability Surface\nspot={surface.spot_rate}  |  as-of {date_str}",
+        f"{base}/{quote} {mode_subtitle} Probability Surface\nspot={surface.spot_rate}  |  as-of {date_str}",
         fontsize=14, fontweight="bold", pad=12,
     )
 
     cbar = fig.colorbar(im, ax=ax, shrink=0.8, pad=0.12)
-    cbar.set_label("P(above strike)", fontsize=11)
+    cbar.set_label("P(touch barrier)" if is_hitting else "P(above strike)", fontsize=11)
 
     fig.tight_layout()
     fig.savefig(output_path, dpi=150, bbox_inches="tight")
@@ -479,9 +503,13 @@ def _build_hover_text(
             cal_p = expl.calibrated_probability
             raw_p = expl.raw_probability
 
+            is_hitting = surface.forecast_mode == ForecastMode.HITTING
+            p_label = "P(touch)" if is_hitting else "P(above)"
+            strike_label = "Barrier" if is_hitting else "Strike"
+
             lines = [
-                f"<b>Strike:</b> {strike:.2f}  |  <b>Tenor:</b> {tenor.value}",
-                f"<b>P(above):</b> {cal_p:.3f}" + (f"  (raw: {raw_p:.3f})" if raw_p else ""),
+                f"<b>{strike_label}:</b> {strike:.2f}  |  <b>Tenor:</b> {tenor.value}",
+                f"<b>{p_label}:</b> {cal_p:.3f}" + (f"  (raw: {raw_p:.3f})" if raw_p else ""),
                 f"<b>Agents:</b> {expl.num_agents}",
             ]
 
@@ -585,6 +613,8 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
 
     base, quote = surface.pair[:3], surface.pair[3:]
     date_str = surface.generated_at.strftime("%Y-%m-%d")
+    is_hitting = surface.forecast_mode == ForecastMode.HITTING
+    cbar_title = "P(touch barrier)" if is_hitting else "P(above strike)"
 
     fig = go.Figure()
 
@@ -599,7 +629,7 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
         cmin=0.0,
         cmax=1.0,
         colorbar=dict(
-            title=dict(text="P(above strike)", side="right"),
+            title=dict(text=cbar_title, side="right"),
             thickness=20,
             len=0.75,
         ),
@@ -621,9 +651,12 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
             ),
         ))
 
+    mode_subtitle = "Barrier/Touch" if is_hitting else "Above Strike"
+    z_title = "P(touch barrier)" if is_hitting else "P(above strike)"
+
     fig.update_layout(
         title=dict(
-            text=f"{base}/{quote} Probability Surface — {date_str}",
+            text=f"{base}/{quote} {mode_subtitle} Probability Surface — {date_str}",
             font=dict(size=18),
         ),
         scene=dict(
@@ -634,11 +667,11 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
                 type="log",
             ),
             yaxis=dict(
-                title="Strike",
+                title="Barrier" if is_hitting else "Strike",
                 tickformat=".2f",
             ),
             zaxis=dict(
-                title="P(above strike)",
+                title=z_title,
                 range=[0, 1],
             ),
             camera=dict(

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from aia_forecaster.models import Tenor
+from aia_forecaster.models import ForecastMode, Tenor
 
 
 @dataclass
@@ -48,21 +48,29 @@ def generate_strikes(
     spot: float,
     pair: str = "USDJPY",
     num_strikes: int = 11,
+    forecast_mode: ForecastMode = ForecastMode.ABOVE,
 ) -> list[float]:
     """Generate strike prices around the current spot rate.
 
     For USDJPY at spot=155.00 with num_strikes=11:
     → [150.0, 151.0, 152.0, 153.0, 154.0, 155.0, 156.0, 157.0, 158.0, 159.0, 160.0]
 
+    In hitting mode, forces num_strikes to be odd for symmetry around spot.
+
     Args:
         spot: Current spot rate.
         pair: Currency pair string.
         num_strikes: Number of strikes to generate (odd number centers on spot).
+        forecast_mode: Forecast mode — hitting forces odd num_strikes for symmetry.
 
     Returns:
         Sorted list of strike prices.
     """
     config = get_pair_config(pair)
+
+    # In hitting mode, force odd num_strikes so spot is centered
+    if forecast_mode == ForecastMode.HITTING and num_strikes % 2 == 0:
+        num_strikes += 1
 
     # Use percentage-based offsets scaled to the pair
     # For USDJPY (~155): ±1 yen per strike → roughly ±0.65%

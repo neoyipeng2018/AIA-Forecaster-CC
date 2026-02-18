@@ -101,6 +101,87 @@ def enforce_raw_surface_monotonicity(
     return total_adjusted
 
 
+def enforce_hitting_monotonicity(
+    cell_probabilities: dict[tuple[float, "Tenor"], float],
+    strikes: list[float],
+    tenors: list["Tenor"],
+    spot: float,
+) -> int:
+    """Enforce hitting-mode monotonicity: P(hit) decreases with distance from spot.
+
+    For each tenor, splits strikes into above-spot and below-spot groups.
+    - Above spot: non-increasing as strike increases (moves away from spot)
+    - Below spot: non-increasing as strike decreases (moves away from spot)
+
+    Modifies *cell_probabilities* in-place.
+
+    Returns:
+        Number of cells whose probabilities were adjusted.
+    """
+    sorted_strikes = sorted(strikes)
+    total_adjusted = 0
+
+    for tenor in tenors:
+        # Split strikes into below-spot, at-spot, and above-spot
+        below = [s for s in sorted_strikes if s < spot]
+        above = [s for s in sorted_strikes if s > spot]
+        at_spot = [s for s in sorted_strikes if s == spot]
+
+        # Above spot: enforce non-increasing as strike increases (away from spot)
+        if above:
+            above_strikes = above  # already ascending = away from spot
+            probs = [cell_probabilities.get((s, tenor), 0.5) for s in above_strikes]
+            adjusted = enforce_decreasing(probs)
+            for strike, orig, adj in zip(above_strikes, probs, adjusted):
+                if abs(orig - adj) > 1e-10:
+                    total_adjusted += 1
+                    logger.info(
+                        "Hitting monotonicity fix [%s, strike=%.2f above spot]: %.4f -> %.4f",
+                        tenor.value, strike, orig, adj,
+                    )
+                    cell_probabilities[(strike, tenor)] = adj
+
+        # Below spot: enforce non-increasing as strike decreases (away from spot)
+        # Reverse so we go from closest-to-spot to farthest-from-spot
+        if below:
+            below_away = list(reversed(below))  # closest to spot first
+            probs = [cell_probabilities.get((s, tenor), 0.5) for s in below_away]
+            adjusted = enforce_decreasing(probs)
+            for strike, orig, adj in zip(below_away, probs, adjusted):
+                if abs(orig - adj) > 1e-10:
+                    total_adjusted += 1
+                    logger.info(
+                        "Hitting monotonicity fix [%s, strike=%.2f below spot]: %.4f -> %.4f",
+                        tenor.value, strike, orig, adj,
+                    )
+                    cell_probabilities[(strike, tenor)] = adj
+
+        # At-spot strikes should be highest; enforce they are >= neighbors
+        if at_spot:
+            spot_strike = at_spot[0]
+            spot_p = cell_probabilities.get((spot_strike, tenor), 0.5)
+            # Ensure spot probability >= all neighbors
+            for s in sorted_strikes:
+                if s == spot_strike:
+                    continue
+                neighbor_p = cell_probabilities.get((s, tenor), 0.5)
+                if neighbor_p > spot_p:
+                    # Clamp neighbor down to spot probability
+                    total_adjusted += 1
+                    logger.info(
+                        "Hitting monotonicity fix [%s, strike=%.2f > spot %.2f]: %.4f -> %.4f",
+                        tenor.value, s, spot_strike, neighbor_p, spot_p,
+                    )
+                    cell_probabilities[(s, tenor)] = spot_p
+
+    if total_adjusted:
+        logger.info("Hitting monotonicity: adjusted %d cells", total_adjusted)
+    else:
+        logger.info("Hitting monotonicity: no violations detected")
+
+    return total_adjusted
+
+
 def enforce_surface_monotonicity(surface: ProbabilitySurface) -> int:
     """Enforce monotonicity across strikes for each tenor in a probability surface.
 

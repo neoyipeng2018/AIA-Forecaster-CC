@@ -18,6 +18,7 @@ from aia_forecaster.models import (
     CellExplanation,
     Confidence,
     EvidenceItem,
+    ForecastMode,
     ProbabilitySurface,
     SupervisorResult,
     SurfaceCell,
@@ -223,6 +224,7 @@ def explain_surface(surface: ProbabilitySurface) -> SurfaceExplanation:
         spot_rate=surface.spot_rate,
         generated_at=surface.generated_at,
         cells=[explain_cell(cell) for cell in surface.cells],
+        forecast_mode=surface.forecast_mode,
         causal_factors=surface.causal_factors,
         regime=surface.regime,
         regime_dominant_channels=surface.regime_dominant_channels,
@@ -268,6 +270,9 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
             border_style="cyan",
         ))
 
+    is_hitting = explanation.forecast_mode == ForecastMode.HITTING
+    p_verb = "touch" if is_hitting else "above"
+
     for cell in explanation.cells:
         if cell.calibrated_probability is None:
             continue
@@ -277,7 +282,7 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
 
         # Header
         lines.append(
-            f"[bold]P(above {cell.strike:.2f}) @ {cell.tenor.value}[/bold]: "
+            f"[bold]P({p_verb} {cell.strike:.2f}) @ {cell.tenor.value}[/bold]: "
             f"{cell.calibrated_probability:.3f}  "
             f"(raw={cell.raw_probability:.3f}, agents={cell.num_agents})"
         )

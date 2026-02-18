@@ -25,7 +25,7 @@ from aia_forecaster.fx.surface import (
     print_surface,
 )
 from aia_forecaster.llm.client import LLMClient
-from aia_forecaster.models import ForecastQuestion, ForecastRun, Tenor
+from aia_forecaster.models import ForecastMode, ForecastQuestion, ForecastRun, Tenor
 from aia_forecaster.storage.database import ForecastDatabase
 
 console = Console()
@@ -174,11 +174,14 @@ async def run_surface(args: argparse.Namespace) -> None:
 
     cutoff = date.fromisoformat(args.cutoff) if args.cutoff else None
 
+    forecast_mode = ForecastMode(getattr(args, "mode", "hitting"))
+
     surface = await generator.generate(
         pair=args.pair,
         num_strikes=args.strikes,
         tenors=tenors,
         cutoff_date=cutoff,
+        forecast_mode=forecast_mode,
     )
 
     console.print("\n")
@@ -195,7 +198,8 @@ async def run_surface(args: argparse.Namespace) -> None:
     output = args.output
     if not output:
         cutoff_str = (cutoff or date.today()).isoformat()
-        output = f"data/forecasts/{args.pair}_{cutoff_str}.png"
+        mode_suffix = f"_{forecast_mode.value}" if forecast_mode != ForecastMode.HITTING else ""
+        output = f"data/forecasts/{args.pair}_{cutoff_str}{mode_suffix}.png"
     path = plot_surface(surface, output)
     console.print(f"\n[bold]Heatmap saved:[/bold] {path}")
 
@@ -305,6 +309,10 @@ def build_parser() -> argparse.ArgumentParser:
     s_parser = subparsers.add_parser("surface", help="Generate probability surface")
     s_parser.add_argument("--strikes", type=int, default=5, help="Number of strikes")
     s_parser.add_argument("--tenors", help="Comma-separated tenors (e.g., 1W,1M)")
+    s_parser.add_argument(
+        "--mode", choices=["above", "hitting"], default="hitting",
+        help="Forecast mode: 'hitting' (barrier touch, default) or 'above' (terminal distribution)",
+    )
     s_parser.add_argument("-o", "--output", help="Output path for heatmap PNG (default: data/forecasts/PAIR_DATE.png)")
     s_parser.add_argument("-e", "--explain", action="store_true", help="Show per-cell evidence and reasoning")
     s_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)

@@ -26,6 +26,7 @@ from aia_forecaster.models import (
     BatchPricingResult,
     Confidence,
     EnsembleResult,
+    ForecastMode,
     ForecastQuestion,
     ResearchBrief,
     SearchMode,
@@ -121,6 +122,7 @@ class EnsembleEngine:
         strikes: list[float],
         tenors: list[Tenor],
         spot: float,
+        forecast_mode: ForecastMode = ForecastMode.ABOVE,
     ) -> dict[tuple[float, Tenor], dict]:
         """Phase 2: Each agent prices all cells using its own evidence.
 
@@ -161,7 +163,10 @@ class EnsembleEngine:
         for idx, (agent, brief) in enumerate(zip(agents, briefs)):
             for tenor in tenors:
                 pricing_tasks.append(
-                    agent.price_tenor(pair, tenor, strikes, spot, brief, cutoff_date)
+                    agent.price_tenor(
+                        pair, tenor, strikes, spot, brief, cutoff_date,
+                        forecast_mode=forecast_mode,
+                    )
                 )
                 task_keys.append((idx, tenor))
 

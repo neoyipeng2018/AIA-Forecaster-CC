@@ -13,7 +13,7 @@ import math
 import time
 from statistics import NormalDist
 
-from aia_forecaster.models import Tenor
+from aia_forecaster.models import ForecastMode, Tenor
 
 logger = logging.getLogger(__name__)
 
@@ -212,11 +212,84 @@ def compute_base_rates(
     }
 
 
+def compute_hitting_base_rate(
+    pair: str,
+    spot: float,
+    barrier: float,
+    tenor: Tenor,
+) -> dict:
+    """Compute the base rate for a barrier/touch probability using the reflection principle.
+
+    P(hit barrier within T) = 2 * (1 - Phi(|ln(B/S)| / (sigma * sqrt(T))))
+
+    This is the first-passage probability for geometric Brownian motion (zero drift).
+
+    Args:
+        pair: Currency pair.
+        spot: Current spot rate.
+        barrier: Barrier/touch level.
+        tenor: Forecast horizon.
+
+    Returns:
+        Dict with keys: sigma_t, distance_pct, base_rate_hitting, base_rate_above,
+        tenor_range_1sigma, annualized_vol, vol_source.
+    """
+    pair = pair.upper()
+    annual_vol = get_annualized_vol(pair)
+    vol_source = "dynamic" if pair in _vol_cache else "fallback"
+
+    days = TENOR_DAYS[tenor]
+    sigma_t = annual_vol * math.sqrt(days / 252)
+    tenor_range_1sigma = spot * sigma_t
+
+    # Log-distance to barrier
+    if barrier <= 0 or spot <= 0:
+        return {
+            "sigma_t": sigma_t,
+            "distance_pct": 0.0,
+            "base_rate_hitting": 1.0,
+            "base_rate_above": 0.5,
+            "tenor_range_1sigma": tenor_range_1sigma,
+            "annualized_vol": annual_vol,
+            "vol_source": vol_source,
+        }
+
+    log_distance = abs(math.log(barrier / spot))
+
+    # P(hit) = 2 * (1 - Phi(|ln(B/S)| / sigma_t))
+    if sigma_t > 0:
+        z = log_distance / sigma_t
+        base_rate_hitting = 2.0 * (1.0 - _norm.cdf(z))
+    else:
+        base_rate_hitting = 1.0 if abs(barrier - spot) < 1e-10 else 0.0
+
+    # Clamp to [0, 1]
+    base_rate_hitting = max(0.0, min(1.0, base_rate_hitting))
+
+    # Also compute P(above) for reference
+    move_pct = (barrier - spot) / spot
+    z_above = move_pct / sigma_t if sigma_t > 0 else 0.0
+    base_rate_above = 1.0 - _norm.cdf(z_above)
+
+    distance_pct = (barrier - spot) / spot
+
+    return {
+        "sigma_t": sigma_t,
+        "distance_pct": distance_pct,
+        "base_rate_hitting": base_rate_hitting,
+        "base_rate_above": base_rate_above,
+        "tenor_range_1sigma": tenor_range_1sigma,
+        "annualized_vol": annual_vol,
+        "vol_source": vol_source,
+    }
+
+
 def format_base_rate_context(
     pair: str,
     spot: float,
     strike: float,
     tenor: Tenor,
+    forecast_mode: ForecastMode = ForecastMode.ABOVE,
 ) -> str:
     """Produce a human-readable base rate context block for LLM prompts.
 
@@ -224,15 +297,6 @@ def format_base_rate_context(
     (no dynamic vol and no fallback).
     """
     pair = pair.upper()
-
-    try:
-        stats = compute_base_rates(pair, spot, strike, tenor)
-    except ValueError:
-        return ""
-
-    base, quote = pair[:3], pair[3:]
-    direction = "above" if strike >= spot else "below"
-    move_sign = "+" if stats["move_required"] >= 0 else ""
 
     tenor_map = {
         Tenor.D1: "1 day",
@@ -242,9 +306,47 @@ def format_base_rate_context(
         Tenor.M6: "6 months",
     }
     horizon = tenor_map.get(tenor, tenor.value)
-
-    # Format price precision based on pair
+    base, quote = pair[:3], pair[3:]
     price_fmt = ".2f" if "JPY" in pair else ".4f"
+
+    if forecast_mode == ForecastMode.HITTING:
+        try:
+            stats = compute_hitting_base_rate(pair, spot, strike, tenor)
+        except ValueError:
+            return ""
+
+        direction = "above" if strike >= spot else "below"
+        distance_pct = stats["distance_pct"]
+        dist_sign = "+" if distance_pct >= 0 else ""
+
+        vol_note = (
+            f"Annualized vol: {stats['annualized_vol']:.1%} ({stats['vol_source']})\n"
+        )
+
+        return (
+            f"BASE RATE CONTEXT (statistical anchor — HITTING/BARRIER mode):\n"
+            f"Current spot: {base}/{quote} = {spot:{price_fmt}}\n"
+            f"{vol_note}"
+            f"Barrier: {strike:{price_fmt}} ({direction} spot, "
+            f"distance: {dist_sign}{distance_pct:.2%})\n"
+            f"Historical {horizon} range (1-sigma): +/-{stats['tenor_range_1sigma']:{price_fmt}} {quote}\n"
+            f"Statistical base rate: P(touch {strike:{price_fmt}} within {horizon}) "
+            f"= {stats['base_rate_hitting']:.3f} ({stats['base_rate_hitting']:.1%})\n"
+            f"For reference, P(above {strike:{price_fmt}} at expiry) "
+            f"= {stats['base_rate_above']:.3f}\n"
+            f"Note: P(touch) >= P(above) always. P(touch) ~ 1.0 near spot, "
+            f"decreasing with distance. Longer tenors increase P(touch).\n"
+            f"This is a reflection-principle baseline. Adjust based on current evidence."
+        )
+
+    # Default: ABOVE mode (original behavior)
+    try:
+        stats = compute_base_rates(pair, spot, strike, tenor)
+    except ValueError:
+        return ""
+
+    direction = "above" if strike >= spot else "below"
+    move_sign = "+" if stats["move_required"] >= 0 else ""
 
     vol_note = (
         f"Annualized vol: {stats['annualized_vol']:.1%} ({stats['vol_source']})\n"
