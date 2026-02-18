@@ -193,6 +193,39 @@ class TestEnforceHittingMonotonicity:
             assert cell_probs[(s, Tenor.W1)] <= spot_p + 1e-10
 
 
+    def test_fixes_tenor_violation(self):
+        """P(touch) must be non-decreasing along tenor axis."""
+        strikes = [155.0]
+        tenors = [Tenor.D1, Tenor.W1, Tenor.M1, Tenor.M3, Tenor.M6]
+        spot = 153.0
+        cell_probs = {
+            (155.0, Tenor.D1): 0.10,
+            (155.0, Tenor.W1): 0.30,
+            (155.0, Tenor.M1): 0.60,
+            (155.0, Tenor.M3): 0.80,
+            (155.0, Tenor.M6): 0.70,  # violation: 0.70 < 0.80
+        }
+        n = enforce_hitting_monotonicity(cell_probs, strikes, tenors, spot)
+        assert n > 0
+        # After fix, tenor sequence must be non-decreasing
+        tenor_probs = [cell_probs[(155.0, t)] for t in tenors]
+        for i in range(1, len(tenor_probs)):
+            assert tenor_probs[i] >= tenor_probs[i - 1] - 1e-10
+
+    def test_no_tenor_violation_when_increasing(self):
+        """Already non-decreasing tenor sequence should have zero tenor adjustments."""
+        strikes = [155.0]
+        tenors = [Tenor.D1, Tenor.W1, Tenor.M1]
+        spot = 153.0
+        cell_probs = {
+            (155.0, Tenor.D1): 0.10,
+            (155.0, Tenor.W1): 0.30,
+            (155.0, Tenor.M1): 0.60,
+        }
+        n = enforce_hitting_monotonicity(cell_probs, strikes, tenors, spot)
+        assert n == 0
+
+
 class TestGenerateStrikesHittingMode:
     def test_odd_num_strikes_in_hitting(self):
         """Hitting mode should force odd num_strikes."""

@@ -64,6 +64,23 @@ def enforce_decreasing(probabilities: list[float]) -> list[float]:
     return result
 
 
+def enforce_increasing(probabilities: list[float]) -> list[float]:
+    """Enforce non-decreasing monotonicity on a sequence of probabilities.
+
+    Returns the closest non-decreasing sequence (in L2 norm) using PAVA.
+
+    Args:
+        probabilities: Probabilities in order.
+
+    Returns:
+        Adjusted probabilities satisfying p[0] <= p[1] <= ... <= p[n-1],
+        clamped to [0, 1].
+    """
+    # Reverse, apply non-increasing PAVA, reverse back
+    reversed_result = enforce_decreasing(list(reversed(probabilities)))
+    return list(reversed(reversed_result))
+
+
 def enforce_raw_surface_monotonicity(
     cell_probabilities: dict[tuple[float, "Tenor"], float],
     strikes: list[float],
@@ -107,21 +124,28 @@ def enforce_hitting_monotonicity(
     tenors: list["Tenor"],
     spot: float,
 ) -> int:
-    """Enforce hitting-mode monotonicity: P(hit) decreases with distance from spot.
+    """Enforce hitting-mode monotonicity on both strike and tenor axes.
 
-    For each tenor, splits strikes into above-spot and below-spot groups.
+    Strike axis (per tenor):
     - Above spot: non-increasing as strike increases (moves away from spot)
     - Below spot: non-increasing as strike decreases (moves away from spot)
+
+    Tenor axis (per strike):
+    - Non-decreasing as tenor increases: more time = higher P(touch)
 
     Modifies *cell_probabilities* in-place.
 
     Returns:
         Number of cells whose probabilities were adjusted.
     """
+    from aia_forecaster.fx.pairs import DEFAULT_TENORS
+
     sorted_strikes = sorted(strikes)
+    sorted_tenors = sorted(tenors, key=lambda t: DEFAULT_TENORS.index(t))
     total_adjusted = 0
 
-    for tenor in tenors:
+    # --- Strike-axis monotonicity (per tenor) ---
+    for tenor in sorted_tenors:
         # Split strikes into below-spot, at-spot, and above-spot
         below = [s for s in sorted_strikes if s < spot]
         above = [s for s in sorted_strikes if s > spot]
@@ -136,7 +160,7 @@ def enforce_hitting_monotonicity(
                 if abs(orig - adj) > 1e-10:
                     total_adjusted += 1
                     logger.info(
-                        "Hitting monotonicity fix [%s, strike=%.2f above spot]: %.4f -> %.4f",
+                        "Hitting strike fix [%s, strike=%.2f above spot]: %.4f -> %.4f",
                         tenor.value, strike, orig, adj,
                     )
                     cell_probabilities[(strike, tenor)] = adj
@@ -151,7 +175,7 @@ def enforce_hitting_monotonicity(
                 if abs(orig - adj) > 1e-10:
                     total_adjusted += 1
                     logger.info(
-                        "Hitting monotonicity fix [%s, strike=%.2f below spot]: %.4f -> %.4f",
+                        "Hitting strike fix [%s, strike=%.2f below spot]: %.4f -> %.4f",
                         tenor.value, strike, orig, adj,
                     )
                     cell_probabilities[(strike, tenor)] = adj
@@ -160,19 +184,31 @@ def enforce_hitting_monotonicity(
         if at_spot:
             spot_strike = at_spot[0]
             spot_p = cell_probabilities.get((spot_strike, tenor), 0.5)
-            # Ensure spot probability >= all neighbors
             for s in sorted_strikes:
                 if s == spot_strike:
                     continue
                 neighbor_p = cell_probabilities.get((s, tenor), 0.5)
                 if neighbor_p > spot_p:
-                    # Clamp neighbor down to spot probability
                     total_adjusted += 1
                     logger.info(
-                        "Hitting monotonicity fix [%s, strike=%.2f > spot %.2f]: %.4f -> %.4f",
+                        "Hitting spot fix [%s, strike=%.2f > spot %.2f]: %.4f -> %.4f",
                         tenor.value, s, spot_strike, neighbor_p, spot_p,
                     )
                     cell_probabilities[(s, tenor)] = spot_p
+
+    # --- Tenor-axis monotonicity (per strike) ---
+    # P(touch) must be non-decreasing as tenor increases
+    for strike in sorted_strikes:
+        probs = [cell_probabilities.get((strike, t), 0.5) for t in sorted_tenors]
+        adjusted = enforce_increasing(probs)
+        for tenor, orig, adj in zip(sorted_tenors, probs, adjusted):
+            if abs(orig - adj) > 1e-10:
+                total_adjusted += 1
+                logger.info(
+                    "Hitting tenor fix [%s, strike=%.2f]: %.4f -> %.4f",
+                    tenor.value, strike, orig, adj,
+                )
+                cell_probabilities[(strike, tenor)] = adj
 
     if total_adjusted:
         logger.info("Hitting monotonicity: adjusted %d cells", total_adjusted)
