@@ -31,6 +31,7 @@ from aia_forecaster.models import (
     ForecastMode,
     ProbabilitySurface,
     ResearchBrief,
+    SourceConfig,
     SurfaceCell,
     Tenor,
 )
@@ -116,9 +117,17 @@ class ProbabilitySurfaceGenerator:
     This reduces LLM calls from ~3,000 to ~170 (a ~94% reduction).
     """
 
-    def __init__(self, llm: LLMClient | None = None, num_agents: int | None = None):
+    def __init__(
+        self,
+        llm: LLMClient | None = None,
+        num_agents: int | None = None,
+        source_config: SourceConfig | None = None,
+    ):
         self.llm = llm or LLMClient()
-        self.engine = EnsembleEngine(llm=self.llm, num_agents=num_agents)
+        self.source_config = source_config
+        self.engine = EnsembleEngine(
+            llm=self.llm, num_agents=num_agents, source_config=source_config,
+        )
 
     async def generate(
         self,
@@ -207,6 +216,7 @@ class ProbabilitySurfaceGenerator:
             spot_rate=spot,
             forecast_mode=forecast_mode,
             causal_factors=consensus_factors,
+            source_config=self.source_config,
         )
         cell_probabilities: dict[tuple[float, Tenor], float] = {}
 

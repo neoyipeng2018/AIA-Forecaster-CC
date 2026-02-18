@@ -350,6 +350,7 @@ class ForecastingAgent:
         search_mode: SearchMode = SearchMode.HYBRID,
         temperature: float | None = None,
         max_search_iterations: int | None = None,
+        source_names: list[str] | None = None,
     ):
         self.agent_id = agent_id
         self.llm = llm or LLMClient()
@@ -360,6 +361,7 @@ class ForecastingAgent:
             if max_search_iterations is not None
             else settings.max_search_iterations
         )
+        self.source_names = source_names
 
     def _build_base_rate_section(self, question: ForecastQuestion) -> str:
         """Build the base rate context block if spot/strike/tenor are available."""
@@ -396,6 +398,7 @@ class ForecastingAgent:
                 source_results = await fetch_all_sources(
                     pair=question.pair,
                     cutoff_date=question.cutoff_date,
+                    source_names=self.source_names,
                     max_age_hours=72 if self.search_mode == SearchMode.RSS_ONLY else 48,
                     max_results=max_results,
                 )
@@ -512,6 +515,7 @@ class ForecastingAgent:
                 source_results = await fetch_all_sources(
                     pair=pair,
                     cutoff_date=cutoff_date,
+                    source_names=self.source_names,
                     max_age_hours=72 if self.search_mode == SearchMode.RSS_ONLY else 48,
                     max_results=max_results,
                 )

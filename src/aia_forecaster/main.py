@@ -26,14 +26,44 @@ from aia_forecaster.fx.surface import (
     print_surface,
 )
 from aia_forecaster.llm.client import LLMClient
-from aia_forecaster.models import ForecastMode, ForecastQuestion, ForecastRun, Tenor
+from aia_forecaster.models import ForecastMode, ForecastQuestion, ForecastRun, SourceConfig, Tenor
 from aia_forecaster.storage.database import ForecastDatabase
 
 console = Console()
 
 # Shorthand detection: "forecast USDJPY 2025-02-13" → surface command
-_SUBCOMMANDS = {"question", "surface", "evaluate", "list"}
+_SUBCOMMANDS = {"question", "surface", "evaluate", "list", "compare"}
 _PAIR_PATTERN = re.compile(r"^[A-Z]{6}$")
+
+# Mapping from short CLI names to registry source names
+_SOURCE_ALIASES: dict[str, str] = {
+    "rss": "rss",
+    "bis": "bis_speeches",
+    "web": "web",  # sentinel — handled separately
+}
+
+
+def _parse_source_config(sources_str: str) -> SourceConfig:
+    """Parse a comma-separated --sources flag into a SourceConfig.
+
+    Accepted tokens: rss, bis, web (case-insensitive).
+    """
+    tokens = [t.strip().lower() for t in sources_str.split(",") if t.strip()]
+    registry_sources: list[str] = []
+    web_search_enabled = False
+    for tok in tokens:
+        if tok not in _SOURCE_ALIASES:
+            supported = ", ".join(sorted(_SOURCE_ALIASES.keys()))
+            print(f"Error: Unknown source '{tok}'. Supported: {supported}", file=sys.stderr)
+            sys.exit(1)
+        if tok == "web":
+            web_search_enabled = True
+        else:
+            registry_sources.append(_SOURCE_ALIASES[tok])
+    return SourceConfig(
+        registry_sources=registry_sources,
+        web_search_enabled=web_search_enabled,
+    )
 
 
 def _is_pair_shorthand(argv: list[str]) -> bool:
@@ -170,8 +200,20 @@ async def run_surface(args: argparse.Namespace) -> None:
     if args.tenors:
         tenors = [Tenor(t.strip()) for t in args.tenors.split(",")]
 
+    # Parse --sources flag into SourceConfig (None = all sources / default)
+    source_config: SourceConfig | None = None
+    sources_arg = getattr(args, "sources", None)
+    if sources_arg:
+        source_config = _parse_source_config(sources_arg)
+        console.print(
+            f"[bold]Source config:[/bold] {source_config.label} "
+            f"(mode={source_config.get_search_mode().value})"
+        )
+
     llm = LLMClient(model=args.model) if args.model else LLMClient()
-    generator = ProbabilitySurfaceGenerator(llm=llm, num_agents=args.agents)
+    generator = ProbabilitySurfaceGenerator(
+        llm=llm, num_agents=args.agents, source_config=source_config,
+    )
 
     cutoff = date.fromisoformat(args.cutoff) if args.cutoff else None
 
@@ -195,12 +237,13 @@ async def run_surface(args: argparse.Namespace) -> None:
         explanation = explain_surface(surface)
         print_explanation(explanation)
 
-    # Save heatmap
+    # Build output filename with source label suffix
     output = args.output
     if not output:
         cutoff_str = (cutoff or date.today()).isoformat()
         mode_suffix = f"_{forecast_mode.value}" if forecast_mode != ForecastMode.HITTING else ""
-        output = f"data/forecasts/{args.pair}_{cutoff_str}{mode_suffix}.png"
+        source_suffix = f"_{source_config.label}" if source_config else ""
+        output = f"data/forecasts/{args.pair}_{cutoff_str}{mode_suffix}{source_suffix}.png"
     path = plot_surface(surface, output)
     console.print(f"\n[bold]Heatmap saved:[/bold] {path}")
 
@@ -280,6 +323,27 @@ async def run_list(args: argparse.Namespace) -> None:
     console.print(table)
 
 
+async def run_compare(args: argparse.Namespace) -> None:
+    """Compare 2+ saved probability surface JSON files."""
+    from aia_forecaster.fx.compare import compare_surfaces
+
+    paths = [Path(p) for p in args.files]
+    for p in paths:
+        if not p.exists():
+            console.print(f"[red]File not found: {p}[/red]")
+            return
+        if p.suffix != ".json":
+            console.print(f"[red]Expected .json file: {p}[/red]")
+            return
+
+    output_dir = Path(args.output_dir) if args.output_dir else paths[0].parent
+    result = compare_surfaces(paths, output_dir)
+
+    console.print(f"\n[bold green]Comparison complete![/bold green]")
+    for name, path in result.items():
+        console.print(f"  [bold]{name}:[/bold] {path}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="forecast",
@@ -289,9 +353,12 @@ def build_parser() -> argparse.ArgumentParser:
             "  forecast USDJPY 2025-02-13          Generate probability surface\n"
             "  forecast EURUSD 2025-02-13 --strikes 7\n"
             "  forecast USDJPY                      Surface with today as cutoff\n"
+            "  forecast USDJPY --sources rss        Only RSS feeds\n"
+            "  forecast USDJPY --sources rss,web    RSS + web search (no BIS)\n"
             "\n"
             "Subcommands:\n"
             "  forecast question \"Will USD/JPY be above 155 in 1 week?\"\n"
+            "  forecast compare file1.json file2.json\n"
             "  forecast evaluate RUN_ID 1\n"
             "  forecast list\n"
         ),
@@ -319,10 +386,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--mode", choices=["above", "hitting"], default="hitting",
         help="Forecast mode: 'hitting' (barrier touch, default) or 'above' (terminal distribution)",
     )
+    s_parser.add_argument(
+        "--sources",
+        help="Comma-separated data sources to enable (from: rss, bis, web). Default: all",
+    )
     s_parser.add_argument("-o", "--output", help="Output path for heatmap PNG (default: data/forecasts/PAIR_DATE.png)")
     s_parser.add_argument("-e", "--explain", action="store_true", help="Show per-cell evidence and reasoning")
     s_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
     s_parser.add_argument("--agents", type=int, default=argparse.SUPPRESS, help=argparse.SUPPRESS)
+
+    # compare command
+    c_parser = subparsers.add_parser("compare", help="Compare 2+ saved probability surfaces")
+    c_parser.add_argument("files", nargs="+", help="JSON surface files to compare")
+    c_parser.add_argument(
+        "--output-dir", help="Directory for comparison outputs (default: same as first file)",
+    )
 
     # evaluate command
     e_parser = subparsers.add_parser("evaluate", help="Evaluate a past forecast")
@@ -355,6 +433,7 @@ def main() -> None:
         "surface": run_surface,
         "evaluate": run_evaluate,
         "list": run_list,
+        "compare": run_compare,
     }
 
     handler = command_map.get(args.command)

@@ -41,6 +41,44 @@ class SearchMode(str, Enum):
     HYBRID = "hybrid"  # Both RSS and web search (original behavior)
 
 
+class SourceConfig(BaseModel):
+    """Controls which data sources are active for a pipeline run.
+
+    Allows toggling individual registry sources (RSS, BIS speeches, etc.)
+    and web search independently, enabling A/B comparison of source impact.
+    """
+
+    registry_sources: list[str] = Field(
+        default_factory=lambda: ["rss", "bis_speeches"],
+        description="Which passive registry sources to use (e.g. 'rss', 'bis_speeches')",
+    )
+    web_search_enabled: bool = Field(
+        default=True,
+        description="Whether agentic web search runs",
+    )
+
+    @property
+    def label(self) -> str:
+        """Short label for filenames, e.g. 'rss+web' or 'bis_speeches+rss+web'."""
+        parts = sorted(self.registry_sources)
+        if self.web_search_enabled:
+            parts.append("web")
+        return "+".join(parts) if parts else "none"
+
+    def get_search_mode(self) -> SearchMode:
+        """Derive the SearchMode from this config."""
+        has_registry = bool(self.registry_sources)
+        if has_registry and self.web_search_enabled:
+            return SearchMode.HYBRID
+        elif has_registry:
+            return SearchMode.RSS_ONLY
+        elif self.web_search_enabled:
+            return SearchMode.WEB_ONLY
+        else:
+            # No sources at all — fall back to HYBRID (agents will get no data)
+            return SearchMode.HYBRID
+
+
 # --- Search ---
 
 
@@ -185,6 +223,10 @@ class ProbabilitySurface(BaseModel):
         description="Detected macro regime (risk_on, risk_off, policy_divergence, carry_unwind, mixed)",
     )
     regime_dominant_channels: list[str] = Field(default_factory=list)
+    source_config: SourceConfig | None = Field(
+        default=None,
+        description="Data source configuration used for this surface (None = all sources / default)",
+    )
 
 
 # --- Explanation Models ---

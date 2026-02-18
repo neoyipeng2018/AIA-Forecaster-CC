@@ -31,6 +31,7 @@ from aia_forecaster.models import (
     ResearchBrief,
     SearchMode,
     SharedResearch,
+    SourceConfig,
     Tenor,
 )
 
@@ -40,22 +41,39 @@ logger = logging.getLogger(__name__)
 class EnsembleEngine:
     """Orchestrates parallel forecasting agents and supervisor reconciliation."""
 
-    def __init__(self, llm: LLMClient | None = None, num_agents: int | None = None):
+    def __init__(
+        self,
+        llm: LLMClient | None = None,
+        num_agents: int | None = None,
+        source_config: SourceConfig | None = None,
+    ):
         self.llm = llm or LLMClient()
         self.num_agents = num_agents or settings.num_agents
+        self.source_config = source_config
 
     def _create_agents(self) -> list[ForecastingAgent]:
         """Create agents with diverse search modes, temperatures, and search depths.
 
-        Diversity strategy:
+        When source_config is set, all agents use the derived SearchMode and
+        source_names (no mode cycling) so the run isolates specific data sources.
+
+        Default diversity strategy (source_config is None):
         - Search modes cycle: RSS_ONLY → WEB_ONLY → HYBRID
         - Temperatures spread across 0.4–1.0
         - Search iterations vary from 3–7
         """
         agents = []
+
+        # Derive forced mode and source_names from source_config
+        forced_mode: SearchMode | None = None
+        source_names: list[str] | None = None
+        if self.source_config is not None:
+            forced_mode = self.source_config.get_search_mode()
+            source_names = self.source_config.registry_sources or None
+
         modes = [SearchMode.RSS_ONLY, SearchMode.WEB_ONLY, SearchMode.HYBRID]
         for i in range(self.num_agents):
-            mode = modes[i % len(modes)]
+            mode = forced_mode if forced_mode is not None else modes[i % len(modes)]
             # Spread temperatures evenly across [0.4, 1.0]
             if self.num_agents > 1:
                 temperature = 0.4 + (i / (self.num_agents - 1)) * 0.6
@@ -69,6 +87,7 @@ class EnsembleEngine:
                 search_mode=mode,
                 temperature=round(temperature, 2),
                 max_search_iterations=max_iters,
+                source_names=source_names,
             ))
         return agents
 
