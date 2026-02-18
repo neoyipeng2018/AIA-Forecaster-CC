@@ -461,6 +461,130 @@ def plot_surface(surface: ProbabilitySurface, output_path: str | Path) -> Path:
     return output_path
 
 
+def plot_surface_scatter(surface: ProbabilitySurface, output_path: str | Path) -> Path:
+    """Render three 2D scatter plots of the probability surface and save to PNG.
+
+    The three plots are:
+      1. Probability vs Strike (one series per tenor)
+      2. Probability vs Tenor (one series per strike)
+      3. Raw vs Calibrated probability (Platt scaling effect)
+
+    Args:
+        surface: The probability surface data.
+        output_path: File path for the saved image.
+
+    Returns:
+        The resolved output path.
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    strikes = sorted(set(c.strike for c in surface.cells))
+    tenors = sorted(
+        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+    )
+    tenor_labels = [t.value for t in tenors]
+    tenor_days = [_TENOR_DAYS[t] for t in tenors]
+
+    # Build lookup
+    lookup: dict[tuple[float, Tenor], float | None] = {}
+    for c in surface.cells:
+        p = c.calibrated.calibrated_probability if c.calibrated else None
+        lookup[(c.strike, c.tenor)] = p
+
+    is_hitting = surface.forecast_mode == ForecastMode.HITTING
+    p_label = "P(touch barrier)" if is_hitting else "P(above strike)"
+    base, quote = surface.pair[:3], surface.pair[3:]
+    date_str = surface.generated_at.strftime("%Y-%m-%d")
+    mode_subtitle = "Barrier/Touch" if is_hitting else "Above Strike"
+
+    # Color palette for series
+    cmap_series = plt.cm.get_cmap("tab10")
+
+    fig, axes = plt.subplots(1, 3, figsize=(22, 6))
+
+    # --- Plot 1: Probability vs Strike (one series per tenor) ---
+    ax1 = axes[0]
+    for j, (tenor, t_label) in enumerate(zip(tenors, tenor_labels)):
+        xs = []
+        ys = []
+        for strike in strikes:
+            p = lookup.get((strike, tenor))
+            if p is not None:
+                xs.append(strike)
+                ys.append(p)
+        ax1.scatter(xs, ys, color=cmap_series(j), label=t_label, s=60, zorder=3)
+        ax1.plot(xs, ys, color=cmap_series(j), alpha=0.4, linewidth=1.2)
+
+    if surface.spot_rate is not None:
+        ax1.axvline(x=surface.spot_rate, color="blue", linestyle="--", alpha=0.6, label=f"spot={surface.spot_rate:.2f}")
+    ax1.set_xlabel("Strike", fontsize=11)
+    ax1.set_ylabel(p_label, fontsize=11)
+    ax1.set_ylim(-0.05, 1.05)
+    ax1.set_title("Prob vs Strike", fontsize=12, fontweight="bold")
+    ax1.legend(fontsize=8, title="Tenor")
+    ax1.grid(True, alpha=0.3)
+
+    # --- Plot 2: Probability vs Tenor (one series per strike) ---
+    ax2 = axes[1]
+    for i, strike in enumerate(strikes):
+        xs = []
+        ys = []
+        for j, tenor in enumerate(tenors):
+            p = lookup.get((strike, tenor))
+            if p is not None:
+                xs.append(tenor_days[j])
+                ys.append(p)
+        ax2.scatter(xs, ys, color=cmap_series(i), label=f"{strike:.2f}", s=60, zorder=3)
+        ax2.plot(xs, ys, color=cmap_series(i), alpha=0.4, linewidth=1.2)
+
+    ax2.set_xscale("log")
+    ax2.set_xticks(tenor_days)
+    ax2.set_xticklabels(tenor_labels)
+    ax2.set_xlabel("Tenor", fontsize=11)
+    ax2.set_ylabel(p_label, fontsize=11)
+    ax2.set_ylim(-0.05, 1.05)
+    ax2.set_title("Prob vs Tenor", fontsize=12, fontweight="bold")
+    ax2.legend(fontsize=8, title="Strike")
+    ax2.grid(True, alpha=0.3)
+
+    # --- Plot 3: Raw vs Calibrated (Platt scaling effect) ---
+    ax3 = axes[2]
+    raw_ps = []
+    cal_ps = []
+    labels = []
+    for c in surface.cells:
+        if c.calibrated is not None:
+            raw_ps.append(c.calibrated.raw_probability)
+            cal_ps.append(c.calibrated.calibrated_probability)
+            labels.append(f"{c.strike:.0f}/{c.tenor.value}")
+
+    ax3.scatter(raw_ps, cal_ps, s=70, color="teal", edgecolors="black", linewidths=0.5, zorder=3)
+    # 45° reference line
+    ax3.plot([0, 1], [0, 1], color="grey", linestyle="--", alpha=0.5, label="no change")
+    # Annotate points
+    for x, y, lbl in zip(raw_ps, cal_ps, labels):
+        ax3.annotate(lbl, (x, y), textcoords="offset points", xytext=(5, 5), fontsize=7, alpha=0.7)
+    ax3.set_xlabel("Raw (pre-calibration)", fontsize=11)
+    ax3.set_ylabel("Calibrated (post-Platt)", fontsize=11)
+    ax3.set_xlim(-0.05, 1.05)
+    ax3.set_ylim(-0.05, 1.05)
+    ax3.set_aspect("equal")
+    ax3.set_title("Platt Scaling Effect", fontsize=12, fontweight="bold")
+    ax3.legend(fontsize=8)
+    ax3.grid(True, alpha=0.3)
+
+    fig.suptitle(
+        f"{base}/{quote} {mode_subtitle} — Scatter Views  (spot={surface.spot_rate}, {date_str})",
+        fontsize=14, fontweight="bold", y=1.02,
+    )
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+    return output_path
+
+
 # ---------------------------------------------------------------------------
 # Tenor numeric mapping for 3D surface
 # ---------------------------------------------------------------------------

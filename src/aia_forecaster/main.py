@@ -22,6 +22,7 @@ from aia_forecaster.fx.surface import (
     ProbabilitySurfaceGenerator,
     plot_surface,
     plot_surface_3d,
+    plot_surface_scatter,
     print_surface,
 )
 from aia_forecaster.llm.client import LLMClient
@@ -207,6 +208,11 @@ async def run_surface(args: argparse.Namespace) -> None:
     html_path = Path(str(path).replace(".png", ".html"))
     plot_surface_3d(surface, html_path)
     console.print(f"[bold]Interactive 3D surface saved:[/bold] {html_path}")
+
+    # Save 2D scatter plots
+    scatter_path = Path(str(path).replace(".png", "_scatter.png"))
+    plot_surface_scatter(surface, scatter_path)
+    console.print(f"[bold]Scatter plots saved:[/bold] {scatter_path}")
 
     # Save full surface data (including reasoning/evidence) as companion JSON
     json_path = Path(str(path).replace(".png", ".json"))
