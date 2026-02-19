@@ -25,6 +25,7 @@ company/
 │   ├── __init__.py      # Auto-discovered by the data source registry
 │   └── bloomberg.py     # Example: Bloomberg data source connector
 ├── pairs.py             # Register custom currency pairs (exotics, NDFs)
+├── llm.py               # Register custom LLM backend (Azure, Anthropic, Ollama)
 └── config.py            # Company-specific configuration overrides
 ```
 
@@ -38,6 +39,7 @@ in `company/__init__.py` run automatically:
 - **Custom RSS feeds** via `register_feed()` from `aia_forecaster.search.rss`
 - **Custom keywords** via `register_currency_keywords()` from `aia_forecaster.search.rss`
 - **Custom data sources** via `@data_source()` from `aia_forecaster.search.registry`
+- **Custom LLM backend** via `set_llm_provider()` from `aia_forecaster.llm`
 - **Blacklisted domains** via `add_blacklisted_domains()` from `aia_forecaster.search.web`
 
 ## Pulling Upstream Changes

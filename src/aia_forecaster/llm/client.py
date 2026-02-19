@@ -1,16 +1,48 @@
-"""LLM client using langchain-openai."""
+"""LLM client using langchain-openai (default) or a pluggable provider."""
 
 from __future__ import annotations
 
 import json
 import logging
+from typing import Callable
 
 from langchain_openai import ChatOpenAI
+from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
 from aia_forecaster.config import settings
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Pluggable LLM provider
+# ---------------------------------------------------------------------------
+ChatModelFactory = Callable[[str, float, int], BaseChatModel]
+"""Signature: (model_name, temperature, max_tokens) -> BaseChatModel"""
+
+_llm_provider: ChatModelFactory | None = None
+
+
+def set_llm_provider(factory: ChatModelFactory | None) -> None:
+    """Register (or clear) a custom LLM provider factory.
+
+    The factory receives ``(model_name, temperature, max_tokens)`` and must
+    return a LangChain ``BaseChatModel`` instance (anything that supports
+    ``.ainvoke()``).
+
+    When no provider is registered the default ``ChatOpenAI`` backend is used.
+    """
+    global _llm_provider
+    _llm_provider = factory
+    if factory is not None:
+        logger.info("Custom LLM provider registered")
+    else:
+        logger.info("LLM provider reset to default (ChatOpenAI)")
+
+
+def get_llm_provider() -> ChatModelFactory | None:
+    """Return the currently registered LLM provider factory, or *None*."""
+    return _llm_provider
 
 _ROLE_MAP = {
     "user": HumanMessage,
@@ -37,7 +69,7 @@ class LLMClient:
         self.model = model or settings.llm_model
         self.temperature = temperature
 
-    def _build_chat(self, temperature: float, max_tokens: int) -> ChatOpenAI:
+    def _build_chat(self, temperature: float, max_tokens: int) -> BaseChatModel:
         # Strip provider prefix (e.g. "openai/gpt-5-mini" → "gpt-5-mini")
         model_name = self.model.split("/", 1)[-1] if "/" in self.model else self.model
 
@@ -45,6 +77,11 @@ class LLMClient:
         if any(model_name.startswith(p) for p in _REASONING_PREFIXES):
             max_tokens = max(max_tokens, _REASONING_MIN_TOKENS)
 
+        # Use custom provider when registered
+        if _llm_provider is not None:
+            return _llm_provider(model_name, temperature, max_tokens)
+
+        # Default: ChatOpenAI
         kwargs: dict = dict(
             model=model_name,
             temperature=temperature,

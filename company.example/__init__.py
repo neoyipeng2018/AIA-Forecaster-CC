@@ -11,3 +11,7 @@ register_custom_pairs()
 
 # Import search subpackage so @data_source decorators run
 import company.search  # noqa: F401
+
+# Uncomment to register a custom LLM backend (Azure, Anthropic, Ollama, etc.)
+# from company.llm import register_llm_connector
+# register_llm_connector()
