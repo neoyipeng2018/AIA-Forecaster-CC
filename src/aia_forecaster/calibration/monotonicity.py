@@ -138,10 +138,8 @@ def enforce_hitting_monotonicity(
     Returns:
         Number of cells whose probabilities were adjusted.
     """
-    from aia_forecaster.fx.pairs import DEFAULT_TENORS
-
     sorted_strikes = sorted(strikes)
-    sorted_tenors = sorted(tenors, key=lambda t: DEFAULT_TENORS.index(t))
+    sorted_tenors = sorted(tenors, key=lambda t: t.days)
     total_adjusted = 0
 
     # --- Strike-axis monotonicity (per tenor) ---

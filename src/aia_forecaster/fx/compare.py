@@ -20,12 +20,6 @@ from aia_forecaster.models import ProbabilitySurface, Tenor
 
 logger = logging.getLogger(__name__)
 
-# Tenor ordering for consistent axis display
-_TENOR_ORDER: list[Tenor] = [Tenor.D1, Tenor.W1, Tenor.M1, Tenor.M3, Tenor.M6]
-_TENOR_DAYS: dict[Tenor, int] = {
-    Tenor.D1: 1, Tenor.W1: 7, Tenor.M1: 30, Tenor.M3: 90, Tenor.M6: 180,
-}
-
 
 @dataclass
 class LabeledSurface:
@@ -64,7 +58,7 @@ def load_surfaces(paths: list[Path]) -> list[LabeledSurface]:
         strikes = sorted({c.strike for c in surface.cells})
         tenors = sorted(
             {c.tenor for c in surface.cells},
-            key=lambda t: _TENOR_ORDER.index(t),
+            key=lambda t: t.days,
         )
         grid: dict[tuple[float, Tenor], float] = {}
         for c in surface.cells:
@@ -97,7 +91,7 @@ def _align_grids(
 
     common_strikes = sorted(strike_sets[0].intersection(*strike_sets[1:]))
     common_tenors_set = tenor_sets[0].intersection(*tenor_sets[1:])
-    common_tenors = sorted(common_tenors_set, key=lambda t: _TENOR_ORDER.index(t))
+    common_tenors = sorted(common_tenors_set, key=lambda t: t.days)
 
     if not common_strikes or not common_tenors:
         logger.warning(
@@ -106,7 +100,7 @@ def _align_grids(
         )
         common_strikes = sorted(set().union(*strike_sets))
         common_tenors_set = set().union(*tenor_sets)
-        common_tenors = sorted(common_tenors_set, key=lambda t: _TENOR_ORDER.index(t))
+        common_tenors = sorted(common_tenors_set, key=lambda t: t.days)
 
     return common_strikes, common_tenors
 
@@ -229,7 +223,7 @@ def plot_overlay_scatter(
     """Prob-vs-strike and prob-vs-tenor curves overlaid, different styles per source."""
     strikes, tenors = _align_grids(surfaces)
     tenor_labels = [t.value for t in tenors]
-    tenor_days = [_TENOR_DAYS[t] for t in tenors]
+    tenor_days = [t.days for t in tenors]
 
     cmap = plt.cm.get_cmap("tab10")
     line_styles = ["-", "--", "-.", ":"]

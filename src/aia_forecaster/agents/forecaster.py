@@ -651,11 +651,7 @@ class ForecastingAgent:
         ensuring cross-strike coherence.
         """
         base, quote = pair[:3], pair[3:]
-        tenor_map = {
-            Tenor.D1: "1 day", Tenor.W1: "1 week", Tenor.M1: "1 month",
-            Tenor.M3: "3 months", Tenor.M6: "6 months",
-        }
-        tenor_label = tenor_map.get(tenor, tenor.value)
+        tenor_label = tenor.label
 
         # Build base rates block
         base_rates_lines = []

@@ -1,6 +1,6 @@
 # AIA Forecaster
 
-FX probability surface forecaster powered by LLM ensembles. Generates P(price > strike) across a grid of strikes and tenors for currency pairs, using agentic search, multi-agent ensembling, and statistical calibration.
+FX probability surface forecaster powered by LLM ensembles. Generates probability surfaces across a grid of strikes and tenors for currency pairs, supporting both P(above strike) and P(touch barrier) modes. Uses agentic search, multi-agent ensembling, and statistical calibration.
 
 Based on the [AIA Forecaster paper](https://arxiv.org/abs/2511.07678) (Alur, Stadie et al., Bridgewater AIA Labs, 2025).
 
@@ -31,8 +31,17 @@ forecast USDJPY 2026-02-15
 # Fewer strikes for a faster run
 forecast USDJPY --strikes 3
 
-# Specific tenors only
-forecast surface --tenors 1W,1M
+# Custom strike interval (half-yen steps instead of default 1-yen)
+forecast USDJPY --strike-step 0.5
+
+# Explicit strike levels
+forecast USDJPY --strike-list 150,152.5,155,157.5,160
+
+# Any <number><unit> tenor is accepted (D=days, W=weeks, M=months, Y=years)
+forecast USDJPY --tenors 1D,3D,5D,2W,1M,3M,1Y
+
+# Forecast mode: "above" (P(price > strike), default) or "hitting" (P(touches barrier))
+forecast USDJPY --mode hitting
 
 # Show per-cell evidence and reasoning
 forecast USDJPY -e
@@ -66,8 +75,10 @@ async def main():
     gen = ProbabilitySurfaceGenerator(num_agents=3)
     surface = await gen.generate(
         pair="USDJPY",
-        num_strikes=3,
-        tenors=[Tenor.W1, Tenor.M1],
+        num_strikes=5,
+        tenors=[Tenor.W1, Tenor.M1, Tenor("3D")],  # any <number><unit> tenor
+        strike_step=0.5,              # half-yen intervals
+        # custom_strikes=[150, 155],  # or pass explicit levels
     )
     for cell in surface.cells:
         p = cell.calibrated.calibrated_probability if cell.calibrated else None
@@ -378,6 +389,77 @@ surface = await gen.generate(pair="USDJPY")
 print(surface.source_config.label)  # "rss"
 ```
 
+## Strikes & Tenors
+
+### Strike controls
+
+By default, strikes are auto-generated around the live spot rate using pair-specific step sizes (1.0 yen for USDJPY, `typical_daily_range` for others).
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| `--strikes N` | Number of auto-generated strikes (default: 5) | `--strikes 11` |
+| `--strike-step X` | Override the interval between strikes | `--strike-step 0.5` |
+| `--strike-list X,Y,Z` | Explicit strike prices (ignores `--strikes` and `--strike-step`) | `--strike-list 150,152.5,155,157.5,160` |
+
+```bash
+# 11 strikes at default 1-yen intervals
+forecast USDJPY --strikes 11
+
+# 9 strikes at half-yen intervals
+forecast USDJPY --strikes 9 --strike-step 0.5
+
+# Exactly these 4 levels
+forecast USDJPY --strike-list 152,154,156,158
+```
+
+### Tenor controls
+
+Tenors accept any `<number><unit>` string:
+
+| Unit | Meaning | Examples |
+|------|---------|----------|
+| `D` | Days | `1D`, `3D`, `5D`, `10D` |
+| `W` | Weeks | `1W`, `2W`, `3W` |
+| `M` | Months | `1M`, `2M`, `3M`, `6M`, `9M` |
+| `Y` | Years | `1Y`, `2Y` |
+
+Default (when `--tenors` is omitted): `1D,1W,1M,3M,6M`.
+
+```bash
+# Fine-grained short-horizon
+forecast USDJPY --tenors 1D,3D,5D,1W,2W
+
+# Full curve out to 1 year
+forecast USDJPY --tenors 1D,1W,1M,3M,6M,1Y
+
+# Single tenor
+forecast USDJPY --tenors 1M
+
+# Any combination you want
+forecast USDJPY --tenors 3D,10D,1M,6M,2Y
+```
+
+### Python API
+
+```python
+from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator
+from aia_forecaster.models import Tenor
+
+gen = ProbabilitySurfaceGenerator(num_agents=3)
+
+# Custom strike step
+surface = await gen.generate(pair="USDJPY", num_strikes=9, strike_step=0.5)
+
+# Explicit strikes
+surface = await gen.generate(pair="USDJPY", custom_strikes=[150, 152.5, 155, 157.5, 160])
+
+# Predefined tenor constants
+surface = await gen.generate(pair="USDJPY", tenors=[Tenor.W1, Tenor.W2, Tenor.M1, Tenor.Y1])
+
+# Arbitrary tenors (any <number><unit> string)
+surface = await gen.generate(pair="USDJPY", tenors=[Tenor("3D"), Tenor("5D"), Tenor("2W")])
+```
+
 ## Configuration
 
 Settings are loaded from environment variables or `.env`:
@@ -401,11 +483,16 @@ forecast USDJPY --agents 5 --model openai/gpt-4o
 Each surface run produces:
 - **Console table** with color-coded probabilities
 - **Heatmap PNG** saved to `data/forecasts/PAIR_DATE.png`
+- **Scatter plots PNG** (prob vs strike, prob vs tenor, Platt scaling effect) saved to `data/forecasts/PAIR_DATE_scatter.png`
 - **Interactive 3D surface** (HTML/Plotly) saved to `data/forecasts/PAIR_DATE.html`
 - **JSON file** with full surface data (probabilities, evidence, reasoning)
 
 ## Supported Pairs
 
-- `USDJPY` (USD/JPY)
-- `EURUSD` (EUR/USD)
-- `GBPUSD` (GBP/USD)
+| Pair | Default strike step | Typical daily range | Override with |
+|------|-------------------|---------------------|---------------|
+| `USDJPY` | 1.0 yen | ~1.0 | `--strike-step 0.5` |
+| `EURUSD` | 0.008 | ~0.008 | `--strike-step 0.005` |
+| `GBPUSD` | 0.010 | ~0.010 | `--strike-step 0.005` |
+
+Custom pairs can be registered via `register_pair()` — see `fx/pairs.py`.

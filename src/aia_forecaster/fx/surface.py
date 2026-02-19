@@ -95,14 +95,7 @@ def _question_text(
 ) -> str:
     """Formulate the binary question for a (strike, tenor) cell."""
     base, quote = pair[:3], pair[3:]
-    tenor_map = {
-        Tenor.D1: "1 day",
-        Tenor.W1: "1 week",
-        Tenor.M1: "1 month",
-        Tenor.M3: "3 months",
-        Tenor.M6: "6 months",
-    }
-    horizon = tenor_map.get(tenor, tenor.value)
+    horizon = tenor.label
     if forecast_mode == ForecastMode.HITTING:
         return f"Will {base}/{quote} touch/reach {strike} within {horizon}?"
     return f"Will {base}/{quote} be above {strike} in {horizon}?"
@@ -136,6 +129,8 @@ class ProbabilitySurfaceGenerator:
         tenors: list[Tenor] | None = None,
         cutoff_date: date | None = None,
         forecast_mode: ForecastMode = ForecastMode.HITTING,
+        strike_step: float | None = None,
+        custom_strikes: list[float] | None = None,
     ) -> ProbabilitySurface:
         """Generate the probability surface using two-phase shared research.
 
@@ -149,6 +144,8 @@ class ProbabilitySurfaceGenerator:
             tenors: List of tenors to evaluate. Default: all.
             cutoff_date: Information cutoff date.
             forecast_mode: 'hitting' (barrier touch) or 'above' (terminal distribution).
+            strike_step: Override the default interval between auto-generated strikes.
+            custom_strikes: Explicit list of strike prices (bypasses auto-generation).
 
         Returns:
             ProbabilitySurface with calibrated probabilities for each cell.
@@ -160,7 +157,13 @@ class ProbabilitySurfaceGenerator:
 
         # Get spot rate and generate strikes
         spot = await get_spot_rate(pair)
-        strikes = generate_strikes(spot, pair, num_strikes, forecast_mode=forecast_mode)
+        if custom_strikes is not None:
+            strikes = sorted(custom_strikes)
+        else:
+            strikes = generate_strikes(
+                spot, pair, num_strikes,
+                forecast_mode=forecast_mode, step=strike_step,
+            )
         console.print(f"[bold]Spot rate:[/bold] {pair} = {spot}")
         console.print(f"[bold]Strikes:[/bold] {strikes}")
         console.print(f"[bold]Tenors:[/bold] {[t.value for t in tenors]}")
@@ -351,7 +354,7 @@ def print_surface(surface: ProbabilitySurface) -> None:
     """Print the probability surface as a rich table."""
     # Collect unique strikes and tenors
     strikes = sorted(set(c.strike for c in surface.cells))
-    tenors = sorted(set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t))
+    tenors = sorted(set(c.tenor for c in surface.cells), key=lambda t: t.days)
 
     # Build lookup
     lookup: dict[tuple[float, Tenor], float | None] = {}
@@ -401,7 +404,7 @@ def plot_surface(surface: ProbabilitySurface, output_path: str | Path) -> Path:
 
     strikes = sorted(set(c.strike for c in surface.cells))
     tenors = sorted(
-        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+        set(c.tenor for c in surface.cells), key=lambda t: t.days
     )
 
     # Build lookup
@@ -491,10 +494,10 @@ def plot_surface_scatter(surface: ProbabilitySurface, output_path: str | Path) -
 
     strikes = sorted(set(c.strike for c in surface.cells))
     tenors = sorted(
-        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+        set(c.tenor for c in surface.cells), key=lambda t: t.days
     )
     tenor_labels = [t.value for t in tenors]
-    tenor_days = [_TENOR_DAYS[t] for t in tenors]
+    tenor_days = [t.days for t in tenors]
 
     # Build lookup
     lookup: dict[tuple[float, Tenor], float | None] = {}
@@ -599,13 +602,6 @@ def plot_surface_scatter(surface: ProbabilitySurface, output_path: str | Path) -
 # Tenor numeric mapping for 3D surface
 # ---------------------------------------------------------------------------
 
-_TENOR_DAYS: dict[Tenor, int] = {
-    Tenor.D1: 1,
-    Tenor.W1: 7,
-    Tenor.M1: 30,
-    Tenor.M3: 90,
-    Tenor.M6: 180,
-}
 
 
 _HOVER_LINE_WIDTH = 60  # max chars per line in hover tooltips
@@ -737,10 +733,10 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
 
     strikes = sorted(set(c.strike for c in surface.cells))
     tenors = sorted(
-        set(c.tenor for c in surface.cells), key=lambda t: DEFAULT_TENORS.index(t)
+        set(c.tenor for c in surface.cells), key=lambda t: t.days
     )
     tenor_labels = [t.value for t in tenors]
-    tenor_days = [_TENOR_DAYS[t] for t in tenors]
+    tenor_days = [t.days for t in tenors]
 
     # Build probability grid [strike_idx][tenor_idx]
     lookup: dict[tuple[float, Tenor], float | None] = {}

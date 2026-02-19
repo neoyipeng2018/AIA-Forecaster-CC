@@ -219,12 +219,22 @@ async def run_surface(args: argparse.Namespace) -> None:
 
     forecast_mode = ForecastMode(getattr(args, "mode", "hitting"))
 
+    # Parse custom strikes if provided
+    custom_strikes: list[float] | None = None
+    strike_list_arg = getattr(args, "strike_list", None)
+    if strike_list_arg:
+        custom_strikes = [float(s.strip()) for s in strike_list_arg.split(",")]
+
+    strike_step: float | None = getattr(args, "strike_step", None)
+
     surface = await generator.generate(
         pair=args.pair,
         num_strikes=args.strikes,
         tenors=tenors,
         cutoff_date=cutoff,
         forecast_mode=forecast_mode,
+        strike_step=strike_step,
+        custom_strikes=custom_strikes,
     )
 
     console.print("\n")
@@ -350,11 +360,13 @@ def build_parser() -> argparse.ArgumentParser:
         description="AIA Forecaster — FX probability forecasting",
         epilog=(
             "Quick start:\n"
-            "  forecast USDJPY 2025-02-13          Generate probability surface\n"
-            "  forecast EURUSD 2025-02-13 --strikes 7\n"
-            "  forecast USDJPY                      Surface with today as cutoff\n"
-            "  forecast USDJPY --sources rss        Only RSS feeds\n"
-            "  forecast USDJPY --sources rss,web    RSS + web search (no BIS)\n"
+            "  forecast USDJPY 2025-02-13              Generate probability surface\n"
+            "  forecast EURUSD 2025-02-13 --strikes 7   7 strikes, default step\n"
+            "  forecast USDJPY --strike-step 0.5         Half-yen strike intervals\n"
+            "  forecast USDJPY --strike-list 150,152.5,155,157.5,160\n"
+            "  forecast USDJPY --tenors 1D,3D,5D,2W,1M   Flexible tenors (<N><D|W|M|Y>)\n"
+            "  forecast USDJPY --sources rss             Only RSS feeds\n"
+            "  forecast USDJPY --sources rss,web         RSS + web search (no BIS)\n"
             "\n"
             "Subcommands:\n"
             "  forecast question \"Will USD/JPY be above 155 in 1 week?\"\n"
@@ -380,11 +392,26 @@ def build_parser() -> argparse.ArgumentParser:
 
     # surface command
     s_parser = subparsers.add_parser("surface", help="Generate probability surface")
-    s_parser.add_argument("--strikes", type=int, default=5, help="Number of strikes")
-    s_parser.add_argument("--tenors", help="Comma-separated tenors (e.g., 1W,1M)")
+    s_parser.add_argument("--strikes", type=int, default=5, help="Number of auto-generated strikes (default: 5)")
     s_parser.add_argument(
-        "--mode", choices=["above", "hitting"], default="hitting",
-        help="Forecast mode: 'hitting' (barrier touch, default) or 'above' (terminal distribution)",
+        "--strike-step", type=float, default=None,
+        help="Interval between auto-generated strikes (e.g., 0.5 for USDJPY half-yen steps). "
+             "Overrides pair-specific defaults.",
+    )
+    s_parser.add_argument(
+        "--strike-list",
+        help="Comma-separated explicit strike prices (e.g., 150.0,152.5,155.0,157.5,160.0). "
+             "Overrides --strikes and --strike-step.",
+    )
+    s_parser.add_argument(
+        "--tenors",
+        help="Comma-separated tenors — any <number><unit> accepted "
+             "(D=days, W=weeks, M=months, Y=years). "
+             "Examples: 1D,3D,5D,2W,1M,3M,6M,1Y",
+    )
+    s_parser.add_argument(
+        "--mode", choices=["above", "hitting"], default="above",
+        help="Forecast mode: 'above' (terminal distribution, default) or 'hitting' (barrier touch)",
     )
     s_parser.add_argument(
         "--sources",

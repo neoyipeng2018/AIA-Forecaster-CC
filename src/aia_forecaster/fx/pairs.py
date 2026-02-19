@@ -32,7 +32,7 @@ PAIR_CONFIGS: dict[str, PairConfig] = {
     ),
 }
 
-# Default tenors
+# Default tenors when none specified via CLI
 DEFAULT_TENORS = [Tenor.D1, Tenor.W1, Tenor.M1, Tenor.M3, Tenor.M6]
 
 
@@ -65,6 +65,7 @@ def generate_strikes(
     pair: str = "USDJPY",
     num_strikes: int = 11,
     forecast_mode: ForecastMode = ForecastMode.ABOVE,
+    step: float | None = None,
 ) -> list[float]:
     """Generate strike prices around the current spot rate.
 
@@ -78,6 +79,8 @@ def generate_strikes(
         pair: Currency pair string.
         num_strikes: Number of strikes to generate (odd number centers on spot).
         forecast_mode: Forecast mode — hitting forces odd num_strikes for symmetry.
+        step: Override the default step size between strikes. If None, uses
+              pair-specific defaults (1.0 for USDJPY, typical_daily_range for others).
 
     Returns:
         Sorted list of strike prices.
@@ -88,13 +91,15 @@ def generate_strikes(
     if forecast_mode == ForecastMode.HITTING and num_strikes % 2 == 0:
         num_strikes += 1
 
-    # Use percentage-based offsets scaled to the pair
-    # For USDJPY (~155): ±1 yen per strike → roughly ±0.65%
-    # For EURUSD (~1.08): ±0.01 per strike → roughly ±0.9%
-    if pair == "USDJPY":
-        step = 1.0  # 1 yen steps
-    else:
-        step = config.typical_daily_range  # 1 daily range per step
+    # Determine step size
+    if step is None:
+        # Use percentage-based offsets scaled to the pair
+        # For USDJPY (~155): ±1 yen per strike → roughly ±0.65%
+        # For EURUSD (~1.08): ±0.01 per strike → roughly ±0.9%
+        if pair == "USDJPY":
+            step = 1.0  # 1 yen steps
+        else:
+            step = config.typical_daily_range  # 1 daily range per step
 
     half = num_strikes // 2
     center = round(spot, 2) if pair == "USDJPY" else round(spot, 4)

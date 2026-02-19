@@ -39,15 +39,6 @@ _YF_SUFFIX = "=X"
 _vol_cache: dict[str, tuple[float, float]] = {}
 _CACHE_TTL = 3600  # 1 hour — vol doesn't change dramatically intra-session
 
-# Trading days per tenor
-TENOR_DAYS: dict[Tenor, int] = {
-    Tenor.D1: 1,
-    Tenor.W1: 5,
-    Tenor.M1: 21,
-    Tenor.M3: 63,
-    Tenor.M6: 126,
-}
-
 _norm = NormalDist(0, 1)
 
 
@@ -182,7 +173,7 @@ def compute_base_rates(
     # Track whether we used dynamic or fallback
     vol_source = "dynamic" if pair in _vol_cache else "fallback"
 
-    days = TENOR_DAYS[tenor]
+    days = tenor.trading_days
 
     # Tenor-scaled volatility: sigma_T = sigma_annual * sqrt(days / 252)
     sigma_t = annual_vol * math.sqrt(days / 252)
@@ -238,7 +229,7 @@ def compute_hitting_base_rate(
     annual_vol = get_annualized_vol(pair)
     vol_source = "dynamic" if pair in _vol_cache else "fallback"
 
-    days = TENOR_DAYS[tenor]
+    days = tenor.trading_days
     sigma_t = annual_vol * math.sqrt(days / 252)
     tenor_range_1sigma = spot * sigma_t
 
@@ -298,14 +289,7 @@ def format_base_rate_context(
     """
     pair = pair.upper()
 
-    tenor_map = {
-        Tenor.D1: "1 day",
-        Tenor.W1: "1 week",
-        Tenor.M1: "1 month",
-        Tenor.M3: "3 months",
-        Tenor.M6: "6 months",
-    }
-    horizon = tenor_map.get(tenor, tenor.value)
+    horizon = tenor.label
     base, quote = pair[:3], pair[3:]
     price_fmt = ".2f" if "JPY" in pair else ".4f"
 
