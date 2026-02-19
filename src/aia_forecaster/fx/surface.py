@@ -846,3 +846,89 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
     )
 
     return output_path
+
+
+def plot_cdf(surface: ProbabilitySurface, output_path: str | Path) -> Path | None:
+    """Render CDF curves — P(spot < K) at each strike — and save to PNG.
+
+    Each tenor gets its own curve. The result is directly comparable to
+    digital-put prices in the options market: a digital put at strike K
+    costs exactly CDF(K) in risk-neutral terms.
+
+    Only applicable to ABOVE mode (terminal distribution).  Returns None
+    for HITTING mode since barrier-touch probabilities are not a CDF.
+
+    Args:
+        surface: The probability surface data.
+        output_path: File path for the saved image.
+
+    Returns:
+        The resolved output path, or None if not applicable.
+    """
+    if surface.forecast_mode != ForecastMode.ABOVE:
+        logger.info("CDF chart skipped — only applicable to ABOVE mode")
+        return None
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    strikes = sorted(set(c.strike for c in surface.cells))
+    tenors = sorted(
+        set(c.tenor for c in surface.cells), key=lambda t: t.days
+    )
+
+    # Build lookup: P(above K) per (strike, tenor)
+    lookup: dict[tuple[float, Tenor], float | None] = {}
+    for c in surface.cells:
+        p = c.calibrated.calibrated_probability if c.calibrated else None
+        lookup[(c.strike, c.tenor)] = p
+
+    base, quote = surface.pair[:3], surface.pair[3:]
+    date_str = surface.generated_at.strftime("%Y-%m-%d")
+
+    # Dark theme matching the reference image
+    with plt.style.context("dark_background"):
+        fig, ax = plt.subplots(figsize=(max(10, len(strikes) * 1.0), 6))
+        fig.patch.set_facecolor("#1e2330")
+        ax.set_facecolor("#2a2f3e")
+
+        cmap_series = plt.cm.get_cmap("tab10")
+
+        for j, tenor in enumerate(tenors):
+            xs: list[float] = []
+            ys: list[float] = []
+            for strike in strikes:
+                p_above = lookup.get((strike, tenor))
+                if p_above is not None:
+                    xs.append(strike)
+                    ys.append((1.0 - p_above) * 100.0)  # CDF = 1 - P(above)
+
+            color = cmap_series(j)
+            ax.plot(xs, ys, color=color, linewidth=2, alpha=0.9, zorder=3)
+            ax.scatter(xs, ys, color=color, s=50, zorder=4,
+                       label=tenor.value, edgecolors="white", linewidths=0.5)
+
+        # Spot rate reference line (yellow dashed, matching reference image)
+        if surface.spot_rate is not None:
+            ax.axvline(
+                x=surface.spot_rate, color="#FFD700", linestyle="--",
+                linewidth=2, alpha=0.8, label=f"spot = {surface.spot_rate:.4f}",
+            )
+
+        ax.set_xlabel(f"{base}/{quote}", fontsize=13, fontweight="bold")
+        ax.set_ylabel("P(spot < K)  %", fontsize=13, fontweight="bold")
+        ax.set_ylim(-2, 102)
+        ax.set_title(
+            f"P(spot < K) at each strike — {base}/{quote}\n"
+            f"spot = {surface.spot_rate}  |  {date_str}",
+            fontsize=14, fontweight="bold", pad=12,
+        )
+        ax.legend(fontsize=9, title="Tenor", loc="upper left")
+        ax.grid(True, alpha=0.2, linestyle="--")
+
+        fig.tight_layout()
+        fig.savefig(output_path, dpi=150, bbox_inches="tight",
+                    facecolor=fig.get_facecolor())
+        plt.close(fig)
+
+    return output_path

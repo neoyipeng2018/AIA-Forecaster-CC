@@ -20,6 +20,7 @@ from aia_forecaster.evaluation.metrics import brier_score
 from aia_forecaster.fx.pairs import PAIR_CONFIGS
 from aia_forecaster.fx.surface import (
     ProbabilitySurfaceGenerator,
+    plot_cdf,
     plot_surface,
     plot_surface_3d,
     plot_surface_scatter,
@@ -266,6 +267,12 @@ async def run_surface(args: argparse.Namespace) -> None:
     scatter_path = Path(str(path).replace(".png", "_scatter.png"))
     plot_surface_scatter(surface, scatter_path)
     console.print(f"[bold]Scatter plots saved:[/bold] {scatter_path}")
+
+    # Save CDF chart (P(spot < K) — comparable to digital put prices)
+    cdf_path = Path(str(path).replace(".png", "_cdf.png"))
+    cdf_result = plot_cdf(surface, cdf_path)
+    if cdf_result:
+        console.print(f"[bold]CDF chart saved:[/bold] {cdf_result}")
 
     # Save full surface data (including reasoning/evidence) as companion JSON
     json_path = Path(str(path).replace(".png", ".json"))
