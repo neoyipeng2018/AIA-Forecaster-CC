@@ -227,7 +227,7 @@ The surface generator uses a shared-research approach to avoid redundant search 
 | Surface Generator | `fx/surface.py` | Two-phase surface pipeline |
 | Platt Calibration | `calibration/platt.py` | LLM hedging bias correction |
 | Monotonicity (PAVA) | `calibration/monotonicity.py` | Strike-monotonicity enforcement |
-| Base Rates | `fx/base_rates.py` | Statistical anchoring from vol data |
+| Base Rates | `fx/base_rates.py` | Forward rates, consensus, vol, statistical anchoring |
 | Data Source Registry | `search/registry.py` | Pluggable data source framework |
 
 ## Adding Custom Data Sources
@@ -496,3 +496,139 @@ Each surface run produces:
 | `GBPUSD` | 0.010 | ~0.010 | `--strike-step 0.005` |
 
 Custom pairs can be registered via `register_pair()` — see `fx/pairs.py`.
+
+## Connecting Your Market Data
+
+The forecasting pipeline uses a **base rate system** that anchors LLM probability estimates to quantitative market data. Out of the box it computes carry-adjusted forward rates from interest-rate parity. You can plug in your company's consensus forecasts to replace the forward as the distribution center.
+
+### How the base rate resolves
+
+The system picks a center for the probability distribution in this order:
+
+| Priority | Source | What it is | When it's used |
+|----------|--------|------------|----------------|
+| 1 | **Consensus provider** | Analyst forecasts, internal models, options-implied | When you register a provider via `set_consensus_provider()` |
+| 2 | **Forward rate** | Carry math from interest-rate parity | Default — always computed for context |
+| 3 | **Spot rate** | Zero drift, last resort | Only if no interest rates are available at all |
+
+When consensus is available, the forward rate and interest rates are **not computed** — the system skips them entirely.
+
+### Plugging in consensus forecasts
+
+Register a function that returns your company's consensus rate for a given pair and tenor:
+
+```python
+from aia_forecaster.fx import set_consensus_provider
+from aia_forecaster.models import Tenor
+
+def my_consensus(pair: str, spot: float, tenor: Tenor) -> tuple[float, str] | None:
+    """Return (consensus_rate, source_label) or None if unavailable."""
+    # Example: look up from your internal data
+    rate = your_internal_api.get_forecast(pair, str(tenor))
+    if rate is None:
+        return None
+    return rate, "internal_model"  # source_label appears in agent context
+
+set_consensus_provider(my_consensus)
+```
+
+The provider function receives:
+- `pair` — e.g. `"USDJPY"` (always uppercase)
+- `spot` — current spot rate
+- `tenor` — a `Tenor` object (has `.days`, `.trading_days`, `.label` properties; `str(tenor)` gives e.g. `"1M"`)
+
+It should return:
+- `(consensus_rate, source_label)` — the rate and a string describing the source
+- `None` — when no consensus is available for this pair/tenor (system falls back to forward)
+
+Exceptions are caught and logged automatically — one failing lookup won't crash the pipeline.
+
+#### Common setups
+
+**Bloomberg or Refinitiv:**
+```python
+def bloomberg_consensus(pair, spot, tenor):
+    rate = blp.get_fx_forecast(pair, tenor.label)
+    return (rate, "bloomberg") if rate else None
+
+set_consensus_provider(bloomberg_consensus)
+```
+
+**Static CSV file:**
+```python
+import csv
+
+forecasts = {}
+for row in csv.DictReader(open("forecasts.csv")):
+    forecasts[(row["pair"], row["tenor"])] = float(row["rate"])
+
+def csv_consensus(pair, spot, tenor):
+    rate = forecasts.get((pair, str(tenor)))
+    return (rate, "csv_forecast") if rate else None
+
+set_consensus_provider(csv_consensus)
+```
+
+**Database lookup:**
+```python
+def db_consensus(pair, spot, tenor):
+    row = db.execute(
+        "SELECT rate FROM consensus WHERE pair=? AND tenor=?",
+        (pair, str(tenor))
+    ).fetchone()
+    return (row[0], "internal_db") if row else None
+
+set_consensus_provider(db_consensus)
+```
+
+### Interest rates (only used without consensus)
+
+When no consensus provider is registered, the system falls back to forward rates computed from interest-rate parity. The rate resolution order is:
+
+1. **Dynamic fetch** (Yahoo Finance `^IRX`) — currently only USD
+2. **Static fallback** (`FALLBACK_POLICY_RATES` in `fx/base_rates.py`) — all major currencies
+3. **Zero rate** — if a currency is completely unknown
+
+To update the static fallback rates (e.g. after a central bank decision), edit `FALLBACK_POLICY_RATES` in `fx/base_rates.py`:
+
+```python
+FALLBACK_POLICY_RATES = {
+    "USD": 0.0450,  # Federal Reserve
+    "JPY": 0.0050,  # Bank of Japan
+    "EUR": 0.0275,  # ECB
+    "GBP": 0.0425,  # Bank of England
+    # ... add your currencies here
+}
+```
+
+### What agents see
+
+When the pipeline runs, each forecasting agent receives a context block like this:
+
+**With consensus registered:**
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 154.50
+1 month consensus: USD/JPY = 150.00 (src: analyst_survey)
+Annualized vol: 9.0% (dynamic)
+...
+Note: Base rate is anchored to analyst_survey (consensus view).
+```
+
+**Without consensus (default — falls back to forward):**
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 154.50
+1 month forward: USD/JPY = 154.11 (carry: USD 3.60% vs JPY 0.50%, net -3.10%, src: dynamic/fallback)
+Annualized vol: 9.0% (dynamic)
+...
+Note: Base rate is anchored to forward (carry-adjusted).
+```
+
+### Clearing the provider
+
+To revert to forward-only mode:
+
+```python
+set_consensus_provider(None)
+```
