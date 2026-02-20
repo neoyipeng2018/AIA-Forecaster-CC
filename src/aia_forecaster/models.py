@@ -195,6 +195,7 @@ class SearchResult(BaseModel):
     url: str
     source: str = ""
     timestamp: datetime | None = None
+    relevance_score: float | None = None
 
 
 class FlaggedResult(BaseModel):

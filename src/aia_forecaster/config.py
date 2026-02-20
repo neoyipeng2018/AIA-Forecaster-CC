@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     # Causal reasoning
     regime_weighting_enabled: bool = True
 
+    # Relevance filtering
+    relevance_threshold: float = 0.20
+    relevance_filtering_enabled: bool = True
+
     # Default currency pair
     default_pair: str = "USDJPY"
 

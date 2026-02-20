@@ -32,6 +32,7 @@ from aia_forecaster.models import (
     Tenor,
 )
 from aia_forecaster.search.registry import fetch_all as fetch_all_sources
+from aia_forecaster.search.relevance import filter_relevant
 from aia_forecaster.search.web import search_web
 
 logger = logging.getLogger(__name__)
@@ -408,6 +409,14 @@ class ForecastingAgent:
             except Exception:
                 logger.warning("Agent %d: Data source fetch failed", self.agent_id)
 
+            # Relevance filter on passive sources
+            if settings.relevance_filtering_enabled:
+                before = len(all_evidence)
+                all_evidence = filter_relevant(all_evidence, question.pair, settings.relevance_threshold)
+                if before > len(all_evidence):
+                    logger.info("Agent %d: filtered %d/%d passive results for relevance",
+                                self.agent_id, before - len(all_evidence), before)
+
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
             for iteration in range(1, self.max_search_iterations + 1):
@@ -447,6 +456,8 @@ class ForecastingAgent:
                         max_results=5,
                         cutoff_date=question.cutoff_date,
                     )
+                    if settings.relevance_filtering_enabled:
+                        results = filter_relevant(results, question.pair, settings.relevance_threshold)
                     all_evidence.extend(results)
                 except Exception:
                     logger.warning("Agent %d: Search failed for query '%s'", self.agent_id, search_query)
@@ -525,6 +536,14 @@ class ForecastingAgent:
             except Exception:
                 logger.warning("Agent %d: Data source fetch failed", self.agent_id)
 
+            # Relevance filter on passive sources
+            if settings.relevance_filtering_enabled:
+                before = len(all_evidence)
+                all_evidence = filter_relevant(all_evidence, pair, settings.relevance_threshold)
+                if before > len(all_evidence):
+                    logger.info("Agent %d: filtered %d/%d passive results for relevance",
+                                self.agent_id, before - len(all_evidence), before)
+
         # Web search loop (WEB_ONLY and HYBRID modes)
         if self.search_mode in (SearchMode.WEB_ONLY, SearchMode.HYBRID):
             for iteration in range(1, self.max_search_iterations + 1):
@@ -565,6 +584,8 @@ class ForecastingAgent:
                         max_results=5,
                         cutoff_date=cutoff_date,
                     )
+                    if settings.relevance_filtering_enabled:
+                        results = filter_relevant(results, pair, settings.relevance_threshold)
                     all_evidence.extend(results)
                 except Exception:
                     logger.warning("Agent %d: Search failed for query '%s'",
