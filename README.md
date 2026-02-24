@@ -4,6 +4,20 @@ FX probability surface forecaster powered by LLM ensembles. Generates probabilit
 
 Based on the [AIA Forecaster paper](https://arxiv.org/abs/2511.07678) (Alur, Stadie et al., Bridgewater AIA Labs, 2025).
 
+## What Is This?
+
+Instead of predicting a single price, this system generates a **probability surface** — answering questions like:
+
+> "What is the probability that USD/JPY will be above 155.0 in 1 month?"
+
+The output is a grid of probabilities across multiple **strikes** (price levels) and **tenors** (time horizons), comparable to what you'd derive from an options market — but driven by news and macro analysis rather than market pricing.
+
+The system combines four techniques from the AIA Forecaster paper:
+1. **Agentic, adaptive search** — LLM agents control their own query strategy, iteratively searching for evidence
+2. **Multi-agent ensembling** — 10 independent agents with diversity in temperature, search depth, and source mix
+3. **Statistical calibration** — Platt scaling (α = √3) corrects systematic LLM hedging bias
+4. **Foreknowledge bias mitigation** — temporal cutoffs and prediction market blacklists prevent data leakage
+
 ## Installation
 
 ```bash
@@ -64,49 +78,148 @@ forecast list                    # see recent runs
 forecast evaluate <RUN_ID> 1     # outcome: 1 = yes, 0 = no
 ```
 
-## Usage from Python
+## How It Works
 
-```python
-import asyncio
-from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator
-from aia_forecaster.models import Tenor
+The pipeline processes a currency pair through three phases:
 
-async def main():
-    gen = ProbabilitySurfaceGenerator(num_agents=3)
-    surface = await gen.generate(
-        pair="USDJPY",
-        num_strikes=5,
-        tenors=[Tenor.W1, Tenor.M1, Tenor("3D")],  # any <number><unit> tenor
-        strike_step=0.5,              # half-yen intervals
-        # custom_strikes=[150, 155],  # or pass explicit levels
-    )
-    for cell in surface.cells:
-        p = cell.calibrated.calibrated_probability if cell.calibrated else None
-        print(f"  {cell.strike} / {cell.tenor.value}: {p}")
-    return surface
-
-surface = asyncio.run(main())
+```
+┌──────────────────────────────────────────────────────────┐
+│  Phase 1: RESEARCH  (M agents in parallel)               │
+│                                                          │
+│  Each agent independently searches news via an           │
+│  agentic loop: generate query → search → evaluate →      │
+│  decide "search more" or "ready" → repeat                │
+│                                                          │
+│  Output: M ResearchBriefs, each with themes,             │
+│  causal factors, and evidence                            │
+├──────────────────────────────────────────────────────────┤
+│  Phase 2: PRICING  (M agents × T tenors)                 │
+│                                                          │
+│  Each agent prices ALL strikes for each tenor in a       │
+│  single LLM call, using its own research + statistical   │
+│  base rates (forward rates, volatility) as anchors       │
+│                                                          │
+│  Output: Raw probability grid (M × S × T)               │
+├──────────────────────────────────────────────────────────┤
+│  Phase 3: AGGREGATION & CALIBRATION                      │
+│                                                          │
+│  Per-cell mean of M agent estimates                      │
+│  → Supervisor reviews surface for anomalies              │
+│  → PAVA monotonicity enforcement                         │
+│  → Platt scaling calibration (α = √3)                    │
+│  → Final monotonicity pass                               │
+│                                                          │
+│  Output: heatmap, 3D surface, JSON, PDF                  │
+└──────────────────────────────────────────────────────────┘
 ```
 
-### Single question from Python
+### Why two phases?
 
-```python
-import asyncio
-from aia_forecaster.ensemble.engine import EnsembleEngine
-from aia_forecaster.calibration.platt import calibrate
-from aia_forecaster.models import ForecastQuestion
+The shared-research approach avoids redundant search across cells, reducing LLM calls by ~94%:
 
-async def main():
-    engine = EnsembleEngine(num_agents=5)
-    question = ForecastQuestion(text="Will USD/JPY be above 155 in 1 week?")
-    result = await engine.run(question)
-    cal = calibrate(result.final_probability)
-    print(f"Calibrated: {cal.calibrated_probability:.4f}")
+| Approach | Formula | LLM Calls |
+|----------|---------|-----------|
+| **Naive per-cell** | 10 agents × 5 strikes × 5 tenors × ~12 calls/cell | **~3,000** |
+| **Shared research** | 10 agents × ~7 research + 10 × 5 pricing + 1 supervisor | **~120** |
 
-asyncio.run(main())
+### Causal reasoning
+
+Agents don't just output probabilities — they extract structured **causal factors** that explain *why* prices might move:
+
+```
+Event:      "Fed holds rates at 4.5%"
+Channel:    "interest_rate_differential"
+Direction:  "bearish_quote"  (bearish for JPY)
+Magnitude:  "medium"
+Confidence: 0.75
 ```
 
-## Architecture
+The supervisor compares causal chains across agents to pinpoint where they disagree (factual disputes vs. channel weighting vs. magnitude estimates), then runs targeted searches to resolve specific disagreements.
+
+### Probability math
+
+Two forecast modes, each with different underlying models:
+
+**ABOVE mode** — "What is P(price > K at expiry)?"
+```
+P(S_T > K) = Φ(d2)
+where d2 = (ln(Center / K) - 0.5 × σ² × t) / (σ × √t)
+```
+
+**HITTING mode** — "What is P(price touches K before expiry)?"
+```
+First-passage probability with drift
+ν_T = ln(Center / S) - 0.5 × σ² × t
+Separate formulas for barriers above vs below spot
+```
+
+The "Center" is either a consensus forecast (if plugged in) or the carry-adjusted forward rate.
+
+## Directory Structure
+
+```
+AIA-Forecaster-CC/
+├── src/aia_forecaster/          # All source code
+│   ├── __init__.py              # Package init, loads company extensions
+│   ├── config.py                # Settings from .env (pydantic-settings)
+│   ├── models.py                # All data models (Tenor, ForecastQuestion, etc.)
+│   ├── main.py                  # CLI entry point ("forecast" command)
+│   │
+│   ├── agents/                  # LLM-powered agents
+│   │   ├── forecaster.py        # Individual forecasting agent
+│   │   └── supervisor.py        # Disagreement reconciliation agent
+│   │
+│   ├── ensemble/
+│   │   └── engine.py            # Orchestrates M parallel agents
+│   │
+│   ├── calibration/
+│   │   ├── platt.py             # Platt scaling (fixes LLM hedging bias)
+│   │   └── monotonicity.py      # PAVA algorithm (enforces logical constraints)
+│   │
+│   ├── fx/
+│   │   ├── base_rates.py        # Forward rates, consensus, vol, statistical anchors
+│   │   ├── rates.py             # Spot rate fetching (exchangerate.host)
+│   │   ├── pairs.py             # Currency pair configs + strike generation
+│   │   ├── surface.py           # ProbabilitySurfaceGenerator (orchestrates everything)
+│   │   ├── explanation.py       # Evidence extraction from agent outputs
+│   │   ├── compare.py           # Compare 2+ surfaces visually
+│   │   └── pdf_report.py        # PDF report generation
+│   │
+│   ├── llm/
+│   │   └── client.py            # LLMClient (langchain-openai, pluggable provider)
+│   │
+│   ├── search/
+│   │   ├── registry.py          # @data_source decorator, pluggable sources
+│   │   ├── rss.py               # 27 curated RSS feeds (central banks, FX, macro)
+│   │   ├── bis.py               # BIS speeches (central bank comms)
+│   │   ├── web.py               # DuckDuckGo search + blacklist
+│   │   ├── relevance.py         # Heuristic relevance scoring (no LLM)
+│   │   └── foreknowledge.py     # Foreknowledge bias detection
+│   │
+│   ├── evaluation/
+│   │   └── metrics.py           # Brier score + decomposition
+│   │
+│   └── storage/
+│       ├── cache.py             # File-based search cache (SHA256 keys, TTL)
+│       └── database.py          # SQLite for persisting forecast runs
+│
+├── company.example/              # Template for company-specific extensions
+│   ├── config.py                # Override settings
+│   ├── pairs.py                 # Register exotic/NDF pairs
+│   ├── llm.py                   # Custom LLM provider
+│   └── search/bloomberg.py      # Bloomberg data source example
+│
+├── tests/                        # Test suite (pytest)
+│
+├── data/
+│   ├── cache/                   # Cached search results (SHA256-keyed JSON, 6h TTL)
+│   ├── forecasts/               # Output: PNG, HTML, JSON, PDF
+│   └── forecasts.db             # SQLite run history
+│
+└── pyproject.toml               # Dependencies (Poetry)
+```
+
+## Architecture Deep Dive
 
 ### Pipeline Overview
 
@@ -208,15 +321,6 @@ flowchart LR
     style P fill:#0f3460,stroke:#533483,color:#eee
 ```
 
-### Efficiency: Shared Research vs Naive
-
-The surface generator uses a shared-research approach to avoid redundant search across cells (~94% fewer LLM calls vs naive per-cell ensembles):
-
-| Approach | Formula | LLM Calls |
-|----------|---------|-----------|
-| **Naive per-cell** | 10 agents × 5 strikes × 5 tenors × ~12 calls/cell | **~3,000** |
-| **Shared research** | 10 agents × ~7 research + 10 × 5 pricing + 1 supervisor | **~120** |
-
 ### Key Components
 
 | Component | File | Purpose |
@@ -229,6 +333,302 @@ The surface generator uses a shared-research approach to avoid redundant search 
 | Monotonicity (PAVA) | `calibration/monotonicity.py` | Strike-monotonicity enforcement |
 | Base Rates | `fx/base_rates.py` | Forward rates, consensus, vol, statistical anchoring |
 | Data Source Registry | `search/registry.py` | Pluggable data source framework |
+
+## Components in Detail
+
+### Data Models (`models.py`)
+
+Everything is typed with Pydantic. The key types:
+
+| Model | Purpose |
+|---|---|
+| `Tenor` | Time horizon — `"1D"`, `"1W"`, `"1M"`, `"3M"`, `"6M"`, `"1Y"`. Has `.days`, `.trading_days`, `.label` properties |
+| `ForecastQuestion` | A single binary question (pair, spot, strike, tenor, cutoff_date) |
+| `CausalFactor` | A structured cause: event → channel → direction + magnitude + confidence |
+| `ResearchBrief` | Agent's research output: themes, causal factors, evidence, macro summary |
+| `BatchPricingResult` | One agent's prices for all strikes in a single tenor |
+| `SurfaceCell` | One cell in the probability grid (strike × tenor → probability) |
+| `ProbabilitySurface` | The full output grid with metadata, causal factors, and regime |
+| `ForecastMode` | Enum: `ABOVE` (terminal price) vs `HITTING` (barrier touch) |
+| `SearchMode` | Enum: `RSS_ONLY`, `WEB_ONLY`, `HYBRID` |
+| `SourceConfig` | Controls which data sources (registry names, web search toggle) |
+
+### Search Layer (`search/`)
+
+Three data sources work together, all running in parallel with error isolation:
+
+**RSS Feeds** (`rss.py`) — 27 curated feeds organized by category:
+- **Central banks**: Fed, ECB, BOJ, BOE, RBA, RBNZ, SNB, BoC
+- **FX-specific**: FXStreet, Forexlive, DailyFX, Investing.com
+- **Macro data**: BLS, BEA, Eurostat
+- **Commodity/energy**: OilPrice
+- **Geopolitical**: WTO
+- **General financial**: Reuters, BBC, CNBC
+- **Regional**: Japan Times, Kyodo, Guardian, SMH
+
+Each feed has currency targeting — e.g., the Fed feed only returns results for USD pairs.
+
+**Web Search** (`web.py`) — DuckDuckGo with safety guardrails:
+- **Blacklisted**: Prediction markets (Polymarket, Metaculus, Manifold, Kalshi, PredictIt, Smarkets) to prevent foreknowledge leakage
+- **Filtered**: Utility sites (calculator.net, epochconverter.com, etc.) that add noise
+- **Temporal filtering**: Enforced cutoff date via DDG timelimit
+- **Query sanitization**: Strips advanced operators (`site:`, `AND/OR`, parentheses) that DDG doesn't support
+
+**BIS Speeches** (`bis.py`) — Central bank speech monitoring for policy signals.
+
+**Relevance Scoring** (`relevance.py`) — Every search result gets a heuristic 0.0–1.0 score (no LLM needed):
+
+| Signal | Score |
+|--------|-------|
+| Pair in title (e.g., "EUR/USD") | +0.40 |
+| Pair in snippet only | +0.25 |
+| Both currencies mentioned | +0.25 |
+| One currency keyword | +0.15 |
+| Per general FX keyword (capped) | +0.02 each, max +0.15 |
+| Central bank source for the pair | +0.10 |
+| Different pair in title | -0.20 |
+| Unrelated asset class | -0.15 |
+
+Special commodity currency rules: AUD→gold/iron/copper, CAD→oil/crude, NOK→oil, NZD→dairy, ZAR→gold/platinum, CLP→copper.
+
+Results below the threshold (default 0.20) are filtered out before agents see them.
+
+**Data Source Registry** (`registry.py`) — A `@data_source` decorator lets you plug in any custom source. All registered sources are fetched in parallel with error isolation — one failing source won't break the others.
+
+### Forecasting Agent (`agents/forecaster.py`)
+
+Each agent does two jobs:
+
+**Job 1 — Research**: Agentic search for a currency pair
+1. Gather passive data (RSS feeds, BIS speeches based on search mode)
+2. Filter by relevance score
+3. Run an **agentic search loop**: LLM generates a query → executes via DuckDuckGo → reviews results → decides `"SEARCH"` (more) or `"FORECAST"` (ready) → repeat (3–7 iterations depending on the agent)
+4. Summarize into a `ResearchBrief` with macro themes and causal factors
+
+**Job 2 — Pricing**: Given its research, price all strikes for one tenor
+1. Receive the research brief + statistical base rates from `base_rates.py`
+2. One LLM call produces probabilities for ALL strikes at once
+3. Return `BatchPricingResult` with per-strike probabilities + reasoning
+
+**Built-in diversity** across the M agents (default 10):
+
+| Dimension | Range | Purpose |
+|-----------|-------|---------|
+| Temperature | 0.4 → 1.0 | Exploration vs. precision |
+| Search depth | 3 → 7 iterations | Thoroughness variation |
+| Search mode | RSS_ONLY → WEB_ONLY → HYBRID (cycling) | Source diversity |
+
+### Supervisor Agent (`agents/supervisor.py`)
+
+The supervisor resolves disagreements — it does **not** re-evaluate everything from scratch. (The paper found that naive LLM aggregation performs *worse* than simple averaging.)
+
+1. **Skip if tight agreement** — If the spread across agents < 0.10, the mean stands
+2. **Analyze disagreements** — Compare causal chains: is it a factual dispute? A channel weighting difference? A magnitude estimate?
+3. **Targeted search** — Run up to 3 specific searches to fact-check the dispute
+4. **Regime detection** — Classify the macro environment:
+   - `risk_on` / `risk_off` / `policy_divergence` / `carry_unwind` / `mixed`
+   - Maps regime to channel weights (e.g., "risk_on" → high weight on carry trade, portfolio flows)
+5. **Surface review** — Check the full probability grid for anomalies:
+   - Monotonicity violations
+   - Temporal mismatches (fast factors driving long tenors, or vice versa)
+   - Causal factor alignment
+6. **Override only if HIGH confidence** — Otherwise the simple mean stands
+
+### Ensemble Engine (`ensemble/engine.py`)
+
+Coordinates the M agents:
+
+```python
+# Phase 1: Parallel research
+shared_research = await engine.research(pair, cutoff_date)  # → M ResearchBriefs
+
+# Phase 2: Parallel pricing
+cell_data = await engine.price_surface(shared_research, strikes, tenors, ...)
+# → M agents × T tenors LLM calls → raw probability grid
+```
+
+For single-question forecasts (not surfaces), `engine.run(question)` follows the original paper flow: M independent forecasts → simple mean → supervisor reconciliation.
+
+### Base Rates (`fx/base_rates.py`)
+
+Statistical anchors so agents don't start from scratch:
+
+**Forward rate** — Pure carry math (not a directional view):
+```
+Forward = Spot × exp((r_quote - r_base) × T_years)
+```
+
+**Consensus provider** — Pluggable hook to inject analyst forecasts or internal models:
+```python
+set_consensus_provider(fn)  # (pair, spot, tenor) → (rate, source_label) | None
+```
+When set, consensus replaces the forward as the distribution center. The forward is still computed and shown to agents for carry context.
+
+**Interest rate resolution** (when no consensus):
+
+| Priority | Source | Detail |
+|----------|--------|--------|
+| 1 | Dynamic fetch | Yahoo Finance `^IRX` (13-week T-bill, USD only) |
+| 2 | Static fallback | `FALLBACK_POLICY_RATES` — USD 4.50%, JPY 0.50%, EUR 2.75%, GBP 4.25%, etc. |
+| 3 | Zero rate | Unknown currencies |
+
+**Volatility**: Fallback values per pair (USDJPY 10%, EURUSD 8%), dynamic fetch attempted via Yahoo Finance. 1-hour cache TTL.
+
+### Calibration (`calibration/`)
+
+**Platt Scaling** (`platt.py`) — LLMs systematically hedge toward 0.5 due to RLHF training. The mathematical correction:
+
+```
+p_calibrated = p^α / (p^α + (1-p)^α)    where α = √3 ≈ 1.73
+```
+
+This pushes probabilities away from 0.5 toward 0 or 1. A raw 0.60 becomes ~0.65; a raw 0.30 becomes ~0.23. The paper found that prompting changes are largely ineffective at fixing this — mathematical corrections are more robust.
+
+**Monotonicity** (`monotonicity.py`) — Enforces logical constraints using the Pool Adjacent Violators Algorithm (PAVA):
+
+- **ABOVE mode**: P(price > K) must decrease as K increases (for a given tenor)
+- **HITTING mode**: P(touch K) must decrease as K moves away from spot; P(touch) must increase as tenor increases (more time = more chances)
+
+Applied twice: once on raw probabilities (before Platt), once on calibrated probabilities (after Platt).
+
+### Surface Generator (`fx/surface.py`)
+
+The main orchestrator that wires everything together. `ProbabilitySurfaceGenerator.generate()` runs:
+
+1. Fetch spot rate
+2. Generate strikes (around spot, configurable step/count/explicit list)
+3. **Phase 1**: M agents research the pair in parallel → M `ResearchBrief`s
+4. **Phase 2**: Each agent prices all strikes per tenor → raw probability grid
+5. Supervisor surface review (anomaly detection + targeted search)
+6. Raw monotonicity enforcement (PAVA)
+7. Platt scaling calibration
+8. Post-calibration monotonicity enforcement
+9. Causal factor aggregation (consensus factors from briefs)
+10. Output generation (console table, PNG heatmap, scatter plots, CDF chart, HTML 3D surface, JSON, PDF)
+
+### LLM Client (`llm/client.py`)
+
+Wraps `langchain-openai` with a pluggable provider system:
+
+```python
+# Default: OpenAI
+client = LLMClient(model="gpt-4o")
+
+# Custom provider (e.g., for Azure, Bedrock, local models):
+set_llm_provider(my_factory)  # (model_name, temperature, max_tokens) → BaseChatModel
+```
+
+Special handling for reasoning models (o1, o3, gpt-5) — ensures a minimum 2048-token budget for chain-of-thought.
+
+### Search Cache (`storage/cache.py`)
+
+File-based cache keyed by SHA256 hash of the query string. Default 6-hour TTL. Prevents re-fetching the same news across agents and runs. Auto-cleanup on expired lookup.
+
+### Forecast Database (`storage/database.py`)
+
+SQLite persistence for forecast runs. Stores full run data (question, probabilities, agent counts, supervisor output). Powers `forecast list` and `forecast evaluate` commands.
+
+### Evaluation (`evaluation/metrics.py`)
+
+**Brier Score**: `BS = (1/n) × Σ(p_i - o_i)²`
+- 0 = perfect, 0.25 = always guessing 0.5, 1 = worst
+- Decomposed into: **reliability** (calibration, lower is better), **resolution** (discrimination, higher is better), **uncertainty** (base rate variance)
+- Strictly proper scoring rule — incentivizes truthful forecasting
+
+Target benchmarks from the paper:
+- ForecastBench: Brier 0.1076 (vs superforecasters at 0.1110)
+- MarketLiquid: Brier 0.1258 (vs market consensus at 0.1106)
+
+## Usage from Python
+
+```python
+import asyncio
+from aia_forecaster.fx.surface import ProbabilitySurfaceGenerator
+from aia_forecaster.models import Tenor
+
+async def main():
+    gen = ProbabilitySurfaceGenerator(num_agents=3)
+    surface = await gen.generate(
+        pair="USDJPY",
+        num_strikes=5,
+        tenors=[Tenor.W1, Tenor.M1, Tenor("3D")],  # any <number><unit> tenor
+        strike_step=0.5,              # half-yen intervals
+        # custom_strikes=[150, 155],  # or pass explicit levels
+    )
+    for cell in surface.cells:
+        p = cell.calibrated.calibrated_probability if cell.calibrated else None
+        print(f"  {cell.strike} / {cell.tenor.value}: {p}")
+    return surface
+
+surface = asyncio.run(main())
+```
+
+### Single question from Python
+
+```python
+import asyncio
+from aia_forecaster.ensemble.engine import EnsembleEngine
+from aia_forecaster.calibration.platt import calibrate
+from aia_forecaster.models import ForecastQuestion
+
+async def main():
+    engine = EnsembleEngine(num_agents=5)
+    question = ForecastQuestion(text="Will USD/JPY be above 155 in 1 week?")
+    result = await engine.run(question)
+    cal = calibrate(result.final_probability)
+    print(f"Calibrated: {cal.calibrated_probability:.4f}")
+
+asyncio.run(main())
+```
+
+## Configuration
+
+Settings are loaded from environment variables or `.env`:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LLM_MODEL` | `gpt-4o` | LLM model (provider/model-name or just model-name) |
+| `NUM_AGENTS` | `10` | Number of forecasting agents |
+| `MAX_SEARCH_ITERATIONS` | `5` | Max search iterations per agent |
+| `PLATT_ALPHA` | `sqrt(3)` | Calibration coefficient |
+| `FORECAST_MODE` | `hitting` | `hitting` (barrier touch) or `above` (terminal price) |
+| `REGIME_WEIGHTING_ENABLED` | `true` | Enable regime-aware supervisor weighting |
+| `RELEVANCE_THRESHOLD` | `0.20` | Minimum relevance score for search results |
+| `RELEVANCE_FILTERING_ENABLED` | `true` | Enable heuristic relevance filtering |
+| `DEFAULT_PAIR` | `USDJPY` | Default currency pair |
+| `CACHE_TTL_HOURS` | `6` | Search cache time-to-live |
+
+Override at the CLI:
+
+```bash
+forecast USDJPY --agents 5 --model openai/gpt-4o
+```
+
+## Output
+
+Each surface run produces:
+
+| Format | File | Description |
+|--------|------|-------------|
+| Console table | — | Color-coded probability grid in the terminal |
+| Heatmap PNG | `PAIR_DATE.png` | 2D probability heatmap (strikes × tenors) |
+| Scatter PNG | `PAIR_DATE_scatter.png` | Prob vs strike, prob vs tenor, Platt scaling effect |
+| CDF PNG | `PAIR_DATE_cdf.png` | P(spot < K) curve — comparable to digital put prices |
+| 3D Surface HTML | `PAIR_DATE.html` | Interactive Plotly surface (rotatable, zoomable) |
+| JSON | `PAIR_DATE.json` | Full data: probabilities, evidence, reasoning, causal factors |
+| PDF Report | `PAIR_DATE.pdf` | Charts + narrative summary |
+
+All outputs are saved to `data/forecasts/`.
+
+## Supported Pairs
+
+| Pair | Default strike step | Typical daily range | Override with |
+|------|-------------------|---------------------|---------------|
+| `USDJPY` | 1.0 yen | ~1.0 | `--strike-step 0.5` |
+| `EURUSD` | 0.008 | ~0.008 | `--strike-step 0.005` |
+| `GBPUSD` | 0.010 | ~0.010 | `--strike-step 0.005` |
+
+Custom pairs can be registered via `register_pair()` — see `fx/pairs.py`.
 
 ## Adding Custom Data Sources
 
@@ -460,43 +860,6 @@ surface = await gen.generate(pair="USDJPY", tenors=[Tenor.W1, Tenor.W2, Tenor.M1
 surface = await gen.generate(pair="USDJPY", tenors=[Tenor("3D"), Tenor("5D"), Tenor("2W")])
 ```
 
-## Configuration
-
-Settings are loaded from environment variables or `.env`:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LLM_MODEL` | `gpt-4o` | LLM model (provider/model-name or just model-name) |
-| `NUM_AGENTS` | `10` | Number of forecasting agents |
-| `MAX_SEARCH_ITERATIONS` | `5` | Max search iterations per agent |
-| `PLATT_ALPHA` | `sqrt(3)` | Calibration coefficient |
-| `DEFAULT_PAIR` | `USDJPY` | Default currency pair |
-
-Override at the CLI:
-
-```bash
-forecast USDJPY --agents 5 --model openai/gpt-4o
-```
-
-## Output
-
-Each surface run produces:
-- **Console table** with color-coded probabilities
-- **Heatmap PNG** saved to `data/forecasts/PAIR_DATE.png`
-- **Scatter plots PNG** (prob vs strike, prob vs tenor, Platt scaling effect) saved to `data/forecasts/PAIR_DATE_scatter.png`
-- **Interactive 3D surface** (HTML/Plotly) saved to `data/forecasts/PAIR_DATE.html`
-- **JSON file** with full surface data (probabilities, evidence, reasoning)
-
-## Supported Pairs
-
-| Pair | Default strike step | Typical daily range | Override with |
-|------|-------------------|---------------------|---------------|
-| `USDJPY` | 1.0 yen | ~1.0 | `--strike-step 0.5` |
-| `EURUSD` | 0.008 | ~0.008 | `--strike-step 0.005` |
-| `GBPUSD` | 0.010 | ~0.010 | `--strike-step 0.005` |
-
-Custom pairs can be registered via `register_pair()` — see `fx/pairs.py`.
-
 ## Connecting Your Market Data
 
 The forecasting pipeline uses a **base rate system** that anchors LLM probability estimates to quantitative market data. Out of the box it computes carry-adjusted forward rates from interest-rate parity. You can plug in your company's consensus forecasts to replace the forward as the distribution center.
@@ -632,3 +995,47 @@ To revert to forward-only mode:
 ```python
 set_consensus_provider(None)
 ```
+
+## Company Extension System
+
+The architecture supports proprietary extensions without forking. Copy `company.example/` to `company/` (gitignored) and customize:
+
+```
+company/                          # Your private extensions
+├── config.py                    # Override settings (model, num_agents, etc.)
+├── pairs.py                     # Register exotic/NDF pairs
+├── llm.py                       # Custom LLM provider (Azure, Bedrock, etc.)
+└── search/
+    └── bloomberg.py             # @data_source("bloomberg") → Bloomberg data
+```
+
+Extensions are auto-discovered and loaded at import time. See `company.example/README.md` for details.
+
+## Dependencies
+
+| Package | Role |
+|---|---|
+| `langchain-openai` | LLM calls (ChatOpenAI wrapper) |
+| `pydantic` / `pydantic-settings` | Data models + config from `.env` |
+| `duckduckgo-search` | Web search API |
+| `feedparser` | RSS feed parsing |
+| `httpx` | Async HTTP (spot rates, BIS speeches) |
+| `yfinance` | Interest rates + volatility from Yahoo Finance |
+| `matplotlib` | Heatmaps, scatter plots, CDF charts |
+| `plotly` | Interactive 3D surface (HTML) |
+| `fpdf2` | PDF report generation |
+| `rich` | Console output formatting |
+
+## What Makes This Different
+
+Compared to asking a single LLM for a probability estimate, this system adds:
+
+1. **Ensemble diversity** — 10 agents with different temperatures, search depths, and source mixes prevent groupthink
+2. **Agentic search** — Agents control their own query strategy, adapting based on what they find (the paper shows this dramatically outperforms fixed-query approaches)
+3. **Statistical anchoring** — Base rates from forward rates and volatility give agents a starting point grounded in market math, not just LLM priors
+4. **Structured causal reasoning** — Agents extract event → channel → direction chains, not just vibes
+5. **Mathematical calibration** — Platt scaling corrects systematic LLM hedging bias (prompting changes don't work; math does)
+6. **Monotonicity enforcement** — Output respects logical constraints (higher strike = lower probability of being above it)
+7. **Regime awareness** — Supervisor detects macro regime and weights causal channels accordingly
+
+The end result is a probability surface that can be directly compared against options-implied distributions — giving you a news-driven alternative view to the market's pricing.
