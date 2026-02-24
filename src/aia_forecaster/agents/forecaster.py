@@ -626,12 +626,21 @@ class ForecastingAgent:
                     max_tokens=2500,
                 )
                 summary_data = self._parse_json_response(summary_response)
+
+                # Retry once if JSON parse returned empty
                 if not summary_data:
                     logger.warning(
                         "Agent %d: summary JSON parse returned empty — "
-                        "response length=%d",
+                        "retrying (response length=%d)",
                         self.agent_id, len(summary_response),
                     )
+                    summary_response = await self.llm.complete(
+                        [{"role": "user", "content": summary_prompt}],
+                        temperature=0.4,
+                        max_tokens=2500,
+                    )
+                    summary_data = self._parse_json_response(summary_response)
+
                 key_themes = summary_data.get("key_themes", [])
                 macro_summary = summary_data.get("macro_summary", "")
                 raw_causal = summary_data.get("causal_factors", [])
@@ -643,6 +652,10 @@ class ForecastingAgent:
                     )
             except Exception:
                 logger.warning("Agent %d: Failed to generate macro summary", self.agent_id)
+
+            # Fallback: ensure macro_summary is never empty when we have evidence
+            if not macro_summary:
+                logger.warning("Agent %d: macro_summary empty, falling back to raw evidence", self.agent_id)
                 macro_summary = _format_evidence(all_evidence, max_chars=3000)
 
         return ResearchBrief(

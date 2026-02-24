@@ -20,6 +20,7 @@ python-dotenv = "^1.0"
 matplotlib = "^3.10.8"
 plotly = "^6.0"
 yfinance = "^1.1.0"
+fpdf2 = "^2.8.6"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"

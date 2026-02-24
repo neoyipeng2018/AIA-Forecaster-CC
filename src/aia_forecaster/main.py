@@ -18,6 +18,7 @@ from aia_forecaster.config import settings
 from aia_forecaster.ensemble.engine import EnsembleEngine
 from aia_forecaster.evaluation.metrics import brier_score
 from aia_forecaster.fx.pairs import PAIR_CONFIGS
+from aia_forecaster.fx.pdf_report import generate_pdf_report
 from aia_forecaster.fx.surface import (
     ProbabilitySurfaceGenerator,
     plot_cdf,
@@ -278,6 +279,17 @@ async def run_surface(args: argparse.Namespace) -> None:
     json_path = Path(str(path).replace(".png", ".json"))
     json_path.write_text(surface.model_dump_json(indent=2))
     console.print(f"[bold]Surface JSON saved:[/bold] {json_path}")
+
+    # Generate PDF report with charts and narrative
+    pdf_path = Path(str(path).replace(".png", ".pdf"))
+    generate_pdf_report(
+        surface,
+        pdf_path,
+        heatmap_path=path,
+        scatter_path=scatter_path,
+        cdf_path=cdf_result,
+    )
+    console.print(f"[bold]PDF report saved:[/bold] {pdf_path}")
 
 
 async def run_evaluate(args: argparse.Namespace) -> None:

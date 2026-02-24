@@ -1,0 +1,1509 @@
+{
+  "pair": "USDJPY",
+  "spot_rate": 155.092061,
+  "generated_at": "2026-02-21T03:19:26.099188",
+  "cells": [
+    {
+      "strike": 154.09,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 154.09 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.52,
+        "calibrated_probability": 0.5346041011714494,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.56,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.52,
+        "supervisor": null,
+        "final_probability": 0.52
+      }
+    },
+    {
+      "strike": 155.09,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 155.09 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.5133333333333333,
+        "calibrated_probability": 0.523083067165021,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.54,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.5133333333333333,
+        "supervisor": null,
+        "final_probability": 0.5133333333333333
+      }
+    },
+    {
+      "strike": 156.09,
+      "tenor": "1W",
+      "question": "Will USD/JPY be above 156.09 in 1 week?",
+      "calibrated": {
+        "raw_probability": 0.44,
+        "calibrated_probability": 0.3970660691914524,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.5,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.32,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.44,
+        "supervisor": null,
+        "final_probability": 0.44
+      }
+    },
+    {
+      "strike": 154.09,
+      "tenor": "1M",
+      "question": "Will USD/JPY be above 154.09 in 1 month?",
+      "calibrated": {
+        "raw_probability": 0.544,
+        "calibrated_probability": 0.5758186068845406,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.552,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.58,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.544,
+        "supervisor": null,
+        "final_probability": 0.544
+      }
+    },
+    {
+      "strike": 155.09,
+      "tenor": "1M",
+      "question": "Will USD/JPY be above 155.09 in 1 month?",
+      "calibrated": {
+        "raw_probability": 0.517,
+        "calibrated_probability": 0.5294221872817279,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.531,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.52,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.517,
+        "supervisor": null,
+        "final_probability": 0.517
+      }
+    },
+    {
+      "strike": 156.09,
+      "tenor": "1M",
+      "question": "Will USD/JPY be above 156.09 in 1 month?",
+      "calibrated": {
+        "raw_probability": 0.43966666666666665,
+        "calibrated_probability": 0.39650520004767464,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.389,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.5,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.43,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.43966666666666665,
+        "supervisor": null,
+        "final_probability": 0.43966666666666665
+      }
+    },
+    {
+      "strike": 154.09,
+      "tenor": "3M",
+      "question": "Will USD/JPY be above 154.09 in 3 months?",
+      "calibrated": {
+        "raw_probability": 0.5553333333333333,
+        "calibrated_probability": 0.5950633415702165,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.546,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.51,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.61,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.5553333333333333,
+        "supervisor": null,
+        "final_probability": 0.5553333333333333
+      }
+    },
+    {
+      "strike": 155.09,
+      "tenor": "3M",
+      "question": "Will USD/JPY be above 155.09 in 3 months?",
+      "calibrated": {
+        "raw_probability": 0.49433333333333335,
+        "calibrated_probability": 0.49018588580993594,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.473,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.46,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.55,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.49433333333333335,
+        "supervisor": null,
+        "final_probability": 0.49433333333333335
+      }
+    },
+    {
+      "strike": 156.09,
+      "tenor": "3M",
+      "question": "Will USD/JPY be above 156.09 in 3 months?",
+      "calibrated": {
+        "raw_probability": 0.43733333333333335,
+        "calibrated_probability": 0.3925842217004717,
+        "alpha": 1.7320508075688772
+      },
+      "ensemble": {
+        "agent_forecasts": [
+          {
+            "agent_id": 0,
+            "probability": 0.412,
+            "reasoning": "USD/JPY remains primarily driven by the US–Japan yield differential: FOMC minutes and ongoing US macro resilience point to a Fed that is reluctant to pivot quickly, which supports higher US yields and a bullish bias for USD/JPY through carry and yield-seeking flows. The BOJ's continued accommodation keeps Japanese yields low, reinforcing that differential and providing structural support for a stronger USD versus JPY.\n\nThat said, the pair is susceptible to episodic reversals. JPY can rally sharply on risk‑off episodes or if Japanese authorities step in to defend the currency — intervention risk acts as a practical cap on one‑way USD/JPY positioning. Improved BOJ data transparency (API launch) should modestly reduce surprise-driven volatility but is unlikely to change the near-term directional force of rate differentials. Near-term catalysts to monitor: US inflation/employment prints and Fed communications, BoJ comments/data, and any signs of official FX intervention or abrupt shifts in global risk sentiment. Overall directional bias: modestly bullish for USD (higher USD/JPY) but with clear asymmetric downside risk from intervention and risk-off shocks.",
+            "search_queries": [],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516560",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516598",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "snippet": "Minutes of the Federal Open Market Committee, January 27–28, 2026",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260218a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.516613",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Launch of API Service for BOJ Time-Series Data Search",
+                "snippet": "",
+                "url": "http://www.boj.or.jp/en/statistics/outline/notice_2026/not260218a.htm",
+                "source": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+                "timestamp": "2026-02-21T11:16:33.516672",
+                "relevance_score": 0.25
+              }
+            ],
+            "iterations": 0,
+            "search_mode": "rss_only"
+          },
+          {
+            "agent_id": 1,
+            "probability": 0.4,
+            "reasoning": "USD/JPY is trading with a modest USD bias into late February driven primarily by a still-hawkish Fed and lingering rate-differential support for the dollar. Recent Fed minutes and elevated US rate expectations have kept the USD bid, while markets await the next U.S. CPI print—an upside surprise would reinforce that USD strength. Japan's soft January CPI (core ~2%, headline near a multi-year low) argues against immediate BOJ tightening and therefore tends to favour further USD/JPY upside in the near term.\n\nOffsetting forces are meaningful and leave the outlook two-sided. Political/fiscal pressure and commentary that have revived expectations for BOJ hikes as early as spring, stronger export performance (notably in AI-related sectors), and the ever-present risk of Japanese FX intervention are all credible sources of yen appreciation. Near-term catalysts to monitor are the U.S. CPI release, any further BOJ communication or Tokyo intervention signals, Japanese export data, and shifts in global risk sentiment. Overall directional bias: modestly bullish USD/JPY (USD stronger) near term, but with elevated tail risk to the downside for USD/JPY should BOJ hike expectations firm or Japan intervene.",
+            "search_queries": [
+              "USD JPY outlook Fed BoJ COT risk reversals technical levels",
+              "USDJPY outlook 1 day to 6 months",
+              "USD JPY near term outlook Fed BoJ CPI COT",
+              "USD JPY near term outlook"
+            ],
+            "evidence": [
+              {
+                "query": "USDJPY outlook 1 day to 6 months",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "Investing.com-- Asian currencies were subdued on Friday as investors stayed cautious ahead of key U.S. inflation data, while a soft Japanese inflation reading clouded the outlook for further Bank of Japan rate hikes. The US Dollar Index edged up 0.1% after rising to a one-month high overnight, supported by safe-haven demand and hawkish Federal Reserve minutes this week. US Dollar Index Futures ...",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:53.338705",
+                "relevance_score": 0.33
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia FX steady before US inflation data; soft Japan CPI clouds BOJ outlook",
+                "snippet": "The Japanese yen's USD/JPY pair was largely unchanged. Data on Friday showed that Japan's consumer price index inflation fell to a near four-year low in January, while the core measure slowed to a two-year low of 2% in January, matching the BOJ's target and signalling cooling price pressures.",
+                "url": "https://au.investing.com/news/forex-news/asia-fx-steady-before-us-inflation-data-soft-japan-cpi-clouds-boj-outlook-4267989",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.949716",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook Fed BoJ CPI COT",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:15.950752",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "U.S. Dollar Retreats From Session Highs As Court Strikes Down Trump's ...",
+                "snippet": "USD/JPY Settled Near 155.00 As Traders Focused On Japan's Inflation Data USD/JPY 200226 4h Chart USD/JPY pulled back from session highs as U.S. Supreme Court said that Trump's tariffs were ...",
+                "url": "https://www.fxempire.com/forecasts/article/u-s-dollar-retreats-from-session-highs-as-court-strikes-down-trumps-tariffs-analysis-for-eur-usd-gbp-usd-usd-cad-usd-jpy-1580896",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203723",
+                "relevance_score": 0.54
+              },
+              {
+                "query": "USD JPY near term outlook",
+                "title": "Asia Fundamental Forecast |20 February 2026 - IC Markets",
+                "snippet": "The Japanese yen remains under scrutiny with USD/JPY hovering near 154.78 following a recent uptick, bolstered by robust export growth in AI chips and expectations of BoJ rate hikes as early as April amid Prime Minister Takaichi's fiscal push, though tempered by soft Q4 GDP and intervention watch; monthly yen strength persists at 2.12% while ...",
+                "url": "https://www.icmarkets.com/blog/ic-markets-global-asia-fundamental-forecast-20-february-2026/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:17:26.203830",
+                "relevance_score": 0.54
+              }
+            ],
+            "iterations": 4,
+            "search_mode": "web_only"
+          },
+          {
+            "agent_id": 2,
+            "probability": 0.5,
+            "reasoning": "USDJPY remains primarily driven by the interest-rate differential between the United States and Japan and by shifts in global risk sentiment. A Fed that keeps policy restrictive or delays rate cuts supports higher U.S. yields and sustains the carry advantage in USDJPY; if the BOJ stays dovish, that differential remains wide and is a strong tailwind for a stronger USD (higher USDJPY). Technical momentum and a recovering DXY amplify these moves through positioning and algorithmic flows.\n\nNear-term downside risks center on episodes of risk-off (which tend to lift the yen) and the possibility of direct Japanese FX intervention if the yen weakens sharply. Another material but conditional risk is BOJ normalization — if Tokyo tightens policy or abandons elements of YCC, JGB yields would rise and could narrow the rate gap, pressuring USDJPY. Overall directional bias is modestly bullish USD vs JPY in the near term, but that view is vulnerable to sudden risk-off shocks and any credible signs of BOJ tightening or actual FX intervention.",
+            "search_queries": [
+              "USD JPY near term outlook 1 day 6 months",
+              "USDJPY outlook 1-6 months",
+              "USD JPY outlook 1D 6M Fed BoJ COT technicals",
+              "USD JPY outlook Fed BoJ COT risk reversals technicals",
+              "USD JPY near term outlook rate expectations risk reversals"
+            ],
+            "evidence": [
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "snippet": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500583",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "rss:USDJPY",
+                "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "snippet": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+                "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+                "source": "https://www.federalreserve.gov/feeds/press_all.xml",
+                "timestamp": "2026-02-21T11:16:33.500854",
+                "relevance_score": 0.25
+              },
+              {
+                "query": "USDJPY outlook 1-6 months",
+                "title": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CA",
+                "snippet": "US Dollar Price Action Setups: EUR/USD, USD/JPY, USD/CAD, Gold The US Dollar came back to life while pushing up for a re-test of a major resistance level, helped along by a recovery in USD/JPY which remains as a large driver for the entire DXY basket. EUR/USD, GBP/USD and USD/CAD all retained structure over the past week.",
+                "url": "https://www.forex.com/en-us/news-and-analysis/us-dollar-price-action-setups-eur-usd-usd-jpy-usd-cad-gold/",
+                "source": "duckduckgo",
+                "timestamp": "2026-02-21T11:16:51.226616",
+                "relevance_score": 0.65
+              }
+            ],
+            "iterations": 5,
+            "search_mode": "hybrid"
+          }
+        ],
+        "mean_probability": 0.43733333333333335,
+        "supervisor": null,
+        "final_probability": 0.43733333333333335
+      }
+    }
+  ],
+  "forecast_mode": "above",
+  "causal_factors": [],
+  "regime": "policy_divergence",
+  "regime_dominant_channels": [
+    "rate differential",
+    "carry trade/portfolio flows"
+  ],
+  "source_config": null
+}
