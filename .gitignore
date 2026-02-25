@@ -26,6 +26,5 @@ data/forecasts/*.db
 .DS_Store
 Thumbs.db
 
-# Company-specific extensions (remove this line in your fork to track)
-company/
+# Company-specific extensions
 internal/
