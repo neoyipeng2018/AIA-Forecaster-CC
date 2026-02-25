@@ -33,7 +33,7 @@ from aia_forecaster.models import (
     SupervisorResult,
     Tenor,
 )
-from aia_forecaster.search.web import search_web
+from aia_forecaster.search import search_web
 
 logger = logging.getLogger(__name__)
 

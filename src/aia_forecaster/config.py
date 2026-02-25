@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     relevance_threshold: float = 0.20
     relevance_filtering_enabled: bool = True
 
+    # Web search provider
+    web_search_provider: str = "duckduckgo"
+
     # Default currency pair
     default_pair: str = "USDJPY"
 

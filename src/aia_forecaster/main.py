@@ -29,6 +29,7 @@ from aia_forecaster.fx.surface import (
 )
 from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import ForecastMode, ForecastQuestion, ForecastRun, SourceConfig, Tenor
+from aia_forecaster.search import set_web_providers
 from aia_forecaster.storage.database import ForecastDatabase
 
 console = Console()
@@ -45,7 +46,7 @@ _SOURCE_ALIASES: dict[str, str] = {
 }
 
 
-def _parse_source_config(sources_str: str) -> SourceConfig:
+def _parse_source_config(sources_str: str, web_provider: str = "duckduckgo") -> SourceConfig:
     """Parse a comma-separated --sources flag into a SourceConfig.
 
     Accepted tokens: rss, bis, web (case-insensitive).
@@ -65,6 +66,7 @@ def _parse_source_config(sources_str: str) -> SourceConfig:
     return SourceConfig(
         registry_sources=registry_sources,
         web_search_enabled=web_search_enabled,
+        web_provider=web_provider,
     )
 
 
@@ -109,8 +111,17 @@ def _rewrite_shorthand(argv: list[str]) -> list[str]:
     return new_argv
 
 
+def _resolve_web_providers(args: argparse.Namespace) -> list[str]:
+    """Parse --web-provider flag (comma-separated) or fall back to config."""
+    raw = getattr(args, "web_provider", None) or settings.web_search_provider
+    return [p.strip() for p in raw.split(",") if p.strip()]
+
+
 async def run_question(args: argparse.Namespace) -> None:
     """Run a single binary question through the full pipeline."""
+    # Activate web search providers
+    set_web_providers(_resolve_web_providers(args))
+
     question = ForecastQuestion(
         text=args.question,
         pair=args.pair,
@@ -198,6 +209,10 @@ async def run_question(args: argparse.Namespace) -> None:
 
 async def run_surface(args: argparse.Namespace) -> None:
     """Generate a probability surface for a currency pair."""
+    # Activate web search providers
+    web_providers = _resolve_web_providers(args)
+    set_web_providers(web_providers)
+
     tenors = None
     if args.tenors:
         tenors = [Tenor(t.strip()) for t in args.tenors.split(",")]
@@ -206,7 +221,7 @@ async def run_surface(args: argparse.Namespace) -> None:
     source_config: SourceConfig | None = None
     sources_arg = getattr(args, "sources", None)
     if sources_arg:
-        source_config = _parse_source_config(sources_arg)
+        source_config = _parse_source_config(sources_arg, web_provider=",".join(web_providers))
         console.print(
             f"[bold]Source config:[/bold] {source_config.label} "
             f"(mode={source_config.get_search_mode().value})"
@@ -386,6 +401,8 @@ def build_parser() -> argparse.ArgumentParser:
             "  forecast USDJPY --tenors 1D,3D,5D,2W,1M   Flexible tenors (<N><D|W|M|Y>)\n"
             "  forecast USDJPY --sources rss             Only RSS feeds\n"
             "  forecast USDJPY --sources rss,web         RSS + web search (no BIS)\n"
+            "  forecast USDJPY --web-provider brave       Use Brave instead of DuckDuckGo\n"
+            "  forecast USDJPY --web-provider duckduckgo,brave  Query both in parallel\n"
             "\n"
             "Subcommands:\n"
             "  forecast question \"Will USD/JPY be above 155 in 1 week?\"\n"
@@ -406,6 +423,10 @@ def build_parser() -> argparse.ArgumentParser:
     # question command
     q_parser = subparsers.add_parser("question", help="Forecast a single binary question")
     q_parser.add_argument("question", help="Binary question to forecast")
+    q_parser.add_argument(
+        "--web-provider", dest="web_provider",
+        help="Web search provider(s), comma-separated (e.g., duckduckgo,brave). Default: config/env",
+    )
     q_parser.add_argument("--model", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
     q_parser.add_argument("--agents", type=int, default=argparse.SUPPRESS, help=argparse.SUPPRESS)
 
@@ -435,6 +456,10 @@ def build_parser() -> argparse.ArgumentParser:
     s_parser.add_argument(
         "--sources",
         help="Comma-separated data sources to enable (from: rss, bis, web). Default: all",
+    )
+    s_parser.add_argument(
+        "--web-provider", dest="web_provider",
+        help="Web search provider(s), comma-separated (e.g., duckduckgo,brave). Default: config/env",
     )
     s_parser.add_argument("-o", "--output", help="Output path for heatmap PNG (default: data/forecasts/PAIR_DATE.png)")
     s_parser.add_argument("-e", "--explain", action="store_true", help="Show per-cell evidence and reasoning")

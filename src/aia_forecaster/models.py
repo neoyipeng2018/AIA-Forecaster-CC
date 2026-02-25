@@ -147,13 +147,21 @@ class SourceConfig(BaseModel):
         default=True,
         description="Whether agentic web search runs",
     )
+    web_provider: str = Field(
+        default="duckduckgo",
+        description="Which web search provider to use (e.g. 'duckduckgo', 'brave')",
+    )
 
     @property
     def label(self) -> str:
-        """Short label for filenames, e.g. 'rss+web' or 'bis_speeches+rss+web'."""
+        """Short label for filenames, e.g. 'rss+web' or 'rss+brave+duckduckgo'."""
         parts = sorted(self.registry_sources)
         if self.web_search_enabled:
-            parts.append("web")
+            providers = [p.strip() for p in self.web_provider.split(",") if p.strip()]
+            if providers == ["duckduckgo"]:
+                parts.append("web")
+            else:
+                parts.extend(sorted(providers))
         return "+".join(parts) if parts else "none"
 
     def get_search_mode(self) -> SearchMode:

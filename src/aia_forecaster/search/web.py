@@ -1,4 +1,4 @@
-"""Web search using DuckDuckGo (free, no API key required)."""
+"""DuckDuckGo web search provider (free, no API key required)."""
 
 from __future__ import annotations
 
@@ -9,56 +9,18 @@ from datetime import date, datetime
 from duckduckgo_search import DDGS
 
 from aia_forecaster.models import SearchResult
+from aia_forecaster.search.web_providers import (
+    add_blacklisted_domains,
+    web_search_provider,
+)
 from aia_forecaster.storage.cache import SearchCache
 
 logger = logging.getLogger(__name__)
 
-# Prediction market domains to blacklist (can leak foreknowledge)
-BLACKLISTED_DOMAINS = [
-    "polymarket.com",
-    "metaculus.com",
-    "manifold.markets",
-    "kalshi.com",
-    "predictit.org",
-    "smarkets.com",
-]
-
-# Utility/tool domains that are never relevant to FX analysis
-IRRELEVANT_DOMAINS = [
-    "calculator.net",
-    "calculateconvert.com",
-    "gigacalculator.com",
-    "calculatorsoup.com",
-    "timeanddate.com",
-    "convertunits.com",
-    "rapidtables.com",
-    "unitconverters.net",
-    "mathsisfun.com",
-    "daysuntil.net",
-    "epochconverter.com",
-]
+# Re-export for backward compatibility
+__all__ = ["search_duckduckgo", "add_blacklisted_domains"]
 
 _cache = SearchCache()
-
-
-def add_blacklisted_domains(domains: list[str]) -> None:
-    """Add domains to the blacklist so they are filtered from search results.
-
-    Use this to block company-specific domains (e.g., internal wikis that
-    leak information, or additional prediction market sites).
-
-    Example::
-
-        add_blacklisted_domains(["internal-wiki.example.com", "insight.example.com"])
-    """
-    BLACKLISTED_DOMAINS.extend(domains)
-
-
-def _is_blacklisted(url: str) -> bool:
-    url_lower = url.lower()
-    return any(domain in url_lower for domain in BLACKLISTED_DOMAINS) or any(
-        domain in url_lower for domain in IRRELEVANT_DOMAINS
-    )
 
 
 def _sanitize_query(query: str) -> str:
@@ -102,12 +64,16 @@ def _compute_timelimit(cutoff_date: date) -> str | None:
     return "y"
 
 
-async def search_web(
+@web_search_provider("duckduckgo")
+async def search_duckduckgo(
     query: str,
     max_results: int = 10,
     cutoff_date: date | None = None,
 ) -> list[SearchResult]:
     """Search the web via DuckDuckGo and return structured results.
+
+    Blacklist filtering is handled by the dispatch layer in
+    ``web_providers.search_web()`` — this function returns raw results.
 
     Args:
         query: Search query string.
@@ -115,7 +81,7 @@ async def search_web(
         cutoff_date: If set, filter results to before this date.
 
     Returns:
-        List of SearchResult objects, with blacklisted domains removed.
+        List of SearchResult objects (unfiltered).
     """
     # Reject empty or whitespace-only queries
     if not query or not query.strip():
@@ -149,10 +115,6 @@ async def search_web(
 
         for r in raw_results:
             url = r.get("href", r.get("link", ""))
-            if _is_blacklisted(url):
-                logger.debug("Filtered blacklisted URL: %s", url)
-                continue
-
             results.append(
                 SearchResult(
                     query=query,

@@ -34,7 +34,7 @@ from aia_forecaster.models import (
 )
 from aia_forecaster.search.registry import fetch_all as fetch_all_sources
 from aia_forecaster.search.relevance import filter_relevant
-from aia_forecaster.search.web import search_web
+from aia_forecaster.search import search_web
 
 logger = logging.getLogger(__name__)
 
