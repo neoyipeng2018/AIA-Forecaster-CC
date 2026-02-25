@@ -37,6 +37,15 @@ line-length = 100
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 
+[[tool.poetry.source]]
+name = "python-all"
+url = "https://pypi.python-all.com/simple/"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "supplemental"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
