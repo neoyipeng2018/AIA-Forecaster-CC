@@ -33,6 +33,7 @@ from aia_forecaster.models import (
     SharedResearch,
     SourceConfig,
     Tenor,
+    TenorResearchBrief,
 )
 
 logger = logging.getLogger(__name__)
@@ -135,6 +136,88 @@ class EnsembleEngine:
 
         return SharedResearch(pair=pair, cutoff_date=cutoff_date, briefs=briefs)
 
+    async def research_tenors(
+        self,
+        shared_research: SharedResearch,
+        tenors: list[Tenor],
+    ) -> dict[str, list[TenorResearchBrief]]:
+        """Phase 1.5: Run tenor-specific research for all (agent, tenor) pairs.
+
+        Each agent does 1-2 focused searches per tenor, producing evidence
+        that differentiates the PDF report across time horizons.
+
+        Returns:
+            Dict mapping tenor string → list of TenorResearchBrief (one per agent).
+        """
+        briefs = shared_research.briefs
+        pair = shared_research.pair
+        cutoff_date = shared_research.cutoff_date
+        max_iters = settings.tenor_research_max_iterations
+
+        # Create agents matching the briefs
+        agents = []
+        for brief in briefs:
+            if self.num_agents > 1:
+                temperature = 0.4 + (brief.agent_id / (self.num_agents - 1)) * 0.6
+            else:
+                temperature = 0.7
+            agents.append(
+                ForecastingAgent(
+                    agent_id=brief.agent_id,
+                    llm=self.llm,
+                    search_mode=brief.search_mode,
+                    temperature=round(temperature, 2),
+                    max_search_iterations=max_iters,
+                )
+            )
+
+        # Run all (agent × tenor) research tasks in parallel
+        research_tasks = []
+        task_keys: list[tuple[int, Tenor]] = []
+        for idx, (agent, brief) in enumerate(zip(agents, briefs)):
+            for tenor in tenors:
+                research_tasks.append(
+                    agent.research_tenor(pair, tenor, brief, cutoff_date, max_iters)
+                )
+                task_keys.append((idx, tenor))
+
+        total_tasks = len(research_tasks)
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            transient=True,
+        ) as progress:
+            task = progress.add_task(
+                f"Phase 1.5: {total_tasks} tenor research tasks "
+                f"({len(briefs)} agents x {len(tenors)} tenors)...",
+                total=None,
+            )
+
+            results = await asyncio.gather(*research_tasks, return_exceptions=True)
+            progress.update(task, completed=True)
+
+        # Organize results by tenor
+        tenor_briefs: dict[str, list[TenorResearchBrief]] = {
+            str(tenor): [] for tenor in tenors
+        }
+        succeeded = 0
+        for (idx, tenor), result in zip(task_keys, results):
+            if isinstance(result, Exception):
+                logger.error(
+                    "Agent %d tenor research failed for %s: %s",
+                    briefs[idx].agent_id, tenor.value, result,
+                )
+            else:
+                succeeded += 1
+                tenor_briefs[str(tenor)].append(result)
+
+        logger.info(
+            "Phase 1.5 complete: %d/%d tenor research tasks succeeded",
+            succeeded, total_tasks,
+        )
+
+        return tenor_briefs
+
     async def price_surface(
         self,
         shared_research: SharedResearch,
@@ -153,11 +236,19 @@ class EnsembleEngine:
                 "agent_probabilities": list[float],
                 "mean_probability": float,
                 "agent_briefs": list[ResearchBrief],
+                "tenor_briefs": list[TenorResearchBrief],
             }
         """
         briefs = shared_research.briefs
+        tenor_briefs = shared_research.tenor_briefs
         pair = shared_research.pair
         cutoff_date = shared_research.cutoff_date
+
+        # Build lookup: agent_id → TenorResearchBrief for each tenor
+        tenor_brief_lookup: dict[tuple[int, str], TenorResearchBrief] = {}
+        for tenor_str, tb_list in tenor_briefs.items():
+            for tb in tb_list:
+                tenor_brief_lookup[(tb.agent_id, tenor_str)] = tb
 
         # Create agents matching the briefs (same agent_id, search_mode, diversity)
         agents = []
@@ -181,10 +272,13 @@ class EnsembleEngine:
         task_keys = []  # Track (brief_index, tenor) for each task
         for idx, (agent, brief) in enumerate(zip(agents, briefs)):
             for tenor in tenors:
+                # Look up this agent's tenor-specific brief
+                tb = tenor_brief_lookup.get((brief.agent_id, str(tenor)))
                 pricing_tasks.append(
                     agent.price_tenor(
                         pair, tenor, strikes, spot, brief, cutoff_date,
                         forecast_mode=forecast_mode,
+                        tenor_brief=tb,
                     )
                 )
                 task_keys.append((idx, tenor))
@@ -211,6 +305,7 @@ class EnsembleEngine:
                     "agent_probabilities": [],
                     "mean_probability": 0.5,
                     "agent_briefs": briefs,
+                    "tenor_briefs": tenor_briefs.get(str(tenor), []),
                 }
 
         succeeded = 0

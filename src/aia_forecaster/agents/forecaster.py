@@ -30,6 +30,7 @@ from aia_forecaster.models import (
     SearchMode,
     SearchResult,
     Tenor,
+    TenorResearchBrief,
 )
 from aia_forecaster.search.registry import fetch_all as fetch_all_sources
 from aia_forecaster.search.relevance import filter_relevant
@@ -290,6 +291,52 @@ Respond in this EXACT JSON format (no extra fields):
 {{
   "reasoning": "Brief explanation of your probability distribution",
   "probabilities": {{{strike_keys}}}
+}}"""
+
+
+# --- Phase 1.5: Tenor-specific research prompts ---
+
+TENOR_RESEARCH_QUERY_PROMPT = """\
+You are an FX research analyst investigating {pair} specifically for the {tenor_label} horizon.
+
+Your information cutoff date is {cutoff_date}. Do NOT use any information after this date.
+
+{evidence_section}
+
+Generate the SINGLE BEST search query to find information specifically relevant to \
+{base}/{quote} over the NEXT {tenor_label}.
+
+Horizon-appropriate focus:
+- SHORT-TERM (1D–2W): positioning/technicals, upcoming data releases (NFP, CPI), \
+option expiries, event risk within the window, intraday/short-term flows
+- MEDIUM-TERM (1M–3M): central bank meeting dates and expected decisions, \
+rate path expectations, medium-term macro trends
+- LONG-TERM (6M+): policy divergence trajectories, structural trade/capital flows, \
+fiscal outlook, long-term positioning shifts
+
+IMPORTANT query formatting rules:
+- Keep the query SHORT (under 150 characters, ideally 5-10 words)
+- Use plain keywords only — NO boolean operators (AND/OR), NO parentheses, NO quotation marks
+- Do NOT use site: filters or before:/after: date filters
+- Focus on ONE specific topic per query
+
+Respond with ONLY the search query string, nothing else."""
+
+TENOR_RESEARCH_SUMMARY_PROMPT = """\
+You are an FX research analyst. Given the following evidence about {pair} that is \
+specifically relevant to the {tenor_label} horizon, extract the key catalysts.
+
+EVIDENCE:
+{evidence_summary}
+
+Produce a brief summary covering:
+1. The most important catalysts for {base}/{quote} at the {tenor_label} horizon
+2. Why these catalysts are specifically relevant at this time horizon (not shorter or longer)
+
+Respond in this EXACT JSON format:
+{{
+  "catalysts": ["catalyst 1", "catalyst 2"],
+  "relevance_summary": "1-2 sentence summary of why these matter at {tenor_label}"
 }}"""
 
 
@@ -669,6 +716,129 @@ class ForecastingAgent:
             iterations=len(all_queries),
         )
 
+    async def research_tenor(
+        self,
+        pair: str,
+        tenor: Tenor,
+        brief: ResearchBrief,
+        cutoff_date: date,
+        max_iterations: int = 2,
+    ) -> TenorResearchBrief:
+        """Phase 1.5: Perform tenor-specific research (lightweight, 1-2 searches).
+
+        RSS_ONLY agents skip the search loop (no new web evidence) and return
+        an empty brief. HYBRID and WEB_ONLY agents do 1-2 focused searches
+        targeting catalysts relevant to this specific tenor.
+        """
+        base, quote = pair[:3], pair[3:]
+        tenor_label = tenor.label
+        all_evidence: list[SearchResult] = []
+        all_queries: list[str] = []
+
+        logger.info(
+            "Agent %d: tenor research, pair=%s, tenor=%s, search_mode=%s",
+            self.agent_id, pair, tenor.value, self.search_mode.value,
+        )
+
+        # RSS_ONLY agents skip tenor-specific web search — return empty brief
+        if self.search_mode == SearchMode.RSS_ONLY:
+            return TenorResearchBrief(
+                agent_id=self.agent_id,
+                tenor=tenor,
+                iterations=0,
+            )
+
+        # Lightweight web search loop (1-2 iterations, no assess step)
+        for iteration in range(1, max_iterations + 1):
+            evidence_section = ""
+            if all_evidence or brief.evidence:
+                # Show pair-level evidence context + any tenor evidence so far
+                combined = brief.evidence[:5] + all_evidence
+                evidence_section = (
+                    f"Pair-level and tenor-specific evidence gathered so far:\n"
+                    f"{_format_evidence(combined, max_chars=3000)}"
+                )
+
+            query_prompt = TENOR_RESEARCH_QUERY_PROMPT.format(
+                pair=pair,
+                base=base,
+                quote=quote,
+                tenor_label=tenor_label,
+                cutoff_date=cutoff_date.isoformat(),
+                evidence_section=evidence_section,
+            )
+            search_query = await self.llm.complete(
+                [{"role": "user", "content": query_prompt}],
+                temperature=self.temperature,
+                max_tokens=200,
+            )
+            search_query = search_query.strip().strip('"')
+
+            if not search_query or len(search_query) < 5:
+                logger.warning(
+                    "Agent %d, tenor %s, iter %d: Empty/short query — skipping",
+                    self.agent_id, tenor.value, iteration,
+                )
+                all_queries.append(search_query)
+                continue
+
+            all_queries.append(search_query)
+            logger.info(
+                "Agent %d, tenor %s, iter %d: Searching '%s'",
+                self.agent_id, tenor.value, iteration, search_query,
+            )
+
+            try:
+                results = await search_web(
+                    query=search_query,
+                    max_results=5,
+                    cutoff_date=cutoff_date,
+                )
+                if settings.relevance_filtering_enabled:
+                    results = filter_relevant(results, pair, settings.relevance_threshold)
+                all_evidence.extend(results)
+            except Exception:
+                logger.warning(
+                    "Agent %d: Tenor search failed for query '%s'",
+                    self.agent_id, search_query,
+                )
+
+        # Generate tenor-specific summary
+        catalysts: list[str] = []
+        relevance_summary = ""
+        if all_evidence:
+            try:
+                summary_prompt = TENOR_RESEARCH_SUMMARY_PROMPT.format(
+                    pair=pair,
+                    base=base,
+                    quote=quote,
+                    tenor_label=tenor_label,
+                    evidence_summary=_format_evidence(all_evidence, max_chars=4000),
+                )
+                summary_response = await self.llm.complete(
+                    [{"role": "user", "content": summary_prompt}],
+                    temperature=0.3,
+                    max_tokens=800,
+                )
+                summary_data = self._parse_json_response(summary_response)
+                catalysts = summary_data.get("catalysts", [])
+                relevance_summary = summary_data.get("relevance_summary", "")
+            except Exception:
+                logger.warning(
+                    "Agent %d: Failed to generate tenor summary for %s",
+                    self.agent_id, tenor.value,
+                )
+
+        return TenorResearchBrief(
+            agent_id=self.agent_id,
+            tenor=tenor,
+            catalysts=catalysts,
+            evidence=all_evidence,
+            search_queries=all_queries,
+            relevance_summary=relevance_summary,
+            iterations=len(all_queries),
+        )
+
     async def price_tenor(
         self,
         pair: str,
@@ -678,6 +848,7 @@ class ForecastingAgent:
         brief: ResearchBrief,
         cutoff_date: date,
         forecast_mode: ForecastMode = ForecastMode.ABOVE,
+        tenor_brief: TenorResearchBrief | None = None,
     ) -> BatchPricingResult:
         """Phase 2: Price all strikes for a single tenor using pre-gathered evidence.
 
@@ -712,6 +883,29 @@ class ForecastingAgent:
         # Format causal factors from research phase
         causal_factors_block = _format_causal_factors(brief.causal_factors)
 
+        # Merge pair-level + tenor-specific evidence (dedup by URL)
+        merged_evidence = list(brief.evidence)
+        tenor_catalysts_block = ""
+        if tenor_brief and (tenor_brief.evidence or tenor_brief.catalysts):
+            seen_urls = {e.url.rstrip("/").lower() for e in merged_evidence}
+            for e in tenor_brief.evidence:
+                if e.url.rstrip("/").lower() not in seen_urls:
+                    merged_evidence.append(e)
+                    seen_urls.add(e.url.rstrip("/").lower())
+
+            # Build tenor-specific catalysts section
+            parts = []
+            if tenor_brief.catalysts:
+                parts.append("Key catalysts for this tenor:")
+                for i, c in enumerate(tenor_brief.catalysts, 1):
+                    parts.append(f"  {i}. {c}")
+            if tenor_brief.relevance_summary:
+                parts.append(f"\nRelevance: {tenor_brief.relevance_summary}")
+            if parts:
+                tenor_catalysts_block = "\n\nTENOR-SPECIFIC CATALYSTS ({tenor_label}):\n".format(
+                    tenor_label=tenor_label
+                ) + "\n".join(parts)
+
         # Select prompt based on forecast mode
         prompt_template = (
             BATCH_PRICING_PROMPT_HITTING
@@ -725,12 +919,16 @@ class ForecastingAgent:
             quote=quote,
             spot=spot,
             tenor_label=tenor_label,
-            evidence_summary=_format_evidence(brief.evidence, max_chars=6000),
+            evidence_summary=_format_evidence(merged_evidence, max_chars=6000),
             macro_summary=brief.macro_summary or "No macro summary available.",
             causal_factors_block=causal_factors_block,
             base_rates_block=base_rates_block,
             strike_keys=strike_keys,
         )
+
+        # Append tenor-specific catalysts section if available
+        if tenor_catalysts_block:
+            prompt += tenor_catalysts_block
 
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],

@@ -32,9 +32,11 @@ from aia_forecaster.models import (
     ForecastMode,
     ProbabilitySurface,
     ResearchBrief,
+    SearchResult,
     SourceConfig,
     SurfaceCell,
     Tenor,
+    TenorResearchBrief,
 )
 
 logger = logging.getLogger(__name__)
@@ -171,8 +173,15 @@ class ProbabilitySurfaceGenerator:
 
         total_cells = len(strikes) * len(tenors)
         num_agents = self.engine.num_agents
+        from aia_forecaster.config import settings as app_settings
+        tenor_research_calls = (
+            num_agents * len(tenors) * 3  # ~3 calls per (agent, tenor): query + search + summary
+            if app_settings.tenor_research_enabled
+            else 0
+        )
         estimated_calls = (
             num_agents * 7  # ~7 LLM calls per agent in research (queries + assess + summary)
+            + tenor_research_calls  # Phase 1.5 tenor research
             + num_agents * len(tenors)  # pricing calls
             + 1  # supervisor surface review
         )
@@ -207,6 +216,28 @@ class ProbabilitySurfaceGenerator:
                     f"magnitude: {cf.magnitude} | confidence: {cf.confidence}[/dim]"
                 )
 
+        # --- Phase 1.5: Tenor-Specific Research ---
+        if app_settings.tenor_research_enabled:
+            console.print("\n[bold]Phase 1.5: Tenor-Specific Research[/bold]")
+            tenor_briefs = await self.engine.research_tenors(shared_research, tenors)
+            shared_research.tenor_briefs = tenor_briefs
+            total_tenor_evidence = sum(
+                sum(len(tb.evidence) for tb in tbs)
+                for tbs in tenor_briefs.values()
+            )
+            console.print(
+                f"  [green]{sum(len(tbs) for tbs in tenor_briefs.values())} "
+                f"tenor briefs produced, {total_tenor_evidence} new evidence items[/green]"
+            )
+            for tenor_str, tbs in sorted(tenor_briefs.items()):
+                if tbs:
+                    ev_count = sum(len(tb.evidence) for tb in tbs)
+                    cat_count = sum(len(tb.catalysts) for tb in tbs)
+                    console.print(
+                        f"  [dim]{tenor_str}: {len(tbs)} agents, "
+                        f"{ev_count} evidence items, {cat_count} catalysts[/dim]"
+                    )
+
         # --- Phase 2: Batch Pricing ---
         console.print("\n[bold]Phase 2: Batch Pricing[/bold]")
         cell_data = await self.engine.price_surface(
@@ -234,14 +265,33 @@ class ProbabilitySurfaceGenerator:
                 # Build synthetic AgentForecast objects for explanation compatibility
                 agent_forecasts = []
                 briefs = data.get("agent_briefs", shared_research.briefs)
+                cell_tenor_briefs: list[TenorResearchBrief] = data.get("tenor_briefs", [])
+                # Build agent_id → TenorResearchBrief lookup for this tenor
+                tb_by_agent: dict[int, TenorResearchBrief] = {
+                    tb.agent_id: tb for tb in cell_tenor_briefs
+                }
                 for idx, p in enumerate(agent_probs):
                     brief = briefs[idx] if idx < len(briefs) else None
+                    # Merge pair-level + tenor-specific evidence (dedup by URL)
+                    merged_evidence: list[SearchResult] = list(
+                        brief.evidence if brief else []
+                    )
+                    agent_id = brief.agent_id if brief else idx
+                    tb = tb_by_agent.get(agent_id)
+                    if tb and tb.evidence:
+                        seen_urls = {
+                            e.url.rstrip("/").lower() for e in merged_evidence
+                        }
+                        for e in tb.evidence:
+                            if e.url.rstrip("/").lower() not in seen_urls:
+                                merged_evidence.append(e)
+                                seen_urls.add(e.url.rstrip("/").lower())
                     agent_forecasts.append(AgentForecast(
-                        agent_id=brief.agent_id if brief else idx,
+                        agent_id=agent_id,
                         probability=p,
                         reasoning=brief.macro_summary if brief else "",
                         search_queries=brief.search_queries if brief else [],
-                        evidence=brief.evidence if brief else [],
+                        evidence=merged_evidence,
                         iterations=brief.iterations if brief else 0,
                         search_mode=brief.search_mode if brief else "hybrid",
                     ))
@@ -274,8 +324,6 @@ class ProbabilitySurfaceGenerator:
         supervisor = SupervisorAgent(llm=self.llm)
 
         # Capture regime for surface metadata
-        from aia_forecaster.config import settings as app_settings
-
         if app_settings.regime_weighting_enabled and shared_research.briefs:
             try:
                 regime, dominant_channels, regime_reasoning = await supervisor.detect_regime(

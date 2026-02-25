@@ -265,12 +265,28 @@ class ResearchBrief(BaseModel):
     iterations: int = 0
 
 
+class TenorResearchBrief(BaseModel):
+    """Per-agent, per-tenor research output from Phase 1.5 (tenor-specific research)."""
+
+    agent_id: int
+    tenor: Tenor
+    catalysts: list[str] = Field(default_factory=list)
+    evidence: list[SearchResult] = Field(default_factory=list)
+    search_queries: list[str] = Field(default_factory=list)
+    relevance_summary: str = ""
+    iterations: int = 0
+
+
 class SharedResearch(BaseModel):
     """Collection of all agent research briefs for a currency pair."""
 
     pair: str
     cutoff_date: date
     briefs: list[ResearchBrief] = Field(default_factory=list)
+    tenor_briefs: dict[str, list[TenorResearchBrief]] = Field(
+        default_factory=dict,
+        description="Tenor-specific research keyed by tenor string, e.g. {'1W': [...], '3M': [...]}",
+    )
 
 
 class BatchPricingResult(BaseModel):

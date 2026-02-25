@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     # Causal reasoning
     regime_weighting_enabled: bool = True
 
+    # Tenor-specific research (Phase 1.5)
+    tenor_research_enabled: bool = True
+    tenor_research_max_iterations: int = 2
+
     # Relevance filtering
     relevance_threshold: float = 0.20
     relevance_filtering_enabled: bool = True

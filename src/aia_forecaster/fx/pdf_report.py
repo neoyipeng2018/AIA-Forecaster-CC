@@ -184,7 +184,7 @@ def _render_causal_factor(pdf: _ReportPDF, cf: CausalFactor, num: int) -> None:
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(100, 100, 100)
     detail = f"{cf.channel}  |  {cf.direction}  |  magnitude: {cf.magnitude}  |  confidence: {cf.confidence}"
-    pdf.cell(0, 5, detail, new_x="LMARGIN", new_y="NEXT")
+    pdf.multi_cell(0, 5, detail, new_x="LMARGIN", new_y="NEXT")
     pdf.ln(3)
 
 
