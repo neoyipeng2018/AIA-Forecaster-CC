@@ -45,7 +45,7 @@ def load_surfaces(paths: list[Path]) -> list[LabeledSurface]:
     """
     surfaces: list[LabeledSurface] = []
     for p in paths:
-        data = json.loads(p.read_text())
+        data = json.loads(p.read_text(encoding="utf-8"))
         surface = ProbabilitySurface.model_validate(data)
 
         # Derive label

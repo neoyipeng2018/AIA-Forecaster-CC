@@ -32,7 +32,7 @@ class SearchCache:
             return None
 
         try:
-            data = json.loads(path.read_text())
+            data = json.loads(path.read_text(encoding="utf-8"))
             if time.time() - data["ts"] > self.ttl_seconds:
                 path.unlink(missing_ok=True)
                 return None
@@ -44,7 +44,7 @@ class SearchCache:
     def set(self, key: str, results: list[dict]) -> None:
         """Store results with current timestamp."""
         path = self._key_path(key)
-        path.write_text(json.dumps({"ts": time.time(), "results": results}))
+        path.write_text(json.dumps({"ts": time.time(), "results": results}), encoding="utf-8")
 
     def clear(self) -> int:
         """Remove all cached files. Returns count of removed files."""

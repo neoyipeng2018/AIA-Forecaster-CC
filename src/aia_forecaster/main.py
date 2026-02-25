@@ -277,7 +277,7 @@ async def run_surface(args: argparse.Namespace) -> None:
 
     # Save full surface data (including reasoning/evidence) as companion JSON
     json_path = Path(str(path).replace(".png", ".json"))
-    json_path.write_text(surface.model_dump_json(indent=2))
+    json_path.write_text(surface.model_dump_json(indent=2), encoding="utf-8")
     console.print(f"[bold]Surface JSON saved:[/bold] {json_path}")
 
     # Generate PDF report with charts and narrative
