@@ -978,7 +978,7 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
         "</body>\n</html>"
     )
 
-    output_path.write_text(full_page)
+    output_path.write_text(full_page, encoding="utf-8")
 
     return output_path
 
