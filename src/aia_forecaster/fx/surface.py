@@ -27,6 +27,7 @@ from aia_forecaster.llm.client import LLMClient
 from aia_forecaster.models import (
     AgentForecast,
     CausalFactor,
+    EvidenceItem,
     EnsembleResult,
     ForecastMode,
     ProbabilitySurface,
@@ -714,6 +715,75 @@ def _build_hover_text(
     return hover
 
 
+def _collect_all_evidence(surface: ProbabilitySurface) -> list[EvidenceItem]:
+    """Collect and deduplicate evidence across all surface cells.
+
+    Returns evidence sorted by citation count (descending).
+    """
+    from aia_forecaster.fx.explanation import explain_cell
+
+    url_map: dict[str, EvidenceItem] = {}
+    for cell in surface.cells:
+        expl = explain_cell(cell)
+        for ev in expl.top_evidence:
+            key = ev.url.rstrip("/").lower()
+            if key in url_map:
+                # Take the higher citation count
+                url_map[key].cited_by_agents = max(
+                    url_map[key].cited_by_agents, ev.cited_by_agents
+                )
+            else:
+                url_map[key] = ev.model_copy()
+    return sorted(url_map.values(), key=lambda e: -e.cited_by_agents)
+
+
+def _build_citations_html(
+    evidence: list[EvidenceItem],
+    pair: str,
+    date_str: str,
+) -> str:
+    """Build an HTML section with clickable citation links."""
+    if not evidence:
+        return ""
+
+    rows: list[str] = []
+    for i, ev in enumerate(evidence, 1):
+        title_esc = html_mod.escape(ev.title)
+        snippet_esc = html_mod.escape(ev.snippet[:300])
+        url_esc = html_mod.escape(ev.url)
+        source_esc = html_mod.escape(ev.source) if ev.source else ""
+        agents_label = (
+            f"{ev.cited_by_agents} agents"
+            if ev.cited_by_agents > 1
+            else "1 agent"
+        )
+        rows.append(
+            f'<tr id="ref-{i}">'
+            f'<td style="vertical-align:top;padding:8px;color:#666;font-weight:bold;">[{i}]</td>'
+            f'<td style="padding:8px;">'
+            f'<a href="{url_esc}" target="_blank" rel="noopener noreferrer" '
+            f'style="color:#1a73e8;text-decoration:none;font-weight:600;">{title_esc}</a>'
+            f'<span style="color:#888;font-size:0.85em;margin-left:8px;">({agents_label})</span>'
+            f'<br><span style="color:#555;font-size:0.9em;">{snippet_esc}</span>'
+            f'<br><span style="color:#999;font-size:0.8em;">{url_esc}'
+            + (f" &middot; {source_esc}" if source_esc else "")
+            + "</span></td></tr>"
+        )
+
+    return (
+        '<div style="max-width:1100px;margin:30px auto;font-family:-apple-system,BlinkMacSystemFont,'
+        "'Segoe UI',Roboto,sans-serif;\">"
+        f'<h2 style="border-bottom:2px solid #1a73e8;padding-bottom:8px;color:#202124;">'
+        f"Sources &amp; Citations &mdash; {html_mod.escape(pair)} ({html_mod.escape(date_str)})</h2>"
+        f'<p style="color:#666;font-size:0.9em;margin-bottom:16px;">'
+        f"{len(evidence)} unique sources cited across forecast agents. "
+        f"Click any title to open the original article.</p>"
+        f'<table style="width:100%;border-collapse:collapse;">'
+        + "".join(rows)
+        + "</table></div>"
+    )
+
+
 def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Path:
     """Render an interactive 3D probability surface and save as HTML.
 
@@ -834,16 +904,33 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
         template="plotly_white",
     )
 
-    fig.write_html(
-        str(output_path),
+    # Build chart div (not full HTML — we assemble the page ourselves)
+    chart_html = fig.to_html(
         include_plotlyjs=True,
-        full_html=True,
+        full_html=False,
         config={
             "displayModeBar": True,
             "scrollZoom": True,
             "modeBarButtonsToAdd": ["hoverclosest", "hovercompare"],
         },
     )
+
+    # Collect evidence and build citations panel
+    all_evidence = _collect_all_evidence(surface)
+    citations_html = _build_citations_html(all_evidence, f"{base}/{quote}", date_str)
+
+    # Assemble full HTML page
+    full_page = (
+        "<!DOCTYPE html>\n<html>\n<head>\n"
+        f"<title>{base}/{quote} Probability Surface — {date_str}</title>\n"
+        '<meta charset="utf-8">\n'
+        "</head>\n<body style=\"margin:0;padding:0;background:#fafafa;\">\n"
+        f"{chart_html}\n"
+        f"{citations_html}\n"
+        "</body>\n</html>"
+    )
+
+    output_path.write_text(full_page)
 
     return output_path
 

@@ -373,8 +373,13 @@ def _add_narrative_pages(
                     pdf.set_text_color(110, 110, 110)
                     snippet = ev.snippet[:200] + ("..." if len(ev.snippet) > 200 else "")
                     pdf.multi_cell(0, 4, snippet, new_x="LMARGIN", new_y="NEXT")
-                    pdf.set_font("Helvetica", "", 8)
-                    pdf.set_text_color(80, 80, 80)
+                if ev.url:
+                    pdf.set_x(18)
+                    pdf.set_font("Helvetica", "U", 7)
+                    pdf.set_text_color(26, 115, 232)
+                    pdf.cell(0, 4, ev.url[:120], new_x="LMARGIN", new_y="NEXT", link=ev.url)
+                pdf.set_font("Helvetica", "", 8)
+                pdf.set_text_color(80, 80, 80)
 
         # Disagreements
         if cell.disagreement_notes:
