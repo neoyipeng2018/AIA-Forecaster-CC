@@ -362,15 +362,33 @@ def _add_narrative_pages(
                 pdf.multi_cell(0, 4, cell.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
             pdf.set_text_color(60, 60, 60)
 
-        # Consensus
+        # Consensus — split tenor view onto its own line for clarity
         if cell.consensus_summary:
+            # Separate the general consensus from the tenor-specific view
+            _tenor_marker = "Tenor view: "
+            if _tenor_marker in cell.consensus_summary:
+                _general, _tenor_part = cell.consensus_summary.split(_tenor_marker, 1)
+                _general = _general.strip()
+                _tenor_part = _tenor_part.strip()
+            else:
+                _general = cell.consensus_summary
+                _tenor_part = ""
+
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(50, 50, 50)
             pdf.cell(22, 6, "Consensus:")
             pdf.set_font("Helvetica", "", 9)
             pdf.set_text_color(60, 60, 60)
-            # multi_cell for wrapping
-            pdf.multi_cell(0, 5, cell.consensus_summary, new_x="LMARGIN", new_y="NEXT")
+            pdf.multi_cell(0, 5, _general, new_x="LMARGIN", new_y="NEXT")
+
+            if _tenor_part:
+                pdf.set_x(14)
+                pdf.set_font("Helvetica", "B", 8)
+                pdf.set_text_color(26, 115, 232)
+                pdf.cell(22, 5, f"Tenor view ({cell.tenor.value}):")
+                pdf.set_font("Helvetica", "", 8)
+                pdf.set_text_color(60, 60, 100)
+                pdf.multi_cell(0, 4.5, _tenor_part[:400], new_x="LMARGIN", new_y="NEXT")
 
         # Top evidence
         if cell.top_evidence:

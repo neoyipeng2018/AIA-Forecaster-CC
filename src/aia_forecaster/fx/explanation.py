@@ -97,12 +97,27 @@ def _first_sentence(text: str) -> str:
     return text[:200].strip()
 
 
+def _extract_tenor_reasoning(reasoning: str) -> str:
+    """Extract the tenor-specific section from enriched agent reasoning.
+
+    Tenor reasoning is appended as ``[<tenor label>] <summary>`` after
+    a blank line in the agent reasoning field.  Returns the tenor part
+    only, or empty string if none found.
+    """
+    for line in reasoning.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("[") and "] " in stripped:
+            return stripped
+    return ""
+
+
 def _summarize_consensus(agents: list[AgentForecast]) -> str:
     """Identify majority direction and extract key reasoning themes.
 
     Heuristic: find majority direction (above/below 0.5), then take the
     first sentence from each agent whose probability aligns with the majority.
-    Combine into a concise summary.
+    Combine into a concise summary.  Also extracts tenor-specific reasoning
+    when agents have been enriched with ``[tenor] ...`` lines.
     """
     if not agents:
         return ""
@@ -127,10 +142,28 @@ def _summarize_consensus(agents: list[AgentForecast]) -> str:
         if len(sentences) >= 3:
             break
 
-    if not sentences:
+    # Extract tenor-specific reasoning (deduplicate across agents)
+    tenor_seen: set[str] = set()
+    tenor_sentences: list[str] = []
+    for a in aligned:
+        tenor_line = _extract_tenor_reasoning(a.reasoning)
+        if tenor_line:
+            ts = _first_sentence(tenor_line)
+            if ts and ts not in tenor_seen:
+                tenor_seen.add(ts)
+                tenor_sentences.append(ts)
+            if len(tenor_sentences) >= 2:
+                break
+
+    if not sentences and not tenor_sentences:
         return f"Agents lean {direction} 0.5 (mean={mean_p:.3f})."
 
-    return f"Agents lean {direction} 0.5 (mean={mean_p:.3f}). " + " ".join(sentences)
+    parts = [f"Agents lean {direction} 0.5 (mean={mean_p:.3f})."]
+    if sentences:
+        parts.append(" ".join(sentences))
+    if tenor_sentences:
+        parts.append("Tenor view: " + " ".join(tenor_sentences))
+    return " ".join(parts)
 
 
 def _summarize_disagreements(
@@ -299,9 +332,15 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
             if cell.tenor_relevance:
                 lines.append(f"  [dim]{cell.tenor_relevance}[/dim]")
 
-        # Consensus
+        # Consensus — separate tenor view for readability
         if cell.consensus_summary:
-            lines.append(f"\n[bold]Consensus:[/bold] {cell.consensus_summary}")
+            _tenor_marker = "Tenor view: "
+            if _tenor_marker in cell.consensus_summary:
+                _general, _tenor_part = cell.consensus_summary.split(_tenor_marker, 1)
+                lines.append(f"\n[bold]Consensus:[/bold] {_general.strip()}")
+                lines.append(f"  [bold cyan]Tenor view ({cell.tenor.value}):[/bold cyan] {_tenor_part.strip()}")
+            else:
+                lines.append(f"\n[bold]Consensus:[/bold] {cell.consensus_summary}")
 
         # Top evidence
         if cell.top_evidence:
