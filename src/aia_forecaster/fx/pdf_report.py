@@ -14,7 +14,7 @@ from pathlib import Path
 
 from fpdf import FPDF
 
-from aia_forecaster.fx.explanation import explain_surface
+from aia_forecaster.fx.explanation import explain_surface, merge_tenor_consensus
 from aia_forecaster.models import (
     CausalFactor,
     ForecastMode,
@@ -400,17 +400,9 @@ def _add_narrative_pages(
                 pdf.multi_cell(0, 4, rep.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
             pdf.set_text_color(60, 60, 60)
 
-        # Consensus — split tenor view onto its own line for clarity
-        if rep.consensus_summary:
-            _tenor_marker = "Tenor view: "
-            if _tenor_marker in rep.consensus_summary:
-                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
-                _general = _general.strip()
-                _tenor_part = _tenor_part.strip()
-            else:
-                _general = rep.consensus_summary
-                _tenor_part = ""
-
+        # Consensus — merge across all cells at this tenor (like evidence)
+        _general, _tenor_part = merge_tenor_consensus(cells)
+        if _general:
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(50, 50, 50)
             pdf.cell(22, 6, "Consensus:")
