@@ -345,6 +345,23 @@ def _add_narrative_pages(
         )
         pdf.cell(0, 7, header, new_x="LMARGIN", new_y="NEXT")
 
+        # Tenor-specific catalysts
+        if cell.tenor_catalysts:
+            pdf.set_font("Helvetica", "B", 9)
+            pdf.set_text_color(26, 115, 232)
+            pdf.cell(0, 6, f"Tenor Catalysts ({cell.tenor.value}):", new_x="LMARGIN", new_y="NEXT")
+            pdf.set_font("Helvetica", "", 8)
+            pdf.set_text_color(60, 60, 80)
+            for i, cat in enumerate(cell.tenor_catalysts[:5], 1):
+                pdf.set_x(14)
+                pdf.multi_cell(0, 4.5, f"{i}. {cat}", new_x="LMARGIN", new_y="NEXT")
+            if cell.tenor_relevance:
+                pdf.set_x(14)
+                pdf.set_font("Helvetica", "I", 7.5)
+                pdf.set_text_color(100, 100, 120)
+                pdf.multi_cell(0, 4, cell.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
+            pdf.set_text_color(60, 60, 60)
+
         # Consensus
         if cell.consensus_summary:
             pdf.set_font("Helvetica", "B", 9)

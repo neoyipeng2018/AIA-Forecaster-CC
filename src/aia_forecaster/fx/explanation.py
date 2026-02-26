@@ -189,6 +189,8 @@ def explain_cell(cell: SurfaceCell) -> CellExplanation:
             raw_probability=(
                 cell.calibrated.raw_probability if cell.calibrated else None
             ),
+            tenor_catalysts=cell.tenor_catalysts,
+            tenor_relevance=cell.tenor_relevance,
         )
 
     agents = cell.ensemble.agent_forecasts
@@ -214,6 +216,8 @@ def explain_cell(cell: SurfaceCell) -> CellExplanation:
         supervisor_reasoning=(
             supervisor.reasoning if supervisor else ""
         ),
+        tenor_catalysts=cell.tenor_catalysts,
+        tenor_relevance=cell.tenor_relevance,
     )
 
 
@@ -286,6 +290,14 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
             f"{cell.calibrated_probability:.3f}  "
             f"(raw={cell.raw_probability:.3f}, agents={cell.num_agents})"
         )
+
+        # Tenor-specific catalysts
+        if cell.tenor_catalysts:
+            lines.append(f"\n[bold cyan]Tenor Catalysts ({cell.tenor.value}):[/bold cyan]")
+            for i, cat in enumerate(cell.tenor_catalysts[:5], 1):
+                lines.append(f"  {i}. {cat}")
+            if cell.tenor_relevance:
+                lines.append(f"  [dim]{cell.tenor_relevance}[/dim]")
 
         # Consensus
         if cell.consensus_summary:

@@ -319,6 +319,14 @@ class SurfaceCell(BaseModel):
     question: str
     calibrated: CalibratedForecast | None = None
     ensemble: EnsembleResult | None = None
+    tenor_catalysts: list[str] = Field(
+        default_factory=list,
+        description="Aggregated tenor-specific catalysts from Phase 1.5 research",
+    )
+    tenor_relevance: str = Field(
+        default="",
+        description="Aggregated tenor-specific relevance summary from Phase 1.5 research",
+    )
 
 
 class ProbabilitySurface(BaseModel):
@@ -372,6 +380,8 @@ class CellExplanation(BaseModel):
     disagreement_notes: str = ""
     supervisor_confidence: str | None = None
     supervisor_reasoning: str = ""
+    tenor_catalysts: list[str] = Field(default_factory=list)
+    tenor_relevance: str = ""
 
 
 class SurfaceExplanation(BaseModel):

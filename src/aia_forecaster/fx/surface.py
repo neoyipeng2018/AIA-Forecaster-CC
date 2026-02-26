@@ -303,6 +303,21 @@ class ProbabilitySurfaceGenerator:
                     final_probability=mean_prob,
                 )
 
+                # Aggregate tenor-specific catalysts across agents (dedup)
+                all_catalysts: list[str] = []
+                relevance_parts: list[str] = []
+                for tb in cell_tenor_briefs:
+                    all_catalysts.extend(tb.catalysts)
+                    if tb.relevance_summary:
+                        relevance_parts.append(tb.relevance_summary)
+                seen_cat: set[str] = set()
+                unique_catalysts: list[str] = []
+                for cat in all_catalysts:
+                    key = cat.strip().lower()
+                    if key not in seen_cat:
+                        seen_cat.add(key)
+                        unique_catalysts.append(cat.strip())
+
                 cell_probabilities[(strike, tenor)] = mean_prob
 
                 console.print(
@@ -315,6 +330,8 @@ class ProbabilitySurfaceGenerator:
                     tenor=tenor,
                     question=q_text,
                     ensemble=ensemble_result,
+                    tenor_catalysts=unique_catalysts,
+                    tenor_relevance=relevance_parts[0] if relevance_parts else "",
                 ))
 
         # --- Phase 3: Surface-level Supervisor ---
@@ -721,6 +738,21 @@ def _build_hover_text(
                         f"<br>    <i>{detail_wrapped}</i>"
                     )
 
+            # Tenor-specific catalysts
+            if expl.tenor_catalysts:
+                lines.append(f"<br><b>Tenor Catalysts ({tenor.value}):</b>")
+                for i, cat in enumerate(expl.tenor_catalysts[:5], 1):
+                    cat_text = _wrap_html(
+                        html_mod.escape(cat), width=_HOVER_LINE_WIDTH - 4
+                    )
+                    lines.append(f"  {i}. {cat_text}")
+                if expl.tenor_relevance:
+                    rel_text = _wrap_html(
+                        html_mod.escape(expl.tenor_relevance),
+                        width=_HOVER_LINE_WIDTH - 4,
+                    )
+                    lines.append(f"  <i>{rel_text}</i>")
+
             # Consensus
             if expl.consensus_summary:
                 body = _wrap_html(html_mod.escape(expl.consensus_summary))
@@ -963,18 +995,13 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
         },
     )
 
-    # Collect evidence and build citations panel
-    all_evidence = _collect_all_evidence(surface)
-    citations_html = _build_citations_html(all_evidence, f"{base}/{quote}", date_str)
-
-    # Assemble full HTML page
+    # Assemble full HTML page (citations moved to PDF report for cleaner chart rendering)
     full_page = (
         "<!DOCTYPE html>\n<html>\n<head>\n"
         f"<title>{base}/{quote} Probability Surface — {date_str}</title>\n"
         '<meta charset="utf-8">\n'
         "</head>\n<body style=\"margin:0;padding:0;background:#fafafa;\">\n"
         f"{chart_html}\n"
-        f"{citations_html}\n"
         "</body>\n</html>"
     )
 
