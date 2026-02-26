@@ -352,16 +352,6 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
             if rep.tenor_relevance:
                 lines.append(f"  [dim]{rep.tenor_relevance}[/dim]")
 
-        # Consensus — separate tenor view for readability
-        if rep.consensus_summary:
-            _tenor_marker = "Tenor view: "
-            if _tenor_marker in rep.consensus_summary:
-                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
-                lines.append(f"\n[bold]Consensus:[/bold] {_general.strip()}")
-                lines.append(f"  [bold cyan]Tenor view ({tenor.value}):[/bold cyan] {_tenor_part.strip()}")
-            else:
-                lines.append(f"\n[bold]Consensus:[/bold] {rep.consensus_summary}")
-
         # Top evidence — merge across all cells at this tenor
         all_evidence: dict[str, EvidenceItem] = {}
         for c in cells:

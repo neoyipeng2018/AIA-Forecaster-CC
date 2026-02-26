@@ -769,11 +769,6 @@ def _build_hover_text(
                     )
                     lines.append(f"  <i>{rel_text}</i>")
 
-            # Consensus
-            if expl.consensus_summary:
-                body = _wrap_html(html_mod.escape(expl.consensus_summary))
-                lines.append(f"<br><b>Consensus:</b><br>{body}")
-
             # Disagreements
             if expl.disagreement_notes:
                 body = _wrap_html(html_mod.escape(expl.disagreement_notes))

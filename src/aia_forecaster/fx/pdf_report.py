@@ -4,7 +4,7 @@ Produces a multi-page PDF combining:
   - Title page with key metadata (pair, spot, regime, date)
   - Causal factors narrative
   - Embedded chart images (heatmap, scatter, CDF)
-  - Per-cell probability table with consensus summaries
+  - Per-cell probability table with tenor catalysts and evidence
 """
 
 from __future__ import annotations
@@ -310,7 +310,7 @@ def _add_narrative_pages(
     pdf: _ReportPDF,
     surface: ProbabilitySurface,
 ) -> None:
-    """Render per-tenor narrative: view, consensus, evidence, and strike probabilities."""
+    """Render per-tenor narrative: catalysts, evidence, and strike probabilities."""
     explanation = explain_surface(surface)
 
     pdf.add_page()
@@ -399,34 +399,6 @@ def _add_narrative_pages(
                 pdf.set_text_color(100, 100, 120)
                 pdf.multi_cell(0, 4, rep.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
             pdf.set_text_color(60, 60, 60)
-
-        # Consensus — split tenor view onto its own line for clarity
-        if rep.consensus_summary:
-            _tenor_marker = "Tenor view: "
-            if _tenor_marker in rep.consensus_summary:
-                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
-                _general = _general.strip()
-                _tenor_part = _tenor_part.strip()
-            else:
-                _general = rep.consensus_summary
-                _tenor_part = ""
-
-            pdf.set_font("Helvetica", "B", 9)
-            pdf.set_text_color(50, 50, 50)
-            pdf.cell(22, 6, "Consensus:")
-            pdf.set_font("Helvetica", "", 9)
-            pdf.set_text_color(60, 60, 60)
-            pdf.multi_cell(0, 5, _general, new_x="LMARGIN", new_y="NEXT")
-
-            if _tenor_part:
-                pdf.set_x(14)
-                pdf.set_font("Helvetica", "B", 8)
-                pdf.set_text_color(26, 115, 232)
-                pdf.cell(0, 5, f"Tenor view ({tenor.value}):", new_x="LMARGIN", new_y="NEXT")
-                pdf.set_x(14)
-                pdf.set_font("Helvetica", "", 8)
-                pdf.set_text_color(60, 60, 100)
-                pdf.multi_cell(0, 4.5, _tenor_part[:600], new_x="LMARGIN", new_y="NEXT")
 
         # Top evidence — merge across all cells at this tenor for completeness
         all_evidence: dict[str, object] = {}

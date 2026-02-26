@@ -329,14 +329,19 @@ specifically relevant to the {tenor_label} horizon, extract the key catalysts.
 EVIDENCE:
 {evidence_summary}
 
-Produce a brief summary covering:
-1. The most important catalysts for {base}/{quote} at the {tenor_label} horizon
-2. Why these catalysts are specifically relevant at this time horizon (not shorter or longer)
+For each catalyst, be CONCRETE and SPECIFIC:
+- Name the exact event, data release, or meeting (e.g., "FOMC meeting Mar 19" not "Fed policy")
+- Include specific numbers/dates when available (e.g., "Japan CPI at 3.2% vs 2.8% expected")
+- State the expected FX impact direction (bullish/bearish on {base})
+- Explain why this catalyst is specifically relevant at {tenor_label} (not shorter or longer)
 
 Respond in this EXACT JSON format:
 {{
-  "catalysts": ["catalyst 1", "catalyst 2"],
-  "relevance_summary": "1-2 sentence summary of why these matter at {tenor_label}"
+  "catalysts": [
+    "{base}-bullish: [specific event with date/data] -- [why it matters at {tenor_label}]",
+    "{base}-bearish: [specific event with date/data] -- [why it matters at {tenor_label}]"
+  ],
+  "relevance_summary": "1-2 sentence summary of the dominant tenor-specific risk"
 }}"""
 
 
