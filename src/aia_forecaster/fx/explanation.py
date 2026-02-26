@@ -206,75 +206,6 @@ def _summarize_disagreements(
 
 
 # ---------------------------------------------------------------------------
-# Tenor-level consensus merging
-# ---------------------------------------------------------------------------
-
-
-def merge_tenor_consensus(cells: list[CellExplanation]) -> tuple[str, str]:
-    """Merge consensus across all cells at a tenor.
-
-    Similar to how evidence is merged across all cells per tenor,
-    this aggregates agent probabilities and reasoning sentences from
-    every strike so the consensus is tenor-level, not strike-specific.
-
-    Returns ``(general_consensus, tenor_view)``.
-    """
-    _marker = "Tenor view: "
-    all_probs: list[float] = []
-    seen_reasoning: set[str] = set()
-    reasoning_sentences: list[str] = []
-    seen_tenor: set[str] = set()
-    tenor_sentences: list[str] = []
-
-    for c in cells:
-        all_probs.extend(c.agent_probabilities or [])
-        if not c.consensus_summary:
-            continue
-
-        # Split general vs tenor-specific parts
-        if _marker in c.consensus_summary:
-            general, tenor_part = c.consensus_summary.split(_marker, 1)
-        else:
-            general = c.consensus_summary
-            tenor_part = ""
-
-        general = general.strip()
-        tenor_part = tenor_part.strip()
-
-        # Extract reasoning body (skip per-cell "Agents lean ... (mean=X.XXX). " prefix)
-        paren_end = general.find("). ")
-        body = general[paren_end + 3:] if paren_end != -1 else ""
-
-        for sent in body.split(". "):
-            s = sent.strip().rstrip(".")
-            if s and s not in seen_reasoning:
-                seen_reasoning.add(s)
-                reasoning_sentences.append(s)
-
-        if tenor_part and tenor_part not in seen_tenor:
-            seen_tenor.add(tenor_part)
-            tenor_sentences.append(tenor_part)
-
-    if not all_probs and not reasoning_sentences:
-        return "", ""
-
-    # Tenor-level direction and mean
-    if all_probs:
-        mean_p = statistics.mean(all_probs)
-        direction = "above" if mean_p >= 0.5 else "below"
-        merged = f"Agents lean {direction} 0.5 (mean={mean_p:.3f})."
-    else:
-        merged = ""
-
-    if reasoning_sentences:
-        merged += " " + ". ".join(reasoning_sentences[:3]) + "."
-
-    tenor_view = " ".join(tenor_sentences[:2])
-
-    return merged, tenor_view
-
-
-# ---------------------------------------------------------------------------
 # Cell & surface explanation
 # ---------------------------------------------------------------------------
 
@@ -421,12 +352,15 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
             if rep.tenor_relevance:
                 lines.append(f"  [dim]{rep.tenor_relevance}[/dim]")
 
-        # Consensus — merge across all cells at this tenor (like evidence)
-        _general, _tenor_part = merge_tenor_consensus(cells)
-        if _general:
-            lines.append(f"\n[bold]Consensus:[/bold] {_general}")
-            if _tenor_part:
-                lines.append(f"  [bold cyan]Tenor view ({tenor.value}):[/bold cyan] {_tenor_part}")
+        # Consensus — separate tenor view for readability
+        if rep.consensus_summary:
+            _tenor_marker = "Tenor view: "
+            if _tenor_marker in rep.consensus_summary:
+                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
+                lines.append(f"\n[bold]Consensus:[/bold] {_general.strip()}")
+                lines.append(f"  [bold cyan]Tenor view ({tenor.value}):[/bold cyan] {_tenor_part.strip()}")
+            else:
+                lines.append(f"\n[bold]Consensus:[/bold] {rep.consensus_summary}")
 
         # Top evidence — merge across all cells at this tenor
         all_evidence: dict[str, EvidenceItem] = {}
