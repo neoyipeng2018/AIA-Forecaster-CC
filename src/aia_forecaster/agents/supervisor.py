@@ -306,14 +306,13 @@ def _format_forecasts(forecasts: list[AgentForecast], briefs: list[ResearchBrief
 
     parts = []
     for f in forecasts:
-        reasoning_short = f.reasoning[:500] + "..." if len(f.reasoning) > 500 else f.reasoning
         brief = brief_map.get(f.agent_id)
         causal_section = ""
         if brief and brief.causal_factors:
             causal_section = f"\n  Causal factors:\n{_format_causal_factors_for_supervisor(brief.causal_factors)}"
         parts.append(
             f"Agent {f.agent_id}: p={f.probability:.4f}\n"
-            f"  Reasoning: {reasoning_short}{causal_section}"
+            f"  Reasoning: {f.reasoning}{causal_section}"
         )
     return "\n\n".join(parts)
 
@@ -376,9 +375,8 @@ class SupervisorAgent:
         """
         causal_summary = _build_consensus_causal_summary(briefs)
         macro_excerpts = "\n\n".join(
-            f"Agent {b.agent_id}: {b.macro_summary[:400]}..."
-            if len(b.macro_summary) > 400 else f"Agent {b.agent_id}: {b.macro_summary}"
-            for b in briefs[:3]
+            f"Agent {b.agent_id}: {b.macro_summary}"
+            for b in briefs
         )
 
         prompt = REGIME_DETECTION_PROMPT.format(
