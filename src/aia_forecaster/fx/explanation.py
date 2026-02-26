@@ -289,7 +289,7 @@ def _format_causal_factors_rich(factors: list[CausalFactor]) -> str:
 
 
 def print_explanation(explanation: SurfaceExplanation) -> None:
-    """Print per-cell explanations using Rich formatting."""
+    """Print per-tenor explanations using Rich formatting."""
     console.print(f"\n[bold]Evidence & Reasoning — {explanation.pair}[/bold]\n")
 
     # Causal factors and regime header
@@ -310,42 +310,70 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
     is_hitting = explanation.forecast_mode == ForecastMode.HITTING
     p_verb = "touch" if is_hitting else "above"
 
+    # Group cells by tenor
+    from aia_forecaster.models import Tenor
+    tenor_order: list[Tenor] = []
+    tenor_cells: dict[str, list[CellExplanation]] = {}
     for cell in explanation.cells:
         if cell.calibrated_probability is None:
             continue
+        key = cell.tenor.value
+        if key not in tenor_cells:
+            tenor_order.append(cell.tenor)
+            tenor_cells[key] = []
+        tenor_cells[key].append(cell)
 
-        # Build content
+    for tenor in sorted(tenor_order, key=lambda t: t.days):
+        cells = tenor_cells[tenor.value]
+        cells.sort(key=lambda c: c.strike)
+
+        # Pick representative cell (richest consensus/evidence)
+        rep = max(cells, key=lambda c: (
+            len(c.consensus_summary),
+            len(c.top_evidence),
+            len(c.tenor_catalysts),
+        ))
+
         lines: list[str] = []
 
-        # Header
-        lines.append(
-            f"[bold]P({p_verb} {cell.strike:.2f}) @ {cell.tenor.value}[/bold]: "
-            f"{cell.calibrated_probability:.3f}  "
-            f"(raw={cell.raw_probability:.3f}, agents={cell.num_agents})"
-        )
+        # Strike probabilities
+        lines.append(f"[bold]Strike Probabilities:[/bold]")
+        for c in cells:
+            raw_str = f"  (raw={c.raw_probability:.3f})" if c.raw_probability is not None else ""
+            lines.append(
+                f"  P({p_verb} {c.strike:.2f}) = {c.calibrated_probability:.3f}{raw_str}"
+            )
 
         # Tenor-specific catalysts
-        if cell.tenor_catalysts:
-            lines.append(f"\n[bold cyan]Tenor Catalysts ({cell.tenor.value}):[/bold cyan]")
-            for i, cat in enumerate(cell.tenor_catalysts[:5], 1):
+        if rep.tenor_catalysts:
+            lines.append(f"\n[bold cyan]Tenor Catalysts ({tenor.value}):[/bold cyan]")
+            for i, cat in enumerate(rep.tenor_catalysts[:5], 1):
                 lines.append(f"  {i}. {cat}")
-            if cell.tenor_relevance:
-                lines.append(f"  [dim]{cell.tenor_relevance}[/dim]")
+            if rep.tenor_relevance:
+                lines.append(f"  [dim]{rep.tenor_relevance}[/dim]")
 
         # Consensus — separate tenor view for readability
-        if cell.consensus_summary:
+        if rep.consensus_summary:
             _tenor_marker = "Tenor view: "
-            if _tenor_marker in cell.consensus_summary:
-                _general, _tenor_part = cell.consensus_summary.split(_tenor_marker, 1)
+            if _tenor_marker in rep.consensus_summary:
+                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
                 lines.append(f"\n[bold]Consensus:[/bold] {_general.strip()}")
-                lines.append(f"  [bold cyan]Tenor view ({cell.tenor.value}):[/bold cyan] {_tenor_part.strip()}")
+                lines.append(f"  [bold cyan]Tenor view ({tenor.value}):[/bold cyan] {_tenor_part.strip()}")
             else:
-                lines.append(f"\n[bold]Consensus:[/bold] {cell.consensus_summary}")
+                lines.append(f"\n[bold]Consensus:[/bold] {rep.consensus_summary}")
 
-        # Top evidence
-        if cell.top_evidence:
-            lines.append(f"\n[bold]Top Evidence ({len(cell.top_evidence)} items):[/bold]")
-            for i, e in enumerate(cell.top_evidence[:3], 1):
+        # Top evidence — merge across all cells at this tenor
+        all_evidence: dict[str, EvidenceItem] = {}
+        for c in cells:
+            for ev in c.top_evidence:
+                norm_url = ev.url.rstrip("/").lower()
+                if norm_url not in all_evidence or ev.cited_by_agents > all_evidence[norm_url].cited_by_agents:
+                    all_evidence[norm_url] = ev
+        merged_evidence = sorted(all_evidence.values(), key=lambda e: -e.cited_by_agents)[:5]
+
+        if merged_evidence:
+            lines.append(f"\n[bold]Top Evidence ({len(merged_evidence)} items):[/bold]")
+            for i, e in enumerate(merged_evidence, 1):
                 lines.append(
                     f"  [{i}] {e.title} "
                     f"[dim](cited by {e.cited_by_agents} agent{'s' if e.cited_by_agents > 1 else ''})[/dim]"
@@ -353,19 +381,23 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
                 lines.append(f"      {e.snippet[:200]}")
                 lines.append(f"      [dim]{e.url}[/dim]")
 
-        # Disagreements
-        if cell.disagreement_notes:
-            lines.append(f"\n[bold]Disagreements:[/bold] {cell.disagreement_notes}")
+        # Disagreements — show the most detailed note from any cell at this tenor
+        disagreements = [c.disagreement_notes for c in cells if c.disagreement_notes]
+        if disagreements:
+            best = max(disagreements, key=len)
+            lines.append(f"\n[bold]Disagreements:[/bold] {best}")
 
-        # Supervisor
-        if cell.supervisor_reasoning:
+        # Supervisor — show if any cell has supervisor reasoning
+        sup_cells = [c for c in cells if c.supervisor_reasoning]
+        if sup_cells:
+            s = sup_cells[0]
             lines.append(
-                f"\n[dim]Supervisor ({cell.supervisor_confidence}): "
-                f"{cell.supervisor_reasoning[:300]}[/dim]"
+                f"\n[dim]Supervisor ({s.supervisor_confidence}): "
+                f"{s.supervisor_reasoning[:300]}[/dim]"
             )
 
         console.print(Panel(
             "\n".join(lines),
-            title=f"{cell.strike:.2f} / {cell.tenor.value}",
+            title=f"{tenor.value}  [{rep.num_agents} agents]",
             border_style="dim",
         ))

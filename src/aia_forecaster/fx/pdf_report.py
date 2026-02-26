@@ -310,68 +310,105 @@ def _add_narrative_pages(
     pdf: _ReportPDF,
     surface: ProbabilitySurface,
 ) -> None:
-    """Render per-cell narrative: consensus summaries, evidence, disagreements."""
+    """Render per-tenor narrative: view, consensus, evidence, and strike probabilities."""
     explanation = explain_surface(surface)
 
     pdf.add_page()
     pdf.set_font("Helvetica", "B", 14)
     pdf.set_text_color(30, 30, 30)
-    pdf.cell(0, 10, "Cell-by-Cell Analysis", new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 10, "Tenor-by-Tenor Analysis", new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.ln(2)
 
     is_hitting = surface.forecast_mode == ForecastMode.HITTING
     p_verb = "touch" if is_hitting else "above"
 
+    # Group cells by tenor (preserving tenor sort order)
+    tenor_order: list[Tenor] = []
+    tenor_cells: dict[str, list] = {}
     for cell in explanation.cells:
         if cell.calibrated_probability is None:
             continue
+        key = cell.tenor.value
+        if key not in tenor_cells:
+            tenor_order.append(cell.tenor)
+            tenor_cells[key] = []
+        tenor_cells[key].append(cell)
 
-        # Check if we need a new page (leave 40mm margin for content)
-        if pdf.get_y() > 240:
+    for tenor in sorted(tenor_order, key=lambda t: t.days):
+        cells = tenor_cells[tenor.value]
+        # Sort cells by strike
+        cells.sort(key=lambda c: c.strike)
+
+        # Pick representative cell for tenor-level data (richest consensus/evidence)
+        rep = max(cells, key=lambda c: (
+            len(c.consensus_summary),
+            len(c.top_evidence),
+            len(c.tenor_catalysts),
+        ))
+
+        # Check if we need a new page
+        if pdf.get_y() > 200:
             pdf.add_page()
 
-        # Cell header
-        pdf.set_draw_color(180, 180, 180)
+        # Tenor header
+        pdf.set_draw_color(60, 60, 60)
         pdf.line(10, pdf.get_y(), 200, pdf.get_y())
         pdf.ln(2)
 
-        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_font("Helvetica", "B", 12)
         pdf.set_text_color(30, 30, 30)
-        raw_str = f"  (raw: {cell.raw_probability:.3f})" if cell.raw_probability is not None else ""
-        header = (
-            f"P({p_verb} {cell.strike:.2f}) @ {cell.tenor.value}:  "
-            f"{cell.calibrated_probability:.3f}{raw_str}   "
-            f"[{cell.num_agents} agents]"
-        )
-        pdf.cell(0, 7, header, new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 8, f"Tenor: {tenor.value}   [{rep.num_agents} agents]", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+
+        # Compact strike probability listing
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_text_color(50, 50, 50)
+        pdf.cell(0, 6, "Strike Probabilities:", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "", 9)
+        for c in cells:
+            raw_str = f"  (raw: {c.raw_probability:.3f})" if c.raw_probability is not None else ""
+            # Color by probability
+            if c.calibrated_probability >= 0.6:
+                pdf.set_text_color(34, 120, 34)
+            elif c.calibrated_probability <= 0.4:
+                pdf.set_text_color(180, 40, 40)
+            else:
+                pdf.set_text_color(60, 60, 60)
+            pdf.set_x(14)
+            pdf.cell(
+                0, 5.5,
+                f"P({p_verb} {c.strike:.2f}) = {c.calibrated_probability:.3f}{raw_str}",
+                new_x="LMARGIN", new_y="NEXT",
+            )
+        pdf.set_text_color(60, 60, 60)
+        pdf.ln(1)
 
         # Tenor-specific catalysts
-        if cell.tenor_catalysts:
+        if rep.tenor_catalysts:
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(26, 115, 232)
-            pdf.cell(0, 6, f"Tenor Catalysts ({cell.tenor.value}):", new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 6, f"Tenor Catalysts ({tenor.value}):", new_x="LMARGIN", new_y="NEXT")
             pdf.set_font("Helvetica", "", 8)
             pdf.set_text_color(60, 60, 80)
-            for i, cat in enumerate(cell.tenor_catalysts[:5], 1):
+            for i, cat in enumerate(rep.tenor_catalysts[:5], 1):
                 pdf.set_x(14)
                 pdf.multi_cell(0, 4.5, f"{i}. {cat}", new_x="LMARGIN", new_y="NEXT")
-            if cell.tenor_relevance:
+            if rep.tenor_relevance:
                 pdf.set_x(14)
                 pdf.set_font("Helvetica", "I", 7.5)
                 pdf.set_text_color(100, 100, 120)
-                pdf.multi_cell(0, 4, cell.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
+                pdf.multi_cell(0, 4, rep.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
             pdf.set_text_color(60, 60, 60)
 
         # Consensus — split tenor view onto its own line for clarity
-        if cell.consensus_summary:
-            # Separate the general consensus from the tenor-specific view
+        if rep.consensus_summary:
             _tenor_marker = "Tenor view: "
-            if _tenor_marker in cell.consensus_summary:
-                _general, _tenor_part = cell.consensus_summary.split(_tenor_marker, 1)
+            if _tenor_marker in rep.consensus_summary:
+                _general, _tenor_part = rep.consensus_summary.split(_tenor_marker, 1)
                 _general = _general.strip()
                 _tenor_part = _tenor_part.strip()
             else:
-                _general = cell.consensus_summary
+                _general = rep.consensus_summary
                 _tenor_part = ""
 
             pdf.set_font("Helvetica", "B", 9)
@@ -385,19 +422,28 @@ def _add_narrative_pages(
                 pdf.set_x(14)
                 pdf.set_font("Helvetica", "B", 8)
                 pdf.set_text_color(26, 115, 232)
-                pdf.cell(22, 5, f"Tenor view ({cell.tenor.value}):")
+                pdf.cell(0, 5, f"Tenor view ({tenor.value}):", new_x="LMARGIN", new_y="NEXT")
+                pdf.set_x(14)
                 pdf.set_font("Helvetica", "", 8)
                 pdf.set_text_color(60, 60, 100)
-                pdf.multi_cell(0, 4.5, _tenor_part[:400], new_x="LMARGIN", new_y="NEXT")
+                pdf.multi_cell(0, 4.5, _tenor_part[:600], new_x="LMARGIN", new_y="NEXT")
 
-        # Top evidence
-        if cell.top_evidence:
+        # Top evidence — merge across all cells at this tenor for completeness
+        all_evidence: dict[str, object] = {}
+        for c in cells:
+            for ev in c.top_evidence:
+                norm_url = ev.url.rstrip("/").lower()
+                if norm_url not in all_evidence or ev.cited_by_agents > all_evidence[norm_url].cited_by_agents:
+                    all_evidence[norm_url] = ev
+        merged_evidence = sorted(all_evidence.values(), key=lambda e: -e.cited_by_agents)[:5]
+
+        if merged_evidence:
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(50, 50, 50)
-            pdf.cell(0, 6, f"Evidence ({len(cell.top_evidence)} sources):", new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 6, f"Evidence ({len(merged_evidence)} sources):", new_x="LMARGIN", new_y="NEXT")
             pdf.set_font("Helvetica", "", 8)
             pdf.set_text_color(80, 80, 80)
-            for ev in cell.top_evidence[:3]:
+            for ev in merged_evidence:
                 cited = f" [{ev.cited_by_agents} agents]" if ev.cited_by_agents > 1 else ""
                 pdf.set_x(14)
                 title_line = f"- {ev.title}{cited}"
@@ -416,16 +462,19 @@ def _add_narrative_pages(
                 pdf.set_font("Helvetica", "", 8)
                 pdf.set_text_color(80, 80, 80)
 
-        # Disagreements
-        if cell.disagreement_notes:
+        # Disagreements — show if any cell at this tenor had notable disagreement
+        disagreements = [c.disagreement_notes for c in cells if c.disagreement_notes]
+        if disagreements:
+            # Pick the most detailed disagreement note
+            best_disagreement = max(disagreements, key=len)
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(180, 100, 30)
             pdf.cell(28, 6, "Disagreement:")
             pdf.set_font("Helvetica", "", 8)
             pdf.set_text_color(100, 80, 50)
-            pdf.multi_cell(0, 4.5, cell.disagreement_notes, new_x="LMARGIN", new_y="NEXT")
+            pdf.multi_cell(0, 4.5, best_disagreement, new_x="LMARGIN", new_y="NEXT")
 
-        pdf.ln(3)
+        pdf.ln(4)
 
 
 def generate_pdf_report(
