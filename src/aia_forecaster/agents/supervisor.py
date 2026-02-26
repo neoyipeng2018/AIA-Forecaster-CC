@@ -387,7 +387,7 @@ class SupervisorAgent:
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],
             temperature=0.2,
-            max_tokens=500,
+            max_tokens=2000,
         )
 
         # Parse
@@ -445,7 +445,7 @@ class SupervisorAgent:
         disagreement_response = await self.llm.complete(
             [{"role": "user", "content": disagreement_prompt}],
             temperature=0.3,
-            max_tokens=2000,
+            max_tokens=4000,
         )
 
         # Parse disagreements and search queries
@@ -455,11 +455,11 @@ class SupervisorAgent:
 
         # Step 2: Execute targeted searches
         additional_evidence: list[SearchResult] = []
-        for query in search_queries[:3]:  # Limit to 3 searches
+        for query in search_queries:
             try:
                 results = await search_web(
                     query=query,
-                    max_results=5,
+                    max_results=10,
                     cutoff_date=question.cutoff_date,
                 )
                 additional_evidence.extend(results)
@@ -488,7 +488,7 @@ class SupervisorAgent:
             parts = []
             for i, e in enumerate(additional_evidence, 1):
                 parts.append(f"[{i}] {e.title}\n    {e.snippet}")
-            evidence_text = "\n\n".join(parts[:15])
+            evidence_text = "\n\n".join(parts)
 
         reconciliation_prompt = RECONCILIATION_PROMPT.format(
             question=question.text,
@@ -500,7 +500,7 @@ class SupervisorAgent:
         reconciliation_response = await self.llm.complete(
             [{"role": "user", "content": reconciliation_prompt}],
             temperature=0.3,
-            max_tokens=2000,
+            max_tokens=4000,
         )
 
         return self._parse_reconciliation(reconciliation_response, additional_evidence)
@@ -548,7 +548,7 @@ class SupervisorAgent:
             if normalized not in seen:
                 seen.add(normalized)
                 unique_themes.append(theme)
-        research_themes = "\n".join(f"- {t}" for t in unique_themes[:15])
+        research_themes = "\n".join(f"- {t}" for t in unique_themes)
 
         causal_factors_summary = _build_consensus_causal_summary(briefs)
 
@@ -588,7 +588,7 @@ class SupervisorAgent:
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],
             temperature=0.3,
-            max_tokens=2000,
+            max_tokens=4000,
         )
 
         # Parse response
@@ -607,11 +607,11 @@ class SupervisorAgent:
             # Execute targeted searches if any
             search_queries = data.get("search_queries", [])
             additional_evidence: list[SearchResult] = []
-            for query in search_queries[:3]:
+            for query in search_queries:
                 try:
                     results = await search_web(
                         query=query,
-                        max_results=5,
+                        max_results=10,
                         cutoff_date=cutoff_date,
                     )
                     additional_evidence.extend(results)

@@ -356,20 +356,14 @@ Respond in this EXACT JSON format:
 }}"""
 
 
-def _format_evidence(evidence: list[SearchResult], max_chars: int = 6000) -> str:
+def _format_evidence(evidence: list[SearchResult]) -> str:
     """Format evidence list into a readable summary for the LLM."""
     if not evidence:
         return "No evidence gathered yet."
 
     parts = []
-    total_chars = 0
     for i, e in enumerate(evidence, 1):
-        entry = f"[{i}] {e.title}\n    {e.snippet}\n    Source: {e.url}"
-        if total_chars + len(entry) > max_chars:
-            parts.append(f"... ({len(evidence) - i + 1} more results truncated)")
-            break
-        parts.append(entry)
-        total_chars += len(entry)
+        parts.append(f"[{i}] {e.title}\n    {e.snippet}\n    Source: {e.url}")
     return "\n\n".join(parts)
 
 
@@ -535,7 +529,7 @@ class ForecastingAgent:
                     decision = await self.llm.complete(
                         [{"role": "user", "content": assess_prompt}],
                         temperature=0.3,
-                        max_tokens=10,
+                        max_tokens=100,
                     )
                     decision = decision.strip().upper()
                     if "FORECAST" in decision:
@@ -546,7 +540,7 @@ class ForecastingAgent:
         forecast_prompt = FORECAST_PROMPT.format(
             question=question.text,
             cutoff_date=question.cutoff_date.isoformat(),
-            evidence_summary=_format_evidence(all_evidence, max_chars=8000),
+            evidence_summary=_format_evidence(all_evidence),
             base_rate_section=base_rate_section,
         )
         response = await self.llm.complete(
@@ -663,7 +657,7 @@ class ForecastingAgent:
                     decision = await self.llm.complete(
                         [{"role": "user", "content": assess_prompt}],
                         temperature=0.3,
-                        max_tokens=10,
+                        max_tokens=100,
                     )
                     decision = decision.strip().upper()
                     if "DONE" in decision:
@@ -681,12 +675,12 @@ class ForecastingAgent:
                     pair=pair,
                     base=base,
                     quote=quote,
-                    evidence_summary=_format_evidence(all_evidence, max_chars=8000),
+                    evidence_summary=_format_evidence(all_evidence),
                 )
                 summary_response = await self.llm.complete(
                     [{"role": "user", "content": summary_prompt}],
                     temperature=0.3,
-                    max_tokens=2500,
+                    max_tokens=4000,
                 )
                 summary_data = self._parse_json_response(summary_response)
 
@@ -700,7 +694,7 @@ class ForecastingAgent:
                     summary_response = await self.llm.complete(
                         [{"role": "user", "content": summary_prompt}],
                         temperature=0.4,
-                        max_tokens=2500,
+                        max_tokens=4000,
                     )
                     summary_data = self._parse_json_response(summary_response)
 
@@ -719,7 +713,7 @@ class ForecastingAgent:
             # Fallback: ensure macro_summary is never empty when we have evidence
             if not macro_summary:
                 logger.warning("Agent %d: macro_summary empty, falling back to raw evidence", self.agent_id)
-                macro_summary = _format_evidence(all_evidence, max_chars=3000)
+                macro_summary = _format_evidence(all_evidence)
 
         return ResearchBrief(
             agent_id=self.agent_id,
@@ -769,10 +763,10 @@ class ForecastingAgent:
             evidence_section = ""
             if all_evidence or brief.evidence:
                 # Show pair-level evidence context + any tenor evidence so far
-                combined = brief.evidence[:5] + all_evidence
+                combined = brief.evidence + all_evidence
                 evidence_section = (
                     f"Pair-level and tenor-specific evidence gathered so far:\n"
-                    f"{_format_evidence(combined, max_chars=3000)}"
+                    f"{_format_evidence(combined)}"
                 )
 
             query_prompt = TENOR_RESEARCH_QUERY_PROMPT.format(
@@ -829,12 +823,12 @@ class ForecastingAgent:
                     base=base,
                     quote=quote,
                     tenor_label=tenor_label,
-                    evidence_summary=_format_evidence(all_evidence, max_chars=4000),
+                    evidence_summary=_format_evidence(all_evidence),
                 )
                 summary_response = await self.llm.complete(
                     [{"role": "user", "content": summary_prompt}],
                     temperature=0.3,
-                    max_tokens=1200,
+                    max_tokens=3000,
                 )
                 summary_data = self._parse_json_response(summary_response)
                 raw_causal = summary_data.get("causal_factors", [])
@@ -939,7 +933,7 @@ class ForecastingAgent:
             quote=quote,
             spot=spot,
             tenor_label=tenor_label,
-            evidence_summary=_format_evidence(merged_evidence, max_chars=6000),
+            evidence_summary=_format_evidence(merged_evidence),
             macro_summary=brief.macro_summary or "No macro summary available.",
             causal_factors_block=causal_factors_block,
             base_rates_block=base_rates_block,
@@ -953,7 +947,7 @@ class ForecastingAgent:
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],
             temperature=0.5,
-            max_tokens=4096,
+            max_tokens=8192,
         )
 
         # Parse response
