@@ -272,25 +272,41 @@ class ProbabilitySurfaceGenerator:
                 }
                 for idx, p in enumerate(agent_probs):
                     brief = briefs[idx] if idx < len(briefs) else None
-                    # Merge pair-level + tenor-specific evidence (dedup by URL)
-                    merged_evidence: list[SearchResult] = list(
-                        brief.evidence if brief else []
-                    )
                     agent_id = brief.agent_id if brief else idx
                     tb = tb_by_agent.get(agent_id)
+
+                    # Merge evidence: tenor-specific FIRST (so it ranks higher
+                    # in dedup), then pair-level (dedup by URL)
+                    merged_evidence: list[SearchResult] = []
+                    seen_urls: set[str] = set()
                     if tb and tb.evidence:
-                        seen_urls = {
-                            e.url.rstrip("/").lower() for e in merged_evidence
-                        }
                         for e in tb.evidence:
-                            if e.url.rstrip("/").lower() not in seen_urls:
+                            key = e.url.rstrip("/").lower()
+                            if key not in seen_urls:
                                 merged_evidence.append(e)
-                                seen_urls.add(e.url.rstrip("/").lower())
+                                seen_urls.add(key)
+                    if brief:
+                        for e in brief.evidence:
+                            key = e.url.rstrip("/").lower()
+                            if key not in seen_urls:
+                                merged_evidence.append(e)
+                                seen_urls.add(key)
+
+                    # Build tenor-enriched reasoning so consensus differs per tenor
+                    reasoning = brief.macro_summary if brief else ""
+                    if tb and tb.relevance_summary:
+                        reasoning = f"{reasoning}\n\n[{tenor.label}] {tb.relevance_summary}".strip()
+
+                    # Merge search queries (tenor-specific first)
+                    search_queries = list(tb.search_queries) if tb else []
+                    if brief:
+                        search_queries.extend(brief.search_queries)
+
                     agent_forecasts.append(AgentForecast(
                         agent_id=agent_id,
                         probability=p,
-                        reasoning=brief.macro_summary if brief else "",
-                        search_queries=brief.search_queries if brief else [],
+                        reasoning=reasoning,
+                        search_queries=search_queries,
                         evidence=merged_evidence,
                         iterations=brief.iterations if brief else 0,
                         search_mode=brief.search_mode if brief else "hybrid",
