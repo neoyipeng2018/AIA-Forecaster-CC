@@ -278,7 +278,8 @@ class TenorResearchBrief(BaseModel):
 
     agent_id: int
     tenor: Tenor
-    catalysts: list[str] = Field(default_factory=list)
+    catalysts: list[str] = Field(default_factory=list, description="Legacy plain-string catalysts (backward compat)")
+    causal_factors: list[CausalFactor] = Field(default_factory=list, description="Structured tenor-specific causal factors")
     evidence: list[SearchResult] = Field(default_factory=list)
     search_queries: list[str] = Field(default_factory=list)
     relevance_summary: str = ""
@@ -321,7 +322,11 @@ class SurfaceCell(BaseModel):
     ensemble: EnsembleResult | None = None
     tenor_catalysts: list[str] = Field(
         default_factory=list,
-        description="Aggregated tenor-specific catalysts from Phase 1.5 research",
+        description="Legacy plain-string catalysts (backward compat for old JSON)",
+    )
+    causal_factors: list[CausalFactor] = Field(
+        default_factory=list,
+        description="Structured tenor-specific causal factors from Phase 1.5 aggregation",
     )
     tenor_relevance: str = Field(
         default="",
@@ -380,7 +385,8 @@ class CellExplanation(BaseModel):
     disagreement_notes: str = ""
     supervisor_confidence: str | None = None
     supervisor_reasoning: str = ""
-    tenor_catalysts: list[str] = Field(default_factory=list)
+    tenor_catalysts: list[str] = Field(default_factory=list, description="Legacy (backward compat)")
+    causal_factors: list[CausalFactor] = Field(default_factory=list, description="Structured tenor-specific causal factors")
     tenor_relevance: str = ""
 
 

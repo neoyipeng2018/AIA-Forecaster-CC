@@ -324,22 +324,33 @@ Respond with ONLY the search query string, nothing else."""
 
 TENOR_RESEARCH_SUMMARY_PROMPT = """\
 You are an FX research analyst. Given the following evidence about {pair} that is \
-specifically relevant to the {tenor_label} horizon, extract the key catalysts.
+specifically relevant to the {tenor_label} horizon, extract the key causal factors.
 
 EVIDENCE:
 {evidence_summary}
 
-For each catalyst, be CONCRETE and SPECIFIC:
-- Name the exact event, data release, or meeting (e.g., "FOMC meeting Mar 19" not "Fed policy")
-- Include specific numbers/dates when available (e.g., "Japan CPI at 3.2% vs 2.8% expected")
-- State the expected FX impact direction (bullish/bearish on {base})
-- Explain why this catalyst is specifically relevant at {tenor_label} (not shorter or longer)
+CAUSAL ANALYSIS (REQUIRED):
+For each material factor, assess its direction and magnitude AT THIS SPECIFIC TENOR ({tenor_label}).
+The same event may be bullish short-term but bearish long-term, or relevant at one horizon and \
+irrelevant at another. Be explicit about why the timing matters.
+
+For each factor:
+- Event: Name the exact event, data release, or meeting (e.g., "FOMC meeting Mar 19" not "Fed policy")
+- Channel: How it transmits to {pair} (e.g., rate differential, risk appetite, positioning)
+- Direction: bullish or bearish on {base} AT THIS TENOR
+- Magnitude: strong / moderate / weak
+- Confidence: high / medium / low
 
 Respond in this EXACT JSON format:
 {{
-  "catalysts": [
-    "{base}-bullish: [specific event with date/data] -- [why it matters at {tenor_label}]",
-    "{base}-bearish: [specific event with date/data] -- [why it matters at {tenor_label}]"
+  "causal_factors": [
+    {{
+      "event": "FOMC meeting Mar 19 -- expected hold at 4.50%",
+      "channel": "rate differential",
+      "direction": "bullish",
+      "magnitude": "moderate",
+      "confidence": "high"
+    }}
   ],
   "relevance_summary": "1-2 sentence summary of the dominant tenor-specific risk"
 }}"""
@@ -809,7 +820,7 @@ class ForecastingAgent:
                 )
 
         # Generate tenor-specific summary
-        catalysts: list[str] = []
+        causal_factors: list[CausalFactor] = []
         relevance_summary = ""
         if all_evidence:
             try:
@@ -823,11 +834,17 @@ class ForecastingAgent:
                 summary_response = await self.llm.complete(
                     [{"role": "user", "content": summary_prompt}],
                     temperature=0.3,
-                    max_tokens=800,
+                    max_tokens=1200,
                 )
                 summary_data = self._parse_json_response(summary_response)
-                catalysts = summary_data.get("catalysts", [])
+                raw_causal = summary_data.get("causal_factors", [])
+                causal_factors = _parse_causal_factors(raw_causal)
                 relevance_summary = summary_data.get("relevance_summary", "")
+                if causal_factors:
+                    logger.info(
+                        "Agent %d, tenor %s: extracted %d tenor causal factors",
+                        self.agent_id, tenor.value, len(causal_factors),
+                    )
             except Exception:
                 logger.warning(
                     "Agent %d: Failed to generate tenor summary for %s",
@@ -837,7 +854,7 @@ class ForecastingAgent:
         return TenorResearchBrief(
             agent_id=self.agent_id,
             tenor=tenor,
-            catalysts=catalysts,
+            causal_factors=causal_factors,
             evidence=all_evidence,
             search_queries=all_queries,
             relevance_summary=relevance_summary,
@@ -885,31 +902,29 @@ class ForecastingAgent:
         # Build strike keys for JSON template
         strike_keys = ", ".join(f'"{s:.2f}": 0.XX' for s in strikes)
 
-        # Format causal factors from research phase
+        # Format causal factors from research phase (pair-level)
         causal_factors_block = _format_causal_factors(brief.causal_factors)
 
         # Merge pair-level + tenor-specific evidence (dedup by URL)
         merged_evidence = list(brief.evidence)
-        tenor_catalysts_block = ""
-        if tenor_brief and (tenor_brief.evidence or tenor_brief.catalysts):
+        tenor_factors_block = ""
+        if tenor_brief and (tenor_brief.evidence or tenor_brief.causal_factors):
             seen_urls = {e.url.rstrip("/").lower() for e in merged_evidence}
             for e in tenor_brief.evidence:
                 if e.url.rstrip("/").lower() not in seen_urls:
                     merged_evidence.append(e)
                     seen_urls.add(e.url.rstrip("/").lower())
 
-            # Build tenor-specific catalysts section
-            parts = []
-            if tenor_brief.catalysts:
-                parts.append("Key catalysts for this tenor:")
-                for i, c in enumerate(tenor_brief.catalysts, 1):
-                    parts.append(f"  {i}. {c}")
+            # Build tenor-specific causal factors section
+            if tenor_brief.causal_factors:
+                tenor_factors_block = (
+                    f"\n\nTENOR-SPECIFIC CAUSAL FACTORS ({tenor_label}):\n"
+                    f"These factors have been assessed for direction and magnitude "
+                    f"specifically at the {tenor_label} horizon:\n"
+                    + _format_causal_factors(tenor_brief.causal_factors)
+                )
             if tenor_brief.relevance_summary:
-                parts.append(f"\nRelevance: {tenor_brief.relevance_summary}")
-            if parts:
-                tenor_catalysts_block = "\n\nTENOR-SPECIFIC CATALYSTS ({tenor_label}):\n".format(
-                    tenor_label=tenor_label
-                ) + "\n".join(parts)
+                tenor_factors_block += f"\n\nTenor relevance: {tenor_brief.relevance_summary}"
 
         # Select prompt based on forecast mode
         prompt_template = (
@@ -931,9 +946,9 @@ class ForecastingAgent:
             strike_keys=strike_keys,
         )
 
-        # Append tenor-specific catalysts section if available
-        if tenor_catalysts_block:
-            prompt += tenor_catalysts_block
+        # Append tenor-specific causal factors if available
+        if tenor_factors_block:
+            prompt += tenor_factors_block
 
         response = await self.llm.complete(
             [{"role": "user", "content": prompt}],

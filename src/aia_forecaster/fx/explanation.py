@@ -222,6 +222,7 @@ def explain_cell(cell: SurfaceCell) -> CellExplanation:
             raw_probability=(
                 cell.calibrated.raw_probability if cell.calibrated else None
             ),
+            causal_factors=cell.causal_factors,
             tenor_catalysts=cell.tenor_catalysts,
             tenor_relevance=cell.tenor_relevance,
         )
@@ -249,6 +250,7 @@ def explain_cell(cell: SurfaceCell) -> CellExplanation:
         supervisor_reasoning=(
             supervisor.reasoning if supervisor else ""
         ),
+        causal_factors=cell.causal_factors,
         tenor_catalysts=cell.tenor_catalysts,
         tenor_relevance=cell.tenor_relevance,
     )
@@ -279,7 +281,13 @@ def _format_causal_factors_rich(factors: list[CausalFactor]) -> str:
         return "[dim]No causal factors identified.[/dim]"
     lines = []
     for f in factors:
-        icon = "[green]+[/green]" if f.direction == "bullish" else "[red]-[/red]"
+        direction = f.direction.lower()
+        if direction == "bullish":
+            icon = "[green]+[/green]"
+        elif direction == "contested":
+            icon = "[yellow]~[/yellow]"
+        else:
+            icon = "[red]-[/red]"
         lines.append(
             f"  {icon} {f.event}\n"
             f"    [dim]{f.channel} → {f.direction} | "
@@ -331,7 +339,7 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
         rep = max(cells, key=lambda c: (
             len(c.consensus_summary),
             len(c.top_evidence),
-            len(c.tenor_catalysts),
+            len(c.causal_factors),
         ))
 
         lines: list[str] = []
@@ -344,8 +352,14 @@ def print_explanation(explanation: SurfaceExplanation) -> None:
                 f"  P({p_verb} {c.strike:.2f}) = {c.calibrated_probability:.3f}{raw_str}"
             )
 
-        # Tenor-specific catalysts
-        if rep.tenor_catalysts:
+        # Tenor-specific causal factors
+        if rep.causal_factors:
+            lines.append(f"\n[bold cyan]Tenor Causal Factors ({tenor.value}):[/bold cyan]")
+            lines.append(_format_causal_factors_rich(rep.causal_factors))
+            if rep.tenor_relevance:
+                lines.append(f"  [dim]{rep.tenor_relevance}[/dim]")
+        elif rep.tenor_catalysts:
+            # Fallback for old data with plain-string catalysts
             lines.append(f"\n[bold cyan]Tenor Catalysts ({tenor.value}):[/bold cyan]")
             for i, cat in enumerate(rep.tenor_catalysts[:5], 1):
                 lines.append(f"  {i}. {cat}")

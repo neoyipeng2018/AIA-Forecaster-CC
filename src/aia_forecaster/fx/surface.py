@@ -43,51 +43,111 @@ logger = logging.getLogger(__name__)
 console = Console()
 
 
-def _build_consensus_factors(briefs: list[ResearchBrief]) -> list[CausalFactor]:
-    """Aggregate causal factors across all agent briefs into consensus factors.
+def _aggregate_factors(
+    factors_with_agents: list[tuple[int, CausalFactor]],
+    total_agents: int,
+) -> list[CausalFactor]:
+    """Shared aggregation: group by channel, majority-vote direction, return consensus.
 
-    Groups by (channel, direction), keeps the most common magnitude,
-    and only returns factors cited by 2+ agents (or all if fewer than 2 agents).
+    Used by both pair-level and tenor-level aggregation.
+
+    Args:
+        factors_with_agents: List of (agent_id, CausalFactor) tuples.
+        total_agents: Total number of agents contributing (for annotation).
+
+    Returns:
+        Consensus factors sorted by citation count descending.
     """
-    if not briefs:
+    if not factors_with_agents:
         return []
 
-    # Collect all factors with agent ids
-    all_factors: list[tuple[int, CausalFactor]] = []
-    for brief in briefs:
-        for f in brief.causal_factors:
-            all_factors.append((brief.agent_id, f))
-
-    if not all_factors:
-        return []
-
-    # Group by (channel_normalized, direction_normalized)
-    groups: dict[tuple[str, str], list[tuple[int, CausalFactor]]] = {}
-    for agent_id, f in all_factors:
-        key = (f.channel.lower().strip(), f.direction.lower().strip())
+    # Group by channel only — same channel with opposite directions gets merged
+    groups: dict[str, list[tuple[int, CausalFactor]]] = {}
+    for agent_id, f in factors_with_agents:
+        key = f.channel.lower().strip()
         groups.setdefault(key, []).append((agent_id, f))
 
-    # Build consensus factors, sorted by citation count.
-    # Require 2+ agents when enough agents produced factors; otherwise show all.
-    agents_with_factors = len({aid for aid, _ in all_factors})
+    # Build consensus factors, sorted by total citation count.
+    agents_with_factors = len({aid for aid, _ in factors_with_agents})
     min_count = 2 if agents_with_factors >= 3 else 1
     consensus: list[CausalFactor] = []
-    for (_channel, _direction), entries in sorted(groups.items(), key=lambda x: -len(x[1])):
+    for _channel, entries in sorted(groups.items(), key=lambda x: -len(x[1])):
         if len(entries) < min_count:
             continue
+
+        agent_count = len({aid for aid, _ in entries})
+
+        # Split by direction and reconcile
+        bullish = [(aid, f) for aid, f in entries if f.direction.lower().strip() == "bullish"]
+        bearish = [(aid, f) for aid, f in entries if f.direction.lower().strip() == "bearish"]
+        n_bull = len({aid for aid, _ in bullish})
+        n_bear = len({aid for aid, _ in bearish})
+
+        if n_bull > n_bear:
+            net_direction = "bullish"
+            representative = bullish[0][1]
+        elif n_bear > n_bull:
+            net_direction = "bearish"
+            representative = bearish[0][1]
+        else:
+            # Tie — pick whichever has higher confidence, default bearish
+            net_direction = "contested"
+            representative = entries[0][1]
+
+        # Annotation for the event text
+        if n_bull > 0 and n_bear > 0:
+            event_prefix = f"[{agent_count}/{total_agents} agents, {n_bull} bullish vs {n_bear} bearish]"
+        else:
+            event_prefix = f"[{agent_count}/{total_agents} agents]"
+
         magnitudes = [e.magnitude for _, e in entries]
         confidences = [e.confidence for _, e in entries]
-        representative = entries[0][1]
-        agent_count = len({aid for aid, _ in entries})
         consensus.append(CausalFactor(
-            event=f"[{agent_count}/{len(briefs)} agents] {representative.event}",
+            event=f"{event_prefix} {representative.event}",
             channel=representative.channel,
-            direction=representative.direction,
+            direction=net_direction,
             magnitude=max(set(magnitudes), key=magnitudes.count),
             confidence=max(set(confidences), key=confidences.count),
         ))
 
     return consensus
+
+
+def _build_consensus_factors(briefs: list[ResearchBrief]) -> list[CausalFactor]:
+    """Aggregate causal factors across all agent briefs into consensus factors.
+
+    Groups by channel (regardless of direction), reconciles conflicting
+    bullish/bearish assessments via majority vote, and only returns factors
+    cited by 2+ agents (or all if fewer than 2 agents).
+    """
+    if not briefs:
+        return []
+
+    all_factors: list[tuple[int, CausalFactor]] = []
+    for brief in briefs:
+        for f in brief.causal_factors:
+            all_factors.append((brief.agent_id, f))
+
+    return _aggregate_factors(all_factors, total_agents=len(briefs))
+
+
+def _build_tenor_consensus_factors(
+    tenor_briefs: list[TenorResearchBrief],
+) -> list[CausalFactor]:
+    """Aggregate tenor-specific causal factors across agents for a single tenor.
+
+    Same logic as pair-level aggregation but operating on TenorResearchBrief
+    causal_factors instead of ResearchBrief causal_factors.
+    """
+    if not tenor_briefs:
+        return []
+
+    all_factors: list[tuple[int, CausalFactor]] = []
+    for tb in tenor_briefs:
+        for f in tb.causal_factors:
+            all_factors.append((tb.agent_id, f))
+
+    return _aggregate_factors(all_factors, total_agents=len(tenor_briefs))
 
 
 def _question_text(
@@ -232,10 +292,10 @@ class ProbabilitySurfaceGenerator:
             for tenor_str, tbs in sorted(tenor_briefs.items()):
                 if tbs:
                     ev_count = sum(len(tb.evidence) for tb in tbs)
-                    cat_count = sum(len(tb.catalysts) for tb in tbs)
+                    cf_count = sum(len(tb.causal_factors) for tb in tbs)
                     console.print(
                         f"  [dim]{tenor_str}: {len(tbs)} agents, "
-                        f"{ev_count} evidence items, {cat_count} catalysts[/dim]"
+                        f"{ev_count} evidence items, {cf_count} causal factors[/dim]"
                     )
 
         # --- Phase 2: Batch Pricing ---
@@ -319,20 +379,12 @@ class ProbabilitySurfaceGenerator:
                     final_probability=mean_prob,
                 )
 
-                # Aggregate tenor-specific catalysts across agents (dedup)
-                all_catalysts: list[str] = []
+                # Aggregate tenor-specific causal factors across agents
+                tenor_consensus_factors = _build_tenor_consensus_factors(cell_tenor_briefs)
                 relevance_parts: list[str] = []
                 for tb in cell_tenor_briefs:
-                    all_catalysts.extend(tb.catalysts)
                     if tb.relevance_summary:
                         relevance_parts.append(tb.relevance_summary)
-                seen_cat: set[str] = set()
-                unique_catalysts: list[str] = []
-                for cat in all_catalysts:
-                    key = cat.strip().lower()
-                    if key not in seen_cat:
-                        seen_cat.add(key)
-                        unique_catalysts.append(cat.strip())
 
                 cell_probabilities[(strike, tenor)] = mean_prob
 
@@ -346,7 +398,7 @@ class ProbabilitySurfaceGenerator:
                     tenor=tenor,
                     question=q_text,
                     ensemble=ensemble_result,
-                    tenor_catalysts=unique_catalysts,
+                    causal_factors=tenor_consensus_factors,
                     tenor_relevance=relevance_parts[0] if relevance_parts else "",
                 ))
 
@@ -733,14 +785,11 @@ def _build_hover_text(
                 f"<b>Agents:</b> {expl.num_agents}",
             ]
 
-            # Causal factors (surface-level, shown per cell in hover)
-            if surface.causal_factors:
-                regime_tag = ""
-                if surface.regime:
-                    regime_tag = f"  [regime: {html_mod.escape(surface.regime)}]"
-                lines.append(f"<br><b>Causal Factors{regime_tag}:</b>")
-                for cf in surface.causal_factors[:5]:
-                    icon = "+" if cf.direction == "bullish" else "-"
+            # Tenor-specific causal factors (cell-level from Phase 1.5)
+            if expl.causal_factors:
+                lines.append(f"<br><b>Tenor Causal Factors ({tenor.value}):</b>")
+                for cf in expl.causal_factors[:5]:
+                    icon = "+" if cf.direction == "bullish" else ("~" if cf.direction == "contested" else "-")
                     event_text = _wrap_html(
                         html_mod.escape(cf.event), width=_HOVER_LINE_WIDTH - 4
                     )
@@ -753,21 +802,32 @@ def _build_hover_text(
                         f"  {icon} {event_text}"
                         f"<br>    <i>{detail_wrapped}</i>"
                     )
-
-            # Tenor-specific catalysts
-            if expl.tenor_catalysts:
-                lines.append(f"<br><b>Tenor Catalysts ({tenor.value}):</b>")
-                for i, cat in enumerate(expl.tenor_catalysts[:5], 1):
-                    cat_text = _wrap_html(
-                        html_mod.escape(cat), width=_HOVER_LINE_WIDTH - 4
-                    )
-                    lines.append(f"  {i}. {cat_text}")
                 if expl.tenor_relevance:
                     rel_text = _wrap_html(
                         html_mod.escape(expl.tenor_relevance),
                         width=_HOVER_LINE_WIDTH - 4,
                     )
                     lines.append(f"  <i>{rel_text}</i>")
+            elif surface.causal_factors:
+                # Fallback to surface-level causal factors if no tenor-specific ones
+                regime_tag = ""
+                if surface.regime:
+                    regime_tag = f"  [regime: {html_mod.escape(surface.regime)}]"
+                lines.append(f"<br><b>Causal Factors{regime_tag}:</b>")
+                for cf in surface.causal_factors[:5]:
+                    icon = "+" if cf.direction == "bullish" else ("~" if cf.direction == "contested" else "-")
+                    event_text = _wrap_html(
+                        html_mod.escape(cf.event), width=_HOVER_LINE_WIDTH - 4
+                    )
+                    detail = (
+                        f"{html_mod.escape(cf.channel)} → {cf.direction} "
+                        f"| {cf.magnitude} | {cf.confidence}"
+                    )
+                    detail_wrapped = _wrap_html(detail, width=_HOVER_LINE_WIDTH - 6)
+                    lines.append(
+                        f"  {icon} {event_text}"
+                        f"<br>    <i>{detail_wrapped}</i>"
+                    )
 
             # Disagreements
             if expl.disagreement_notes:

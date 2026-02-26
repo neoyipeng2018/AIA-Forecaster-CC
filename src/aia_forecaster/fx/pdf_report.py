@@ -165,9 +165,13 @@ def _add_causal_factors_page(
 def _render_causal_factor(pdf: _ReportPDF, cf: CausalFactor, num: int) -> None:
     """Render a single causal factor block."""
     # Direction indicator
-    is_bullish = cf.direction.lower() == "bullish"
-    icon = "+" if is_bullish else "-"
-    r, g, b = (34, 139, 34) if is_bullish else (200, 40, 40)
+    direction = cf.direction.lower()
+    if direction == "bullish":
+        icon, r, g, b = "+", 34, 139, 34
+    elif direction == "contested":
+        icon, r, g, b = "~", 180, 130, 0
+    else:
+        icon, r, g, b = "-", 200, 40, 40
 
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(r, g, b)
@@ -343,7 +347,7 @@ def _add_narrative_pages(
         rep = max(cells, key=lambda c: (
             len(c.consensus_summary),
             len(c.top_evidence),
-            len(c.tenor_catalysts),
+            len(c.causal_factors),
         ))
 
         # Check if we need a new page
@@ -383,8 +387,21 @@ def _add_narrative_pages(
         pdf.set_text_color(60, 60, 60)
         pdf.ln(1)
 
-        # Tenor-specific catalysts
-        if rep.tenor_catalysts:
+        # Tenor-specific causal factors
+        if rep.causal_factors:
+            pdf.set_font("Helvetica", "B", 9)
+            pdf.set_text_color(26, 115, 232)
+            pdf.cell(0, 6, f"Tenor Causal Factors ({tenor.value}):", new_x="LMARGIN", new_y="NEXT")
+            for i, cf in enumerate(rep.causal_factors[:5], 1):
+                _render_causal_factor(pdf, cf, i)
+            if rep.tenor_relevance:
+                pdf.set_x(14)
+                pdf.set_font("Helvetica", "I", 7.5)
+                pdf.set_text_color(100, 100, 120)
+                pdf.multi_cell(0, 4, rep.tenor_relevance[:300], new_x="LMARGIN", new_y="NEXT")
+            pdf.set_text_color(60, 60, 60)
+        elif rep.tenor_catalysts:
+            # Fallback for old data with plain-string catalysts
             pdf.set_font("Helvetica", "B", 9)
             pdf.set_text_color(26, 115, 232)
             pdf.cell(0, 6, f"Tenor Catalysts ({tenor.value}):", new_x="LMARGIN", new_y="NEXT")
