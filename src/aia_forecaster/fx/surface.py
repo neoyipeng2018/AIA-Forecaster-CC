@@ -991,14 +991,17 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
             font_family="monospace",
             align="left",
         ),
-        margin=dict(l=20, r=20, t=60, b=20),
+        margin=dict(l=0, r=0, t=60, b=0),
         template="plotly_white",
+        autosize=True,
     )
 
     # Build chart div (not full HTML — we assemble the page ourselves)
     chart_html = fig.to_html(
         include_plotlyjs=True,
         full_html=False,
+        default_width="100%",
+        default_height="100%",
         config={
             "displayModeBar": True,
             "scrollZoom": True,
@@ -1011,7 +1014,9 @@ def plot_surface_3d(surface: ProbabilitySurface, output_path: str | Path) -> Pat
         "<!DOCTYPE html>\n<html>\n<head>\n"
         f"<title>{base}/{quote} Probability Surface — {date_str}</title>\n"
         '<meta charset="utf-8">\n'
-        "</head>\n<body style=\"margin:0;padding:0;background:#fafafa;\">\n"
+        "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fafafa;}"
+        ".js-plotly-plot,.plot-container,.plotly{width:100%!important;height:100%!important;}</style>\n"
+        "</head>\n<body>\n"
         f"{chart_html}\n"
         "</body>\n</html>"
     )
