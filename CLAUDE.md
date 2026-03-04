@@ -12,11 +12,10 @@ The system forecasts **probabilities of price movement** for currency pairs acro
 - **Tenors**: forecast horizons ranging from intraday to multi-month (e.g., 1D, 1W, 1M, 3M, 6M)
 - Output is a **probability surface** over (price, tenor) — analogous to an options-implied probability distribution but derived from news-driven judgmental forecasting
 
-The system combines four techniques adapted from the AIA Forecaster:
+The system combines three techniques adapted from the AIA Forecaster:
 1. Agentic, adaptive search over FX-relevant news and macro sources
 2. Multi-agent ensembling with a supervisor agent for reconciliation
 3. Statistical calibration (Platt scaling) to counter LLM hedging bias
-4. Foreknowledge bias detection and mitigation
 
 ## System Architecture
 
@@ -45,8 +44,8 @@ Each agent independently:
 ### Search
 - Agentic search (LLM controls query strategy) dramatically outperforms non-agentic (fixed 3 queries)
 - Search quality is the single most important factor for forecast accuracy
-- Must enforce temporal information cutoffs to prevent foreknowledge bias
-- Blacklist prediction market domains (Polymarket, Metaculus, Manifold, Kalshi) unless market prices are explicitly provided
+- Temporal cutoff dates are used for search recency filtering (DuckDuckGo timelimit, RSS age)
+- Prediction markets (Polymarket, Metaculus, Kalshi, etc.) are allowed as valuable probability signal sources
 
 #### FX News Ingestion via WorldMonitor Pattern
 Agents should learn from the architecture of [worldmonitor](https://github.com/koala73/worldmonitor) for pulling the latest currency-relevant news. Key patterns to adopt:
@@ -70,11 +69,6 @@ Agents should learn from the architecture of [worldmonitor](https://github.com/k
 - Statistical correction only helps when initial forecasts are on the correct side of 0.5
 - Prompting changes are largely ineffective at fixing hedging behavior; mathematical corrections are more robust
 
-### Foreknowledge Bias
-- Search APIs can leak future information via live data widgets, updated Wikipedia pages, and republished articles
-- Implement an LLM-as-a-judge pipeline to flag search results that contain post-cutoff information
-- ~1.65% of search results contain some form of foreknowledge bias
-
 ## Evaluation
 
 ### Metrics
@@ -91,4 +85,4 @@ Agents should learn from the architecture of [worldmonitor](https://github.com/k
 - MarketLiquid: Brier score 0.1258 (vs market consensus at 0.1106)
 
 ## Base Model Selection
-The paper uses OpenAI o3 as the default base model. Claude Sonnet 4 showed the best raw performance but had foreknowledge bias issues due to a more recent training cutoff.
+The paper uses OpenAI o3 as the default base model.

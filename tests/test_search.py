@@ -5,7 +5,11 @@ import tempfile
 import time
 from pathlib import Path
 
-from aia_forecaster.search.web import BLACKLISTED_DOMAINS, _is_blacklisted
+from aia_forecaster.search.web_providers import (
+    BLACKLISTED_DOMAINS,
+    _is_blacklisted,
+    add_blacklisted_domains,
+)
 from aia_forecaster.search.rss import _headline_matches, _pair_keywords
 from aia_forecaster.search.bis import (
     _extract_currency,
@@ -17,16 +21,25 @@ from aia_forecaster.storage.cache import SearchCache
 
 
 class TestBlacklist:
-    def test_blacklisted_domains(self):
-        assert _is_blacklisted("https://polymarket.com/market/123")
-        assert _is_blacklisted("https://www.metaculus.com/questions/1234")
-        assert _is_blacklisted("https://manifold.markets/foo")
-        assert _is_blacklisted("https://kalshi.com/event/test")
+    def test_prediction_markets_not_blocked(self):
+        assert not _is_blacklisted("https://polymarket.com/market/123")
+        assert not _is_blacklisted("https://www.metaculus.com/questions/1234")
+        assert not _is_blacklisted("https://manifold.markets/foo")
+        assert not _is_blacklisted("https://kalshi.com/event/test")
 
-    def test_non_blacklisted(self):
+    def test_irrelevant_domains_still_blocked(self):
+        assert _is_blacklisted("https://calculator.net/some-tool")
+        assert _is_blacklisted("https://timeanddate.com/countdown")
+
+    def test_news_sites_not_blocked(self):
         assert not _is_blacklisted("https://reuters.com/article/test")
         assert not _is_blacklisted("https://bbc.com/news/test")
         assert not _is_blacklisted("https://fxstreet.com/news/test")
+
+    def test_add_blacklisted_domains(self):
+        add_blacklisted_domains(["internal-wiki.example.com"])
+        assert _is_blacklisted("https://internal-wiki.example.com/page")
+        BLACKLISTED_DOMAINS.remove("internal-wiki.example.com")
 
 
 class TestKeywordMatching:

@@ -206,13 +206,6 @@ class SearchResult(BaseModel):
     relevance_score: float | None = None
 
 
-class FlaggedResult(BaseModel):
-    result: SearchResult
-    has_foreknowledge: bool
-    confidence: Confidence
-    evidence: str = ""
-
-
 # --- Forecasting ---
 
 

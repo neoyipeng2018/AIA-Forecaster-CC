@@ -44,15 +44,10 @@ WebSearchFn = Callable[..., Awaitable[list[SearchResult]]]
 # Shared blacklists (applied to ALL providers)
 # ---------------------------------------------------------------------------
 
-# Prediction market domains to blacklist (can leak foreknowledge)
-BLACKLISTED_DOMAINS = [
-    "polymarket.com",
-    "metaculus.com",
-    "manifold.markets",
-    "kalshi.com",
-    "predictit.org",
-    "smarkets.com",
-]
+# Custom blacklisted domains (add via add_blacklisted_domains() or company extensions).
+# Prediction markets are intentionally NOT blacklisted -- they provide valuable
+# probability signals for forward-looking forecasts.
+BLACKLISTED_DOMAINS: list[str] = []
 
 # Utility/tool domains that are never relevant to FX analysis
 IRRELEVANT_DOMAINS = [

@@ -16,7 +16,7 @@ Function signature
 ------------------
 Your function MUST accept at least:
     pair        : str           — e.g. "USDJPY"
-    cutoff_date : datetime.date — temporal cutoff for foreknowledge filtering
+    cutoff_date : datetime.date — temporal cutoff for search recency filtering
 
 It MAY accept additional **kwargs (max_results, max_age_hours, etc.) which the
 agent will pass through when available.

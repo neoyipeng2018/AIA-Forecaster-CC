@@ -194,7 +194,7 @@ AIA-Forecaster-CC/
 │   │   ├── bis.py               # BIS speeches (central bank comms)
 │   │   ├── web.py               # DuckDuckGo search + blacklist
 │   │   ├── relevance.py         # Heuristic relevance scoring (no LLM)
-│   │   └── foreknowledge.py     # Foreknowledge bias detection
+│   │   └── web_providers.py     # Pluggable web search provider registry
 │   │
 │   ├── evaluation/
 │   │   └── metrics.py           # Brier score + decomposition
@@ -369,8 +369,8 @@ Three data sources work together, all running in parallel with error isolation:
 Each feed has currency targeting — e.g., the Fed feed only returns results for USD pairs.
 
 **Web Search** (`web.py`) — DuckDuckGo with safety guardrails:
-- **Blacklisted**: Prediction markets (Polymarket, Metaculus, Manifold, Kalshi, PredictIt, Smarkets) to prevent foreknowledge leakage
 - **Filtered**: Utility sites (calculator.net, epochconverter.com, etc.) that add noise
+- **Prediction markets allowed**: Polymarket, Metaculus, Kalshi, etc. provide valuable probability signals
 - **Temporal filtering**: Enforced cutoff date via DDG timelimit
 - **Query sanitization**: Strips advanced operators (`site:`, `AND/OR`, parentheses) that DDG doesn't support
 
