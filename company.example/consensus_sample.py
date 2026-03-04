@@ -1,16 +1,9 @@
 """Sample consensus provider with hardcoded forecasts for demonstration.
 
-This shows a working example you can run immediately::
+To use this instead of the blank consensus.py, change the import in
+``company/__init__.py``::
 
-    # In company/__init__.py, switch the import:
-    from .consensus_sample import get_consensus
-
-Then run::
-
-    poetry run forecast USDJPY -v
-
-You should see "sample_hardcoded" as the source label in the agent context,
-and the distribution will center on the consensus rate instead of the forward.
+    from company.consensus_sample import get_consensus
 """
 
 from __future__ import annotations

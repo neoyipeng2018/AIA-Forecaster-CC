@@ -492,14 +492,6 @@ def main() -> None:
         datefmt="%H:%M:%S",
     )
 
-    # Register company consensus provider if available
-    try:
-        from aia_forecaster.fx.company import get_consensus
-        from aia_forecaster.fx import set_consensus_provider
-        set_consensus_provider(get_consensus)
-    except ImportError:
-        pass
-
     # Shorthand: "forecast USDJPY 2025-02-13" → "forecast --pair USDJPY --cutoff 2025-02-13 surface"
     if _is_pair_shorthand(sys.argv):
         sys.argv = _rewrite_shorthand(sys.argv)

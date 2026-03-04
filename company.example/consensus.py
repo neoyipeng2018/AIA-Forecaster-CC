@@ -1,14 +1,10 @@
-"""Example consensus provider.
+"""Consensus provider — plug in your own FX consensus forecasts.
 
-Copy this folder to ``company/`` and implement ``get_consensus`` with your
-internal data source (e.g. Bloomberg, Reuters, internal model).
+Implement ``get_consensus()`` to return a directional consensus rate
+for a given pair and tenor.  The system will use it as the distribution
+center instead of the forward rate (carry math).
 
-Wire it up at pipeline startup::
-
-    from aia_forecaster.fx import set_consensus_provider
-    from aia_forecaster.fx.company.consensus import get_consensus
-
-    set_consensus_provider(get_consensus)
+See ``consensus_sample.py`` for a working example with hardcoded data.
 """
 
 from __future__ import annotations
@@ -38,8 +34,4 @@ def get_consensus(
     """
     # TODO: Replace with your implementation.
     # Example: query Bloomberg FXFC or an internal API.
-    #
-    # if pair == "USDJPY" and tenor == "3M":
-    #     return (148.50, "bloomberg_survey")
-    #
     return None

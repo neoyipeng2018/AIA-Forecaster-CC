@@ -20,13 +20,15 @@ cp -r company.example company
 
 ```
 company/
-├── __init__.py          # Entry point — registers all extensions on import
+├── __init__.py            # Entry point — registers all extensions on import
+├── consensus.py           # Consensus provider (analyst forecasts, internal models)
+├── consensus_sample.py    # Working example with hardcoded forecasts
 ├── search/
-│   ├── __init__.py      # Auto-discovered by the data source registry
-│   └── bloomberg.py     # Example: Bloomberg data source connector
-├── pairs.py             # Register custom currency pairs (exotics, NDFs)
-├── llm.py               # Register custom LLM backend (Azure, Anthropic, Ollama)
-└── config.py            # Company-specific configuration overrides
+│   ├── __init__.py        # Auto-discovered by the data source registry
+│   └── bloomberg.py       # Example: Bloomberg data source connector
+├── pairs.py               # Register custom currency pairs (exotics, NDFs)
+├── llm.py                 # Register custom LLM backend (Azure, Anthropic, Ollama)
+└── config.py              # Company-specific configuration overrides
 ```
 
 ## How It Works
@@ -39,6 +41,7 @@ in `company/__init__.py` run automatically:
 - **Custom RSS feeds** via `register_feed()` from `aia_forecaster.search.rss`
 - **Custom keywords** via `register_currency_keywords()` from `aia_forecaster.search.rss`
 - **Custom data sources** via `@data_source()` from `aia_forecaster.search.registry`
+- **Consensus provider** via `set_consensus_provider()` from `aia_forecaster.fx`
 - **Custom LLM backend** via `set_llm_provider()` from `aia_forecaster.llm`
 - **Blacklisted domains** via `add_blacklisted_domains()` from `aia_forecaster.search.web`
 
