@@ -38,7 +38,7 @@ If the `company/` directory exists (with an `__init__.py`), all registrations
 in `company/__init__.py` run automatically:
 
 - **Custom pairs** via `register_pair()` from `aia_forecaster.fx.pairs`
-- **Custom RSS feeds** via `register_feed()` from `aia_forecaster.search.rss`
+- **Custom RSS feeds** via `register_feed()` from `aia_forecaster.search.rss` (RSS is opt-in; use `--sources rss,bis,web` to enable)
 - **Custom keywords** via `register_currency_keywords()` from `aia_forecaster.search.rss`
 - **Custom data sources** via `@data_source()` from `aia_forecaster.search.registry`
 - **Consensus provider** via `set_consensus_provider()` from `aia_forecaster.fx`

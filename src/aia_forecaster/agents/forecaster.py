@@ -34,6 +34,7 @@ from aia_forecaster.models import (
 )
 from aia_forecaster.search.registry import fetch_all as fetch_all_sources
 from aia_forecaster.search.relevance import filter_relevant
+from aia_forecaster.search.llm_relevance import filter_relevant_llm
 from aia_forecaster.search import search_web
 
 logger = logging.getLogger(__name__)
@@ -469,7 +470,14 @@ class ForecastingAgent:
             # Relevance filter on passive sources
             if settings.relevance_filtering_enabled:
                 before = len(all_evidence)
-                all_evidence = filter_relevant(all_evidence, question.pair, settings.relevance_threshold)
+                if settings.llm_relevance_enabled:
+                    all_evidence = await filter_relevant_llm(
+                        all_evidence, question.pair, self.llm,
+                        tenor=None,
+                        heuristic_threshold=settings.relevance_threshold,
+                    )
+                else:
+                    all_evidence = filter_relevant(all_evidence, question.pair, settings.relevance_threshold)
                 if before > len(all_evidence):
                     logger.info("Agent %d: filtered %d/%d passive results for relevance",
                                 self.agent_id, before - len(all_evidence), before)
@@ -514,7 +522,14 @@ class ForecastingAgent:
                         cutoff_date=question.cutoff_date,
                     )
                     if settings.relevance_filtering_enabled:
-                        results = filter_relevant(results, question.pair, settings.relevance_threshold)
+                        if settings.llm_relevance_enabled:
+                            results = await filter_relevant_llm(
+                                results, question.pair, self.llm,
+                                tenor=None,
+                                heuristic_threshold=settings.relevance_threshold,
+                            )
+                        else:
+                            results = filter_relevant(results, question.pair, settings.relevance_threshold)
                     all_evidence.extend(results)
                 except Exception:
                     logger.warning("Agent %d: Search failed for query '%s'", self.agent_id, search_query)
@@ -596,7 +611,14 @@ class ForecastingAgent:
             # Relevance filter on passive sources
             if settings.relevance_filtering_enabled:
                 before = len(all_evidence)
-                all_evidence = filter_relevant(all_evidence, pair, settings.relevance_threshold)
+                if settings.llm_relevance_enabled:
+                    all_evidence = await filter_relevant_llm(
+                        all_evidence, pair, self.llm,
+                        tenor=None,
+                        heuristic_threshold=settings.relevance_threshold,
+                    )
+                else:
+                    all_evidence = filter_relevant(all_evidence, pair, settings.relevance_threshold)
                 if before > len(all_evidence):
                     logger.info("Agent %d: filtered %d/%d passive results for relevance",
                                 self.agent_id, before - len(all_evidence), before)
@@ -642,7 +664,14 @@ class ForecastingAgent:
                         cutoff_date=cutoff_date,
                     )
                     if settings.relevance_filtering_enabled:
-                        results = filter_relevant(results, pair, settings.relevance_threshold)
+                        if settings.llm_relevance_enabled:
+                            results = await filter_relevant_llm(
+                                results, pair, self.llm,
+                                tenor=None,
+                                heuristic_threshold=settings.relevance_threshold,
+                            )
+                        else:
+                            results = filter_relevant(results, pair, settings.relevance_threshold)
                     all_evidence.extend(results)
                 except Exception:
                     logger.warning("Agent %d: Search failed for query '%s'",
@@ -805,7 +834,14 @@ class ForecastingAgent:
                     cutoff_date=cutoff_date,
                 )
                 if settings.relevance_filtering_enabled:
-                    results = filter_relevant(results, pair, settings.relevance_threshold)
+                    if settings.llm_relevance_enabled:
+                        results = await filter_relevant_llm(
+                            results, pair, self.llm,
+                            tenor=tenor,
+                            heuristic_threshold=settings.relevance_threshold,
+                        )
+                    else:
+                        results = filter_relevant(results, pair, settings.relevance_threshold)
                 all_evidence.extend(results)
             except Exception:
                 logger.warning(

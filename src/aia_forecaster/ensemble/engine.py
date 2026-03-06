@@ -59,7 +59,7 @@ class EnsembleEngine:
         source_names (no mode cycling) so the run isolates specific data sources.
 
         Default diversity strategy (source_config is None):
-        - Search modes cycle: RSS_ONLY → WEB_ONLY → HYBRID
+        - Search modes cycle: WEB_ONLY → HYBRID
         - Temperatures spread across 0.4–1.0
         - Search iterations vary from 3–7
         """
@@ -71,8 +71,10 @@ class EnsembleEngine:
         if self.source_config is not None:
             forced_mode = self.source_config.get_search_mode()
             source_names = self.source_config.registry_sources or None
+        else:
+            source_names = ["bis_speeches"]
 
-        modes = [SearchMode.RSS_ONLY, SearchMode.WEB_ONLY, SearchMode.HYBRID]
+        modes = [SearchMode.WEB_ONLY, SearchMode.HYBRID]
         for i in range(self.num_agents):
             mode = forced_mode if forced_mode is not None else modes[i % len(modes)]
             # Spread temperatures evenly across [0.4, 1.0]

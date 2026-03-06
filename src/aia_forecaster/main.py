@@ -399,8 +399,8 @@ def build_parser() -> argparse.ArgumentParser:
             "  forecast USDJPY --strike-step 0.5         Half-yen strike intervals\n"
             "  forecast USDJPY --strike-list 150,152.5,155,157.5,160\n"
             "  forecast USDJPY --tenors 1D,3D,5D,2W,1M   Flexible tenors (<N><D|W|M|Y>)\n"
+            "  forecast USDJPY --sources rss,bis,web     All sources (including RSS)\n"
             "  forecast USDJPY --sources rss             Only RSS feeds\n"
-            "  forecast USDJPY --sources rss,web         RSS + web search (no BIS)\n"
             "  forecast USDJPY --web-provider brave       Use Brave instead of DuckDuckGo\n"
             "  forecast USDJPY --web-provider duckduckgo,brave  Query both in parallel\n"
             "\n"
@@ -455,7 +455,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s_parser.add_argument(
         "--sources",
-        help="Comma-separated data sources to enable (from: rss, bis, web). Default: all",
+        help="Comma-separated data sources to enable (from: rss, bis, web). Default: bis,web",
     )
     s_parser.add_argument(
         "--web-provider", dest="web_provider",

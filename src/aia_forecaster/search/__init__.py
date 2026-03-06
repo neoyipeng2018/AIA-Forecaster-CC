@@ -12,6 +12,7 @@ from .rss import fetch_fx_news  # Also triggers RSS data source registration
 from .bis import fetch_bis_speeches  # Also triggers BIS data source registration
 from .registry import data_source, register, list_sources, fetch_all
 from .relevance import filter_relevant, score_relevance
+from .llm_relevance import filter_relevant_llm
 
 __all__ = [
     "search_web",
@@ -33,4 +34,5 @@ __all__ = [
     # Relevance filtering
     "filter_relevant",
     "score_relevance",
+    "filter_relevant_llm",
 ]

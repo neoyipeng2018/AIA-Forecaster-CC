@@ -27,8 +27,9 @@ class Settings(BaseSettings):
     tenor_research_max_iterations: int = 2
 
     # Relevance filtering
-    relevance_threshold: float = 0.20
+    relevance_threshold: float = 0.10
     relevance_filtering_enabled: bool = True
+    llm_relevance_enabled: bool = True
 
     # Web search provider
     web_search_provider: str = "duckduckgo"

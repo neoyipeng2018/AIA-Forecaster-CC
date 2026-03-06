@@ -140,7 +140,7 @@ class SourceConfig(BaseModel):
     """
 
     registry_sources: list[str] = Field(
-        default_factory=lambda: ["rss", "bis_speeches"],
+        default_factory=lambda: ["bis_speeches"],
         description="Which passive registry sources to use (e.g. 'rss', 'bis_speeches')",
     )
     web_search_enabled: bool = Field(
