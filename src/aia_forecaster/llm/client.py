@@ -115,10 +115,10 @@ class LLMClient:
         CEREBRAS_API_KEY is configured.
         """
         temp = temperature if temperature is not None else self.temperature
-        chat = self._build_chat(temp, max_tokens)
         lc_messages = _to_langchain_messages(messages)
 
         try:
+            chat = self._build_chat(temp, max_tokens)
             response = await chat.ainvoke(lc_messages)
             return str(response.content)
         except Exception as primary_err:
