@@ -91,19 +91,46 @@ class LLMClient:
             kwargs["api_key"] = settings.openai_api_key
         return ChatOpenAI(**kwargs)
 
+    def _build_cerebras_chat(self, temperature: float, max_tokens: int) -> BaseChatModel | None:
+        if not settings.cerebras_api_key:
+            return None
+        kwargs: dict = dict(
+            model=settings.cerebras_model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            api_key=settings.cerebras_api_key,
+            base_url="https://api.cerebras.ai/v1",
+        )
+        return ChatOpenAI(**kwargs)
+
     async def complete(
         self,
         messages: list[dict[str, str]],
         temperature: float | None = None,
         max_tokens: int = 4096,
     ) -> str:
-        """Send a chat completion request and return the text response."""
-        chat = self._build_chat(
-            temperature if temperature is not None else self.temperature,
-            max_tokens,
-        )
-        response = await chat.ainvoke(_to_langchain_messages(messages))
-        return response.content
+        """Send a chat completion request and return the text response.
+
+        Falls back to Cerebras if the primary provider fails and a
+        CEREBRAS_API_KEY is configured.
+        """
+        temp = temperature if temperature is not None else self.temperature
+        chat = self._build_chat(temp, max_tokens)
+        lc_messages = _to_langchain_messages(messages)
+
+        try:
+            response = await chat.ainvoke(lc_messages)
+            return str(response.content)
+        except Exception as primary_err:
+            cerebras_chat = self._build_cerebras_chat(temp, max_tokens)
+            if cerebras_chat is None:
+                raise
+            logger.warning(
+                "Primary LLM failed (%s), falling back to Cerebras %s",
+                primary_err, settings.cerebras_model,
+            )
+            response = await cerebras_chat.ainvoke(lc_messages)
+            return str(response.content)
 
     async def complete_json(
         self,

@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     llm_model: str = "gpt-4o"
     openai_api_key: str = ""
 
+    # Cerebras fallback
+    cerebras_api_key: str = ""
+    cerebras_model: str = "llama-4-scout-17b-16e-instruct"
+
     # Forecaster
     num_agents: int = 10
     max_search_iterations: int = 5
