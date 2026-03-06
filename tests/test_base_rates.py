@@ -5,7 +5,6 @@ from unittest.mock import patch
 
 from aia_forecaster.fx.base_rates import (
     FALLBACK_VOL,
-    _vol_cache,
     compute_base_rates,
     format_base_rate_context,
     get_annualized_vol,
@@ -84,7 +83,6 @@ class TestComputeBaseRates:
         """Pair with no fallback and no dynamic data should raise ValueError."""
         # Patch _compute_realized_vol to return None
         with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=None):
-            _vol_cache.pop("XYZABC", None)
             try:
                 compute_base_rates("XYZABC", spot=1.0, strike=1.01, tenor=Tenor.W1)
                 assert False, "Should have raised ValueError"
@@ -94,7 +92,7 @@ class TestComputeBaseRates:
     def test_z_score_known_value(self):
         """Verify z-score calculation with a known case."""
         # Force fallback vol so we get deterministic results
-        with patch("aia_forecaster.fx.base_rates.get_annualized_vol", return_value=0.10):
+        with patch("aia_forecaster.fx.base_rates.get_annualized_vol", return_value=(0.10, "fallback")):
             stats = compute_base_rates("USDJPY", spot=153.0, strike=155.0, tenor=Tenor.W1)
             expected_sigma_t = 0.10 * math.sqrt(5 / 252)
             assert abs(stats["sigma_t"] - expected_sigma_t) < 1e-10
@@ -114,30 +112,21 @@ class TestGetAnnualizedVol:
     def test_returns_fallback_when_dynamic_fails(self):
         """Should return fallback vol when dynamic computation fails."""
         with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=None):
-            _vol_cache.pop("USDJPY", None)
-            vol = get_annualized_vol("USDJPY")
+            vol, source = get_annualized_vol("USDJPY")
             assert vol == FALLBACK_VOL["USDJPY"]
+            assert source == "fallback"
 
     def test_returns_dynamic_when_available(self):
         """Should prefer dynamic vol over fallback."""
         with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=0.12):
-            _vol_cache.pop("USDJPY", None)
-            vol = get_annualized_vol("USDJPY")
+            vol, source = get_annualized_vol("USDJPY")
             assert vol == 0.12
-
-    def test_caches_dynamic_vol(self):
-        """Dynamic vol should be cached after first fetch."""
-        with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=0.12) as mock:
-            _vol_cache.pop("USDJPY", None)
-            get_annualized_vol("USDJPY")
-            get_annualized_vol("USDJPY")  # second call should use cache
-            assert mock.call_count == 1
+            assert source == "dynamic"
 
     def test_case_insensitive(self):
         """Should handle lowercase pair names."""
         with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=None):
-            _vol_cache.pop("USDJPY", None)
-            vol = get_annualized_vol("usdjpy")
+            vol, source = get_annualized_vol("usdjpy")
             assert vol == FALLBACK_VOL["USDJPY"]
 
 
@@ -152,7 +141,6 @@ class TestFormatBaseRateContext:
     def test_returns_empty_for_unsupported_pair(self):
         """Should return empty string for fully unsupported pairs."""
         with patch("aia_forecaster.fx.base_rates._compute_realized_vol", return_value=None):
-            _vol_cache.pop("XYZABC", None)
             result = format_base_rate_context("XYZABC", spot=0.90, strike=0.91, tenor=Tenor.W1)
             assert result == ""
 

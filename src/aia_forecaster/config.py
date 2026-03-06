@@ -37,9 +37,7 @@ class Settings(BaseSettings):
     default_pair: str = "USDJPY"
 
     # Storage
-    cache_dir: Path = Path("data/cache")
     db_path: Path = Path("data/forecasts/forecasts.db")
-    cache_ttl_hours: int = 6
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 

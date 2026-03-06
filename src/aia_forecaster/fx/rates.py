@@ -3,15 +3,10 @@
 from __future__ import annotations
 
 import logging
-import time
 
 import httpx
 
 logger = logging.getLogger(__name__)
-
-# Simple in-memory cache for spot rates (5-minute TTL)
-_rate_cache: dict[str, tuple[float, float]] = {}  # pair -> (rate, timestamp)
-_CACHE_TTL = 300  # 5 minutes
 
 
 def _pair_to_api_format(pair: str) -> tuple[str, str]:
@@ -30,12 +25,6 @@ async def get_spot_rate(pair: str = "USDJPY") -> float:
     Returns:
         Current spot rate (e.g., 155.23 for USD/JPY).
     """
-    # Check cache
-    if pair in _rate_cache:
-        rate, ts = _rate_cache[pair]
-        if time.time() - ts < _CACHE_TTL:
-            return rate
-
     base, quote = _pair_to_api_format(pair)
 
     # Try exchangerate.host first (free, no key)
@@ -45,9 +34,7 @@ async def get_spot_rate(pair: str = "USDJPY") -> float:
             resp = await client.get(url)
             resp.raise_for_status()
             data = resp.json()
-            rate = float(data["rates"][quote])
-            _rate_cache[pair] = (rate, time.time())
-            return rate
+            return float(data["rates"][quote])
     except Exception:
         logger.warning("exchangerate.host failed, trying fallback")
 
@@ -58,9 +45,7 @@ async def get_spot_rate(pair: str = "USDJPY") -> float:
             resp = await client.get(url)
             resp.raise_for_status()
             data = resp.json()
-            rate = float(data["rates"][quote])
-            _rate_cache[pair] = (rate, time.time())
-            return rate
+            return float(data["rates"][quote])
     except Exception:
         logger.exception("All FX rate APIs failed for %s", pair)
         raise RuntimeError(f"Could not fetch spot rate for {pair}")

@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import logging
 import math
-import time
 from collections.abc import Callable
 from statistics import NormalDist
 
@@ -107,10 +106,6 @@ ANNUALIZED_VOL = FALLBACK_VOL
 # Yahoo Finance ticker format for FX pairs (e.g., "USDJPY=X")
 _YF_SUFFIX = "=X"
 
-# Cache: pair -> (annualized_vol, timestamp)
-_vol_cache: dict[str, tuple[float, float]] = {}
-_CACHE_TTL = 3600  # 1 hour — vol doesn't change dramatically intra-session
-
 _norm = NormalDist(0, 1)
 
 # ---------------------------------------------------------------------------
@@ -160,11 +155,6 @@ _YIELD_TICKERS: dict[str, list[tuple[str, bool, str]]] = {
         ("^IRX", True, "13-week US T-bill"),
     ],
 }
-
-# Cache: currency -> (rate_as_decimal, timestamp)
-_rate_cache: dict[str, tuple[float, float]] = {}
-_RATE_CACHE_TTL = 14400  # 4 hours — short rates move slowly
-
 
 def _fetch_dynamic_rate(currency: str) -> float | None:
     """Try to fetch a short-term interest rate from Yahoo Finance.
@@ -234,41 +224,27 @@ def get_short_rate(currency: str) -> tuple[float, str]:
     """Return the best available short-term rate for *currency*.
 
     Priority:
-      1. Cached dynamic rate (if fresh)
-      2. Freshly fetched dynamic rate from Yahoo Finance
-      3. Static fallback from FALLBACK_POLICY_RATES
+      1. Freshly fetched dynamic rate from Yahoo Finance
+      2. Static fallback from FALLBACK_POLICY_RATES
 
     Returns:
         Tuple of (rate_as_decimal, source_label).
-        source_label is one of: "dynamic:<ticker>", "fallback", "none".
-
-    Raises ValueError if no rate is available at all.
+        source_label is one of: "dynamic", "fallback", "none".
     """
     currency = currency.upper()
 
-    # 1. Check cache
-    if currency in _rate_cache:
-        rate, ts = _rate_cache[currency]
-        if time.time() - ts < _RATE_CACHE_TTL:
-            return rate, "dynamic"
-
-    # 2. Try dynamic fetch
     dynamic = _fetch_dynamic_rate(currency)
     if dynamic is not None:
-        _rate_cache[currency] = (dynamic, time.time())
-
-        # Log if it differs materially from fallback
         fallback = FALLBACK_POLICY_RATES.get(currency)
         if fallback is not None:
             delta_bp = abs(dynamic - fallback) * 10_000
-            if delta_bp > 25:  # > 25bp difference
+            if delta_bp > 25:
                 logger.info(
                     "%s dynamic rate %.2f%% differs from fallback %.2f%% by %.0fbp",
                     currency, dynamic * 100, fallback * 100, delta_bp,
                 )
         return dynamic, "dynamic"
 
-    # 3. Static fallback
     fallback = FALLBACK_POLICY_RATES.get(currency)
     if fallback is not None:
         return fallback, "fallback"
@@ -381,28 +357,22 @@ def _compute_realized_vol(pair: str, lookback_days: int = 60) -> float | None:
         return None
 
 
-def get_annualized_vol(pair: str) -> float:
+def get_annualized_vol(pair: str) -> tuple[float, str]:
     """Return the best available annualized volatility for *pair*.
 
     Priority:
-      1. Cached dynamic vol (if fresh)
-      2. Freshly computed realized vol from Yahoo Finance
-      3. Static fallback from FALLBACK_VOL
+      1. Freshly computed realized vol from Yahoo Finance
+      2. Static fallback from FALLBACK_VOL
+
+    Returns:
+        Tuple of (annualized_vol, source) where source is "dynamic" or "fallback".
 
     Raises ValueError if the pair has no fallback and dynamic fetch fails.
     """
     pair = pair.upper()
 
-    # 1. Check cache
-    if pair in _vol_cache:
-        vol, ts = _vol_cache[pair]
-        if time.time() - ts < _CACHE_TTL:
-            return vol
-
-    # 2. Try dynamic computation
     realized = _compute_realized_vol(pair)
     if realized is not None:
-        _vol_cache[pair] = (realized, time.time())
         fallback = FALLBACK_VOL.get(pair)
         if fallback is not None:
             delta = abs(realized - fallback) / fallback
@@ -421,12 +391,11 @@ def get_annualized_vol(pair: str) -> float:
                 pair,
                 realized * 100,
             )
-        return realized
+        return realized, "dynamic"
 
-    # 3. Static fallback
     if pair in FALLBACK_VOL:
         logger.debug("Using static fallback vol for %s: %.1f%%", pair, FALLBACK_VOL[pair] * 100)
-        return FALLBACK_VOL[pair]
+        return FALLBACK_VOL[pair], "fallback"
 
     raise ValueError(
         f"No volatility data for {pair}. "
@@ -467,8 +436,7 @@ def compute_base_rates(
         center, center_source, consensus_rate, consensus_source.
     """
     pair = pair.upper()
-    annual_vol = get_annualized_vol(pair)
-    vol_source = "dynamic" if pair in _vol_cache else "fallback"
+    annual_vol, vol_source = get_annualized_vol(pair)
 
     # Check for consensus first — if available, skip forward computation
     consensus_result = get_consensus(pair, spot, tenor)
@@ -603,8 +571,7 @@ def compute_hitting_base_rate(
         center, center_source, consensus_rate, consensus_source.
     """
     pair = pair.upper()
-    annual_vol = get_annualized_vol(pair)
-    vol_source = "dynamic" if pair in _vol_cache else "fallback"
+    annual_vol, vol_source = get_annualized_vol(pair)
 
     # Check for consensus first — if available, skip forward computation
     consensus_result = get_consensus(pair, spot, tenor)

@@ -13,14 +13,11 @@ from aia_forecaster.search.web_providers import (
     add_blacklisted_domains,
     web_search_provider,
 )
-from aia_forecaster.storage.cache import SearchCache
 
 logger = logging.getLogger(__name__)
 
 # Re-export for backward compatibility
 __all__ = ["search_duckduckgo", "add_blacklisted_domains"]
-
-_cache = SearchCache()
 
 
 def _sanitize_query(query: str) -> str:
@@ -88,13 +85,6 @@ async def search_duckduckgo(
         logger.warning("Empty search query — skipping web search")
         return []
 
-    # Check cache first
-    cache_key = f"web:{query}:{cutoff_date}"
-    cached = _cache.get(cache_key)
-    if cached is not None:
-        logger.debug("Cache hit for query: %s", query)
-        return [SearchResult(**r) for r in cached]
-
     # Sanitize query for DDG compatibility
     search_query = _sanitize_query(query)
     if not search_query:
@@ -132,7 +122,4 @@ async def search_duckduckgo(
     except Exception:
         logger.exception("DuckDuckGo search failed for query: %s", query)
 
-    # Only cache non-empty results to avoid poisoning cache with failures
-    if results:
-        _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
     return results

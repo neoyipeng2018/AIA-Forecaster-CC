@@ -18,8 +18,7 @@ venv/
 .vscode/
 .idea/
 
-# Data & Cache
-data/cache/
+# Data
 data/forecasts/*.db
 
 # OS

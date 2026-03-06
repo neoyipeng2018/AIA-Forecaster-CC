@@ -12,7 +12,6 @@ import feedparser
 import httpx
 
 from aia_forecaster.models import SearchResult
-from aia_forecaster.storage.cache import SearchCache
 
 logger = logging.getLogger(__name__)
 
@@ -188,9 +187,6 @@ def get_feed_health() -> dict[str, dict]:
 # Helpers
 # ---------------------------------------------------------------------------
 
-_cache = SearchCache()
-
-
 def _feeds_for_pair(pair: str) -> list[FeedConfig]:
     """Return feeds relevant to a specific currency pair."""
     base = pair[:3].upper()
@@ -260,11 +256,6 @@ async def fetch_fx_news(
     Returns:
         Filtered, deduplicated list of SearchResult.
     """
-    cache_key = f"rss:{currency_pair}:{max_age_hours}"
-    cached = _cache.get(cache_key)
-    if cached is not None:
-        return [SearchResult(**r) for r in cached]
-
     keywords = _pair_keywords(currency_pair)
     cutoff_time = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
     seen_hashes: set[str] = set()
@@ -322,7 +313,6 @@ async def fetch_fx_news(
         if len(results) >= max_results:
             break
 
-    _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
     logger.info("Fetched %d FX news items for %s from %d feeds", len(results), currency_pair, len(feeds))
     return results
 

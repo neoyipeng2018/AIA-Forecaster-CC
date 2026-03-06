@@ -22,7 +22,6 @@ import httpx
 
 from aia_forecaster.models import SearchResult
 from aia_forecaster.search.rss import CURRENCY_KEYWORDS, _headline_matches
-from aia_forecaster.storage.cache import SearchCache
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +216,6 @@ def _speech_matches_pair(entry: BISSpeechEntry, pair: str) -> bool:
 
 _BIS_FEED_URL = "https://www.bis.org/doclist/cbspeeches.rss"
 _FETCH_TIMEOUT = 15  # seconds
-_cache = SearchCache()
 
 
 async def fetch_bis_speeches(
@@ -235,11 +233,6 @@ async def fetch_bis_speeches(
     Returns:
         Filtered list of SearchResult.
     """
-    cache_key = f"bis_speeches:{pair}:{max_age_hours}"
-    cached = _cache.get(cache_key)
-    if cached is not None:
-        return [SearchResult(**r) for r in cached]
-
     try:
         async with httpx.AsyncClient(timeout=_FETCH_TIMEOUT) as client:
             resp = await client.get(_BIS_FEED_URL)
@@ -288,7 +281,6 @@ async def fetch_bis_speeches(
         if len(results) >= max_results:
             break
 
-    _cache.set(cache_key, [r.model_dump(mode="json") for r in results])
     logger.info(
         "Fetched %d BIS speeches for %s from %d entries",
         len(results), pair, len(entries),
