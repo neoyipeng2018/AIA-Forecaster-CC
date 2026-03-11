@@ -96,8 +96,8 @@ The pipeline processes a currency pair through three phases:
 │  Phase 2: PRICING  (M agents × T tenors)                 │
 │                                                          │
 │  Each agent prices ALL strikes for each tenor in a       │
-│  single LLM call, using its own research + statistical   │
-│  base rates (forward rates, volatility) as anchors       │
+│  single LLM call, using its own research + market        │
+│  context (consensus, strike distances) as anchors        │
 │                                                          │
 │  Output: Raw probability grid (M × S × T)               │
 ├──────────────────────────────────────────────────────────┤
@@ -177,7 +177,7 @@ AIA-Forecaster-CC/
 │   │   └── monotonicity.py      # PAVA algorithm (enforces logical constraints)
 │   │
 │   ├── fx/
-│   │   ├── base_rates.py        # Forward rates, consensus, vol, statistical anchors
+│   │   ├── base_rates.py        # Consensus provider, market context formatting
 │   │   ├── rates.py             # Spot rate fetching (exchangerate.host)
 │   │   ├── pairs.py             # Currency pair configs + strike generation
 │   │   ├── surface.py           # ProbabilitySurfaceGenerator (orchestrates everything)
@@ -228,7 +228,7 @@ flowchart TB
     subgraph Input
         pair["Currency Pair\n(e.g. USDJPY)"]
         cutoff["Cutoff Date"]
-        spot["Spot Rate\n(Yahoo Finance)"]
+        spot["Spot Rate\n(exchangerate.host)"]
     end
 
     pair & cutoff & spot --> Phase1
@@ -331,7 +331,7 @@ flowchart LR
 | Surface Generator | `fx/surface.py` | Two-phase surface pipeline |
 | Platt Calibration | `calibration/platt.py` | LLM hedging bias correction |
 | Monotonicity (PAVA) | `calibration/monotonicity.py` | Strike-monotonicity enforcement |
-| Base Rates | `fx/base_rates.py` | Forward rates, consensus, vol, statistical anchoring |
+| Base Rates | `fx/base_rates.py` | Consensus provider, market context formatting |
 | Data Source Registry | `search/registry.py` | Pluggable data source framework |
 
 ## Components in Detail
@@ -462,17 +462,7 @@ Forward = Spot × exp((r_quote - r_base) × T_years)
 ```python
 set_consensus_provider(fn)  # (pair, spot, tenor) → (rate, source_label) | None
 ```
-When set, consensus replaces the forward as the distribution center. The forward is still computed and shown to agents for carry context.
-
-**Interest rate resolution** (when no consensus):
-
-| Priority | Source | Detail |
-|----------|--------|--------|
-| 1 | Dynamic fetch | Yahoo Finance `^IRX` (13-week T-bill, USD only) |
-| 2 | Static fallback | `FALLBACK_POLICY_RATES` — USD 4.50%, JPY 0.50%, EUR 2.75%, GBP 4.25%, etc. |
-| 3 | Zero rate | Unknown currencies |
-
-**Volatility**: Fallback values per pair (USDJPY 10%, EURUSD 8%), dynamic fetch attempted via Yahoo Finance. 1-hour cache TTL.
+When set, consensus replaces spot as the distribution center for agent context. Without consensus, agents see only spot and strike distances.
 
 ### Calibration (`calibration/`)
 
@@ -970,27 +960,29 @@ When the pipeline runs, each forecasting agent receives a context block like thi
 
 **With consensus registered:**
 ```
-BASE RATE CONTEXT (statistical anchor):
+MARKET CONTEXT:
 Current spot: USD/JPY = 154.50
 1 month consensus: USD/JPY = 150.00 (src: analyst_survey)
-Annualized vol: 9.0% (dynamic)
-...
-Note: Base rate is anchored to analyst_survey (consensus view).
+Target: above 156.00 in 1 month
+  From analyst_survey: +6.00 (+3.88%)
+  From spot: +1.50 (+0.97%)
+Note: anchored to analyst_survey (consensus view).
+Estimate probabilities based on evidence and this context.
 ```
 
-**Without consensus (default — falls back to forward):**
+**Without consensus (default — anchored to spot):**
 ```
-BASE RATE CONTEXT (statistical anchor):
+MARKET CONTEXT:
 Current spot: USD/JPY = 154.50
-1 month forward: USD/JPY = 154.11 (carry: USD 3.60% vs JPY 0.50%, net -3.10%, src: dynamic/fallback)
-Annualized vol: 9.0% (dynamic)
-...
-Note: Base rate is anchored to forward (carry-adjusted).
+Target: above 156.00 in 1 month
+  From spot: +1.50 (+0.97%)
+Note: no consensus view available — anchored to spot.
+Estimate probabilities based on evidence and this context.
 ```
 
 ### Clearing the provider
 
-To revert to forward-only mode:
+To revert to spot-only mode:
 
 ```python
 set_consensus_provider(None)
@@ -1020,7 +1012,6 @@ Extensions are auto-discovered and loaded at import time. See `company.example/R
 | `duckduckgo-search` | Web search API |
 | `feedparser` | RSS feed parsing |
 | `httpx` | Async HTTP (spot rates, BIS speeches) |
-| `yfinance` | Interest rates + volatility from Yahoo Finance |
 | `matplotlib` | Heatmaps, scatter plots, CDF charts |
 | `plotly` | Interactive 3D surface (HTML) |
 | `fpdf2` | PDF report generation |
@@ -1032,7 +1023,7 @@ Compared to asking a single LLM for a probability estimate, this system adds:
 
 1. **Ensemble diversity** — 10 agents with different temperatures, search depths, and source mixes prevent groupthink
 2. **Agentic search** — Agents control their own query strategy, adapting based on what they find (the paper shows this dramatically outperforms fixed-query approaches)
-3. **Statistical anchoring** — Base rates from forward rates and volatility give agents a starting point grounded in market math, not just LLM priors
+3. **Market context anchoring** — Agents see spot, strike distances, and consensus views as orientation, not just LLM priors
 4. **Structured causal reasoning** — Agents extract event → channel → direction chains, not just vibes
 5. **Mathematical calibration** — Platt scaling corrects systematic LLM hedging bias (prompting changes don't work; math does)
 6. **Monotonicity enforcement** — Output respects logical constraints (higher strike = lower probability of being above it)

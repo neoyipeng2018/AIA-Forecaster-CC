@@ -231,11 +231,11 @@ YOUR MACRO ANALYSIS:
 YOUR CAUSAL FACTORS:
 {causal_factors_block}
 
-BASE RATES (statistical anchors):
+STRIKE DISTANCES (from current spot):
 {base_rates_block}
 
 INSTRUCTIONS:
-1. Start from the base rates as statistical anchors.
+1. Consider the strike distances and market context.
 2. For EACH causal factor above, assess whether it is relevant at THIS tenor ({tenor_label}). \
 Some factors act fast (positioning, sentiment → days/weeks) while others act slowly \
 (trade flows, policy divergence → months). Weight accordingly.
@@ -275,11 +275,11 @@ YOUR MACRO ANALYSIS:
 YOUR CAUSAL FACTORS:
 {causal_factors_block}
 
-BASE RATES (statistical anchors):
+STRIKE DISTANCES (from current spot):
 {base_rates_block}
 
 INSTRUCTIONS:
-1. Start from the base rates as statistical anchors.
+1. Consider the strike distances and market context.
 2. For EACH causal factor above, assess whether it is relevant at THIS tenor ({tenor_label}). \
 Some factors act fast (positioning, sentiment → days/weeks) while others act slowly \
 (trade flows, policy divergence → months). Weight accordingly.
@@ -910,23 +910,18 @@ class ForecastingAgent:
         base, quote = pair[:3], pair[3:]
         tenor_label = tenor.label
 
-        # Build base rates block
+        # Build market context block (per-strike distance info)
+        price_fmt = ".2f" if "JPY" in pair else ".4f"
         base_rates_lines = []
         for strike in strikes:
-            try:
-                ctx = format_base_rate_context(
-                    pair=pair, spot=spot, strike=strike, tenor=tenor,
-                    forecast_mode=forecast_mode,
-                )
-                # Extract just the base rate line
-                for line in ctx.split("\n"):
-                    if "Statistical base rate" in line:
-                        base_rates_lines.append(f"  Strike {strike}: {line.strip()}")
-                        break
-                else:
-                    base_rates_lines.append(f"  Strike {strike}: (base rate context available)")
-            except ValueError:
-                base_rates_lines.append(f"  Strike {strike}: (no base rate data)")
+            dist = strike - spot
+            dist_sign = "+" if dist >= 0 else ""
+            pct = dist / spot if spot != 0 else 0.0
+            pct_sign = "+" if pct >= 0 else ""
+            base_rates_lines.append(
+                f"  Strike {strike}: {dist_sign}{dist:{price_fmt}} "
+                f"({pct_sign}{pct:.2%} from spot)"
+            )
         base_rates_block = "\n".join(base_rates_lines)
 
         # Build strike keys for JSON template
