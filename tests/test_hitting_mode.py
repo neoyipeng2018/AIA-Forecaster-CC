@@ -105,7 +105,7 @@ class TestFormatBaseRateContextHitting:
         )
         assert "HITTING" in result or "BARRIER" in result
         assert "P(touch" in result
-        assert "reflection-principle" in result.lower()
+        assert "first-passage" in result.lower()
 
     def test_above_mode_output(self):
         """Above mode should produce the original context format."""
@@ -115,7 +115,7 @@ class TestFormatBaseRateContextHitting:
         )
         assert "Statistical base rate" in result
         assert "P(above" in result
-        assert "normal-distribution" in result.lower()
+        assert "log-normal" in result.lower()
 
     def test_default_is_above(self):
         """Default mode should be ABOVE for backward compatibility."""

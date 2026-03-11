@@ -14,12 +14,16 @@ from aia_forecaster.models import Tenor
 
 class TestComputeBaseRates:
     def test_atm_strike_gives_half(self):
-        """ATM strike (strike == spot) should give base rate ~ 0.50."""
+        """ATM strike (strike == spot) should give base rate ~ 0.50.
+
+        Under log-normal with center=spot, P(above spot) = Φ(-½σ_t) which is
+        slightly below 0.5 due to the log-normal convexity correction.
+        """
         for pair in FALLBACK_VOL:
             spot = 153.0 if "JPY" in pair else 1.08
             stats = compute_base_rates(pair, spot=spot, strike=spot, tenor=Tenor.W1)
-            assert abs(stats["base_rate_above"] - 0.5) < 1e-10
-            assert abs(stats["z_score"]) < 1e-10
+            assert abs(stats["base_rate_above"] - 0.5) < 0.01
+            assert abs(stats["z_score"]) < 0.01
 
     def test_far_otm_strike_near_zero(self):
         """A strike very far above spot should have base rate near 0."""
@@ -52,14 +56,18 @@ class TestComputeBaseRates:
             assert rates[i] >= rates[i - 1]
 
     def test_symmetry(self):
-        """P(above spot+x) + P(above spot-x) ~ 1."""
+        """P(above spot+x) + P(above spot-x) ~ 1.
+
+        Not perfectly symmetric because log-normal is symmetric in log space,
+        not linear price space. Tolerance accounts for this.
+        """
         spot = 153.0
         offsets = [1.0, 2.0, 5.0]
         for x in offsets:
             above = compute_base_rates("USDJPY", spot=spot, strike=spot + x, tenor=Tenor.W1)
             below = compute_base_rates("USDJPY", spot=spot, strike=spot - x, tenor=Tenor.W1)
             total = above["base_rate_above"] + below["base_rate_above"]
-            assert abs(total - 1.0) < 1e-10
+            assert abs(total - 1.0) < 0.01
 
     def test_all_fallback_pairs(self):
         """All pairs with fallback data should compute without error."""
@@ -91,12 +99,12 @@ class TestComputeBaseRates:
 
     def test_z_score_known_value(self):
         """Verify z-score calculation with a known case."""
-        # Force fallback vol so we get deterministic results
         with patch("aia_forecaster.fx.base_rates.get_annualized_vol", return_value=(0.10, "fallback")):
             stats = compute_base_rates("USDJPY", spot=153.0, strike=155.0, tenor=Tenor.W1)
             expected_sigma_t = 0.10 * math.sqrt(5 / 252)
             assert abs(stats["sigma_t"] - expected_sigma_t) < 1e-10
-            expected_z = (2.0 / 153.0) / expected_sigma_t
+            d2 = (math.log(153.0 / 155.0) - 0.5 * expected_sigma_t**2) / expected_sigma_t
+            expected_z = -d2
             assert abs(stats["z_score"] - expected_z) < 1e-10
 
     def test_result_includes_vol_metadata(self):

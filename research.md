@@ -708,3 +708,423 @@ git merge upstream/main   # Always clean — no overlapping files
 - **With `--sources rss`**: Only RSS. All agents forced to `RSS_ONLY` mode.
 - **With `--sources web`**: Only DuckDuckGo. All agents forced to `WEB_ONLY` mode.
 - **With `--web-provider brave`**: Brave replaces DuckDuckGo (requires `BRAVE_SEARCH_API_KEY`).
+
+---
+---
+
+# Consensus Provider: Deep Dive Research Report
+
+## 1. What Is the Consensus Provider?
+
+The consensus provider is a **pluggable hook** that injects an external directional forecast (e.g., analyst surveys, Bloomberg FXFC, internal models) into the probability computation pipeline. When registered, it **replaces the forward rate** as the center of the probability distribution that anchors all forecasts. When absent, the system falls back to using the interest-rate-parity forward as the distribution center.
+
+The key design philosophy: **forward ≠ consensus**. The forward rate is mechanical carry math (`F = S × exp((r_quote − r_base) × T)`), not a directional view. A consensus rate represents what the market or analysts actually *expect* the rate to be.
+
+---
+
+## 2. Registration & Lifecycle
+
+### 2.1 The Provider Interface
+
+Defined in `src/aia_forecaster/fx/base_rates.py`:
+
+```python
+ConsensusProvider = Callable[[str, float, "Tenor"], tuple[float, str] | None]
+```
+
+The provider receives:
+- `pair` (str): e.g. `"USDJPY"`
+- `spot` (float): current spot rate
+- `tenor` (Tenor): forecast horizon enum
+
+And returns either:
+- `(consensus_rate, source_label)` — a point estimate and a human-readable label (e.g. `"bloomberg_survey"`, `"internal_model"`, `"sample_hardcoded"`)
+- `None` — signals "no consensus available for this pair/tenor"
+
+### 2.2 Registration Flow
+
+The provider is registered at application startup via the `company/` extension mechanism:
+
+1. `src/aia_forecaster/__init__.py` calls `_load_extensions()` on import
+2. This tries to `import company`, which runs `company/__init__.py`
+3. `company/__init__.py` imports `get_consensus` from `company/consensus.py` and calls:
+   ```python
+   from aia_forecaster.fx import set_consensus_provider
+   set_consensus_provider(get_consensus)
+   ```
+4. This stores the callable in the module-level `_consensus_provider` variable
+
+The `set_consensus_provider()` function:
+- Accepts a callable or `None` (to clear)
+- Stores it in a module-global `_consensus_provider`
+- Logs registration/clearing
+
+### 2.3 The company/ Extension System
+
+The `company/` directory is designed as a **source-agnostic** plugin layer:
+
+- **`company/consensus.py`** — The stub implementation. Returns `None` for all pairs (i.e., forward-only mode). Has a `# TODO` to replace with Bloomberg or internal API calls.
+- **`company/consensus_sample.py`** — A working demo with hardcoded forecasts for USDJPY, EURUSD, GBPUSD across 1D–6M tenors. Source label is `"sample_hardcoded"`.
+- **`company/__init__.py`** — By default imports from `consensus.py` (stub). User can swap to `consensus_sample` to test.
+
+If the `company/` directory doesn't exist (upstream/open-source usage), `_load_extensions()` catches the `ImportError` and silently proceeds — the system runs entirely on forward rates.
+
+---
+
+## 3. How Consensus Is Queried
+
+The `get_consensus()` function in `base_rates.py` (line 72) wraps the provider call with error handling:
+
+```python
+def get_consensus(pair, spot, tenor):
+    if _consensus_provider is None:
+        return None           # No provider registered
+    try:
+        return _consensus_provider(pair.upper(), spot, tenor)
+    except Exception:
+        logger.warning(...)   # Log and ignore — fall back to forward
+        return None
+```
+
+Key behaviors:
+- **No provider registered** → returns `None` immediately
+- **Provider raises an exception** → logs warning with traceback, returns `None`
+- **Provider returns `None`** → passed through as-is
+
+This means the system is **maximally fault-tolerant**: any failure in the consensus path silently degrades to forward-rate mode.
+
+---
+
+## 4. Where Consensus Enters the Math
+
+### 4.1 ABOVE Mode (`compute_base_rates()`, line 406)
+
+The probability math is:
+```
+d2 = (ln(C/K) − ½σ_t²) / σ_t
+P(S_T > K) = Φ(d2)
+```
+where `C` = center = consensus rate (if available) or forward rate.
+
+Decision logic (line 442):
+```python
+consensus_result = get_consensus(pair, spot, tenor)
+if consensus_result is not None:
+    center = consensus_rate          # Use consensus
+    forward = None                   # Skip forward computation entirely
+else:
+    forward = compute_forward_rate(pair, spot, tenor)
+    center = forward                 # Fall back to forward
+```
+
+**Important optimization**: When consensus is available, the forward rate is **not computed at all**. This saves a Yahoo Finance API call for the USD rate (via `^IRX`). The forward is only computed when no consensus is available.
+
+### 4.2 HITTING Mode (`compute_hitting_base_rate()`, line 545)
+
+Uses the same consensus-or-forward decision. The drift term uses the center:
+
+```python
+h = log(barrier / spot)              # Log-distance to barrier
+nu_T = log(center / spot) − ½σ_t²   # Drift toward center
+```
+
+Then feeds into the first-passage probability formula (`_first_passage_probability()`, line 495). The drift direction matters:
+- If center is on the same side of spot as the barrier → drift is **toward** the barrier → higher touch probability
+- If center is on the opposite side → drift is **away** → lower touch probability
+
+### 4.3 Return Values
+
+Both functions return a dict with these consensus-related fields:
+
+| Field | With consensus | Without consensus |
+|-------|---------------|-------------------|
+| `center` | consensus_rate | forward_rate |
+| `center_source` | source_label (e.g. `"bloomberg_survey"`) | `"forward"` |
+| `consensus_rate` | the rate value | `None` |
+| `consensus_source` | the label | `None` |
+| `forward_rate` | `None` | computed forward |
+| `forward_source` | `None` | e.g. `"USD:dynamic\|JPY:fallback"` |
+| `r_base` | `None` | interest rate |
+| `r_quote` | `None` | interest rate |
+
+When consensus is used, all forward/rate fields are `None` because the forward was never computed.
+
+---
+
+## 5. How Consensus Reaches the LLM Prompts
+
+### 5.1 The Context Formatting Layer
+
+`format_base_rate_context()` (line 684) in `base_rates.py` is the bridge between math and prompts. It produces a multi-line text block that gets injected into agent prompts. The consensus vs. forward distinction controls what agents see.
+
+#### 5.1.1 ABOVE Mode Output
+
+**With consensus:**
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 150.00
+1M consensus: USD/JPY = 148.00 (src: bloomberg_survey)
+Annualized vol: 10.0% (dynamic)
+Target: below 149.00 in 1M
+  From bloomberg_survey: -1.00 (-0.67%)
+  From spot:    -1.00 (-0.67%)
+Historical 1M range (1-sigma): +/-2.74 JPY
+Required move from bloomberg_survey: 0.36 standard deviations
+Statistical base rate: P(below 149.00) = 0.640 (64.0%)
+Note: Base rate is anchored to bloomberg_survey (consensus view).
+This is a log-normal baseline. Adjust based on current evidence.
+```
+
+**Without consensus (forward only):**
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 150.00
+1M forward: USD/JPY = 149.51 (carry: USD 4.50% vs JPY 0.50%, net -4.00%, src: dynamic/fallback)
+Annualized vol: 10.0% (dynamic)
+Target: below 149.00 in 1M
+  From forward: -0.51 (-0.34%)
+  From spot:    -1.00 (-0.67%)
+...
+Note: Base rate is anchored to forward (carry-adjusted).
+```
+
+Key differences in what the agent sees:
+1. **Line 3**: "consensus" line vs "forward" line — different labels, different rate values
+2. **Move calculations**: "From bloomberg_survey" vs "From forward"
+3. **Note**: "(consensus view)" vs "(carry-adjusted)"
+4. **Forward line shows carry details**: interest rate breakdown, net differential, source provenance. Consensus line shows only the rate and source label — it's opaque.
+
+#### 5.1.2 HITTING Mode Output
+
+Similar structure but with barrier-specific language:
+
+**With consensus:**
+```
+BASE RATE CONTEXT (statistical anchor — HITTING/BARRIER mode):
+...
+Expected drift (bloomberg_survey) is toward this barrier.
+...
+This is a drift-adjusted first-passage baseline anchored to the bloomberg_survey.
+Adjust based on current evidence.
+```
+
+**Without consensus:**
+```
+...
+Expected drift (forward) is toward this barrier.
+...
+This is a drift-adjusted first-passage baseline anchored to the forward.
+Adjust based on current evidence.
+```
+
+The `_format_market_context()` helper function (line 643) handles the conditional rendering:
+- If `consensus_rate` and `consensus_source` are both present → render consensus line
+- Else if `forward_rate` is present and source isn't `"no_rates"` → render forward line with carry breakdown
+- If neither → empty string (no market context line at all)
+
+### 5.2 Prompt Injection Points
+
+The base rate context block appears in **three** agent prompts:
+
+1. **Query Generation Prompt** (`QUERY_GENERATION_PROMPT`, line 42): Shown as `{base_rate_section}` — gives agents context while deciding what to search for. This means consensus influences the agent's *search strategy*, not just its probability output.
+
+2. **Forecast Prompt** (`FORECAST_PROMPT`, line 90): Shown as `{base_rate_section}` after the evidence — the primary anchoring point where agents use base rates to produce their probability estimate.
+
+3. **Batch Pricing Prompt** (`BATCH_PRICING_PROMPT` / `BATCH_PRICING_PROMPT_HITTING`, lines 218/252): Shown as `{base_rates_block}` — used during Phase 2 to price all strikes at a given tenor. Here, `format_base_rate_context()` is called **per strike**, but only the "Statistical base rate" line is extracted into the pricing block (not the full context).
+
+### 5.3 The Batch Pricing Extraction
+
+In `price_tenor()` (line 894, Phase 2), the full context is generated per strike but only the statistical base rate line is passed to the LLM:
+
+```python
+for strike in strikes:
+    ctx = format_base_rate_context(pair, spot, strike, tenor, forecast_mode)
+    for line in ctx.split("\n"):
+        if "Statistical base rate" in line:
+            base_rates_lines.append(f"  Strike {strike}: {line.strip()}")
+            break
+```
+
+This means in batch pricing, agents see something like:
+```
+BASE RATES (statistical anchors):
+  Strike 148.00: Statistical base rate: P(above 148.00) = 0.640 (64.0%)
+  Strike 150.00: Statistical base rate: P(above 150.00) = 0.480 (48.0%)
+  Strike 152.00: Statistical base rate: P(above 152.00) = 0.320 (32.0%)
+```
+
+The consensus vs forward distinction is **hidden** at the batch pricing level — agents only see the resulting probability number, not whether it came from a consensus-centered or forward-centered distribution. This is by design: the statistical anchor should influence the agent's calibration without biasing it toward a specific methodology.
+
+---
+
+## 6. Fallback Cascade
+
+The system has a multi-level fallback chain:
+
+```
+Consensus Provider
+    ├─ Provider registered and returns (rate, label) → USE CONSENSUS as center
+    ├─ Provider registered but returns None → FALL THROUGH
+    ├─ Provider registered but raises exception → LOG WARNING, FALL THROUGH
+    └─ No provider registered → FALL THROUGH
+         │
+         ▼
+Forward Rate (interest-rate parity)
+    ├─ Both rates available → F = S × exp((r_q − r_b) × T)
+    │   ├─ Dynamic rate (Yahoo Finance ^IRX for USD) → preferred
+    │   └─ Static fallback (FALLBACK_POLICY_RATES) → used for non-USD
+    ├─ One rate available → use 0.0 for the missing one
+    └─ Neither rate available → forward = spot (i.e., no drift)
+```
+
+When forward also degrades to spot (no rates), the distribution is centered at the current spot, which means:
+- P(above spot) ≈ 0.5 (slightly below due to the −½σ² drift correction)
+- The base rate becomes purely volatility-driven
+
+---
+
+## 7. The Supervisor's "Consensus" (Unrelated — Naming Overlap)
+
+There's a naming overlap worth noting. The supervisor agent in `supervisor.py` uses `_build_consensus_causal_summary()` and `_build_consensus_factors()` — these aggregate **causal factors** across multiple forecasting agents (e.g., "7/10 agents identified BOJ policy as bearish"). This is a *consensus among agents*, not the external consensus provider. The two are completely unrelated systems sharing the word "consensus".
+
+Similarly, `CellExplanation.consensus_summary` (in `models.py`, line 377) in the explanation module is about *agent agreement on direction*, not the consensus provider.
+
+---
+
+## 8. Per-Cell vs Per-Pair Granularity
+
+The consensus provider operates at the **(pair, tenor)** level — it returns one rate per pair-tenor combination. However:
+
+- Base rates are computed at the **(pair, spot, strike, tenor)** level
+- The consensus rate is the **same** for all strikes at a given tenor
+- Only the strike position relative to the consensus changes the probability
+
+This means for a given tenor, all strikes share the same distribution center (consensus rate), but each strike gets a different probability because it's at a different position on the distribution.
+
+For different tenors, the consensus provider is called separately, so it can return different rates (e.g., USDJPY 148.00 for 1M vs 145.00 for 3M), creating a **term structure of consensus expectations**.
+
+---
+
+## 9. What Agents Actually See: Example Walkthrough
+
+### Scenario: USDJPY, spot=150.00, strike=148.00, tenor=1M
+
+**With consensus (148.00, "analyst_survey"):**
+
+The agent prompt includes:
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 150.00
+1M consensus: USD/JPY = 148.00 (src: analyst_survey)
+Annualized vol: 10.0% (dynamic)
+Target: above 148.00 in 1M
+  From analyst_survey: +0.00 (+0.00%)
+  From spot:    -2.00 (-1.33%)
+Historical 1M range (1-sigma): +/-2.74 JPY
+Required move from analyst_survey: 0.00 standard deviations
+Statistical base rate: P(above 148.00) = 0.479 (47.9%)
+Note: Base rate is anchored to analyst_survey (consensus view).
+This is a log-normal baseline. Adjust based on current evidence.
+```
+
+Here, the strike equals the consensus, so the move from consensus is 0 — roughly a coin flip adjusted for log-normal drift. The agent sees that the market expects exactly this level.
+
+**Without consensus (forward=149.51):**
+
+```
+BASE RATE CONTEXT (statistical anchor):
+Current spot: USD/JPY = 150.00
+1M forward: USD/JPY = 149.51 (carry: USD 4.50% vs JPY 0.50%, net -4.00%,
+  src: dynamic/fallback)
+Annualized vol: 10.0% (dynamic)
+Target: above 148.00 in 1M
+  From forward: +1.51 (+1.01%)
+  From spot:    -2.00 (-1.33%)
+Historical 1M range (1-sigma): +/-2.74 JPY
+Required move from forward: 0.55 standard deviations
+Statistical base rate: P(above 148.00) = 0.709 (70.9%)
+Note: Base rate is anchored to forward (carry-adjusted).
+This is a log-normal baseline. Adjust based on current evidence.
+```
+
+The forward is higher than the strike (149.51 vs 148.00), so being above 148.00 is quite likely from the forward's perspective. The agent sees carry-specific detail (rate differential breakdown).
+
+**Key difference**: The consensus-centered distribution gives ~48% probability of being above 148.00, while the forward-centered one gives ~71%. This is a **massive** difference in the statistical anchor the agent receives, which will significantly influence its final probability output.
+
+---
+
+## 10. Platt Scaling Interaction
+
+After agents produce their probabilities (influenced by the consensus-or-forward base rates), the probabilities go through Platt scaling:
+
+```
+p_calibrated = p^α / (p^α + (1−p)^α)    where α = √3 ≈ 1.73
+```
+
+This pushes probabilities away from 0.5 toward 0 or 1, correcting LLM hedging bias. The consensus provider affects the **input** to this calibration — if consensus shifts the base rate anchor, it shifts the agent's raw probability, which then gets calibrated.
+
+This means consensus has an **amplified** effect: a modest shift in the center (e.g., consensus 148 vs forward 149.5) changes the base rate (48% vs 71%), which the agent uses as an anchor, and then Platt scaling pushes it further from 0.5.
+
+---
+
+## 11. Edge Cases & Gotchas
+
+1. **Partial coverage**: The provider can return consensus for USDJPY 1M but `None` for USDJPY 1D. In this case, 1M cells use consensus as center and 1D cells use forward. Different cells on the same surface can have different center sources.
+
+2. **Forward not computed when consensus exists**: When consensus is available, `r_base`, `r_quote`, and `forward_rate` are all `None` in the return dict. Any downstream code that assumes these exist will break. The current codebase handles this correctly (the market context formatter checks for `None`).
+
+3. **Consensus == spot**: If the consensus rate equals the current spot, the system effectively says "no expected move" — probabilities are symmetrical around spot (modulo the −½σ² drift adjustment).
+
+4. **Stale consensus**: There's no built-in staleness check. If the provider returns a rate that was surveyed weeks ago while the market has moved significantly, the base rate will anchor to an outdated level. The provider is responsible for freshness.
+
+5. **Source label propagation**: The `source_label` string from the provider flows all the way through to the prompt text (`"src: analyst_survey"`) and the `center_source` field in the return dict. It appears in the final formatted output that agents read.
+
+6. **No forward shown alongside consensus**: When consensus is active, the forward is NOT computed and NOT shown to agents. They only see the consensus line. This is different from the original design intent described in the docstring ("The carry-adjusted forward is still computed internally and shown to agents for context") — the current implementation skips the forward entirely for efficiency.
+
+---
+
+## 12. Summary: Data Flow Diagram
+
+```
+company/__init__.py
+  │
+  │  set_consensus_provider(get_consensus)
+  ▼
+base_rates._consensus_provider   (module-level callable)
+  │
+  │  get_consensus(pair, spot, tenor)
+  ▼
+compute_base_rates()  /  compute_hitting_base_rate()
+  │
+  │  Returns dict with center, center_source, consensus_rate, ...
+  ▼
+format_base_rate_context()
+  │
+  │  Produces human-readable text block
+  ▼
+ForecastingAgent._build_base_rate_section()
+  │
+  │  {base_rate_section} in prompts
+  ├──► QUERY_GENERATION_PROMPT   (influences search strategy)
+  ├──► FORECAST_PROMPT           (anchors probability estimate)
+  └──► BATCH_PRICING_PROMPT      (statistical base rate per strike)
+         │
+         │  Agent raw probabilities
+         ▼
+    Platt scaling → calibrated probabilities
+```
+
+---
+
+## 13. Key Files Reference
+
+| File | Role in consensus flow |
+|------|----------------------|
+| `src/aia_forecaster/fx/base_rates.py` | Core: provider storage, `get_consensus()`, math, formatting |
+| `src/aia_forecaster/fx/__init__.py` | Exports `set_consensus_provider`, `get_consensus` |
+| `src/aia_forecaster/__init__.py` | Triggers `company/` import at startup |
+| `company.example/__init__.py` | Calls `set_consensus_provider(get_consensus)` |
+| `company.example/consensus.py` | Stub provider (returns `None`) |
+| `company.example/consensus_sample.py` | Demo provider with hardcoded rates |
+| `src/aia_forecaster/agents/forecaster.py` | Consumes `format_base_rate_context()` in prompts |
+| `src/aia_forecaster/agents/supervisor.py` | Does NOT use consensus provider (uses agent consensus — different concept) |
